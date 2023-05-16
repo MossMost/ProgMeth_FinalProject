@@ -10,8 +10,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 
 abstract public class GeneralScene extends Scene{
-	public static final int GAME_WIDTH = 816;
-	public static final int GAME_HEIGHT = 480;
+	public static final int GAME_WIDTH = 600;
+	public static final int GAME_HEIGHT = 600;
 	
 	private StackPane root = new StackPane();
 	protected GraphicsContext gc;

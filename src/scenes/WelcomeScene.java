@@ -40,7 +40,7 @@ public class WelcomeScene extends GeneralScene{
 					
 					if(activeKeys.contains(KeyCode.SPACE)){
 						this.stop();
-						Main.setScene(Main.GAME_SCENE);
+						Main.setScene(Main.SOLO_GAME_SCENE);
 					}
 					else if(activeKeys.contains(KeyCode.ESCAPE)) {
 						this.stop();

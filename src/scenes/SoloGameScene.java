@@ -11,13 +11,13 @@ import javafx.scene.paint.Color;
 import sprites.MainCharacter;
 
 
-public class GameScene extends GeneralScene{
+public class SoloGameScene extends GeneralScene{
 	private static final String BACKGROUND_IMAGE = "assets/background.png";
 	
 	
 	private Image background;
 	private MainCharacter bear;
-	public GameScene() {
+	public SoloGameScene() {
 		super();
 		try {
 			background = new Image(Files.newInputStream(Paths.get(BACKGROUND_IMAGE)));
@@ -31,7 +31,7 @@ public class GameScene extends GeneralScene{
 	@Override
 	public void draw() {
 		activeKeys.clear();
-		bear.moveTo(380, 375);
+		bear.moveTo(0, 0);
 		new AnimationTimer() {
 			 public void handle(long currentNanoTime){
 				 	gc.setFill(Color.BLACK);
