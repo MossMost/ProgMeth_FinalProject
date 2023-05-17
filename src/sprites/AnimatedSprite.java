@@ -1,5 +1,7 @@
 package sprites;
 
+import java.util.ArrayList;
+
 public class AnimatedSprite extends Sprite{
 	public static final int ToTAL_MOVEMENTS = 4;
 	public static final int RIGHT = 0;
@@ -7,6 +9,9 @@ public class AnimatedSprite extends Sprite{
 	public static final int UP = 2;
 	public static final int DOWN = 3;
 	public static final byte SPRITE_CHANGE = 15;
+	
+	public static ArrayList<Integer> wallX = new ArrayList<Integer>();
+	public static ArrayList<Integer> wallY = new ArrayList<Integer>();
 	
 	protected int currentDirection;
 	protected byte currentSprite;
@@ -17,7 +22,7 @@ public class AnimatedSprite extends Sprite{
 	
 	public AnimatedSprite(int width, int height) {
 		super(width, height);
-		currentDirection = RIGHT;
+		currentDirection = DOWN;
 		currentSprite = 0;
 		currentSpriteChange = 0;
 	}

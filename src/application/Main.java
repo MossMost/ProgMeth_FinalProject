@@ -29,6 +29,7 @@ public class Main extends Application {
 		
 		stage.setTitle("Bomber Boy");
 		setScene(WELCOME_SCENE);
+		stage.setResizable(false);
 		stage.show();
 	}
 	

@@ -31,7 +31,7 @@ public class SoloGameScene extends GeneralScene{
 	@Override
 	public void draw() {
 		activeKeys.clear();
-		bear.moveTo(0, 0);
+		bear.moveTo(48, 144);
 		new AnimationTimer() {
 			 public void handle(long currentNanoTime){
 				 	gc.setFill(Color.BLACK);
@@ -62,6 +62,8 @@ public class SoloGameScene extends GeneralScene{
 					}
 			}
 		}.start();
+		
+		
 		
 	}
 }

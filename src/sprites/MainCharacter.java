@@ -34,14 +34,16 @@ public class MainCharacter extends AnimatedSprite{
 	public void move(int movement) {
 		int newX = x;
 		int newY = y;
-		if (movement == LEFT)
+		if (movement == LEFT && newX - STEP >= 48)
 			newX -= STEP;
-		else if (movement == RIGHT)
+		else if (movement == RIGHT && newX + STEP <= 1008 - 48*2)
 			newX += STEP;
-		else if (movement == UP)
+		else if (movement == UP && newY - STEP >= 48*3)
 			newY -= STEP;
-		else if (movement == DOWN)
+		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
 			newY += STEP;
+		
+		//for(int i = 0; i<=)
 		moveTo(newX, newY);
 		animate(movement);
 	}
