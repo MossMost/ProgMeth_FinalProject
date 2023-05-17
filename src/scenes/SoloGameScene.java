@@ -2,6 +2,7 @@ package scenes;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Random;
 
 import application.Main;
 import javafx.animation.AnimationTimer;
@@ -14,16 +15,20 @@ import sprites.MainCharacter;
 
 public class SoloGameScene extends GeneralScene{
 	private static final String BACKGROUND_IMAGE = "assets/background.png";
+	private static final String BRICK_IMAGE = "assets/Brick.png";
+	private int posXBrick[] = new int[110];
+	private int posYBrick[] = new int[110];
 	
-	
-	private Image background;
-	private MainCharacter bear;
+	private Image background,brick;
+	private MainCharacter Player;
 	public SoloGameScene() {
 		super();
 		addWall();
+		
 		try {
 			background = new Image(Files.newInputStream(Paths.get(BACKGROUND_IMAGE)));
-			bear = new MainCharacter();
+			brick = new Image(Files.newInputStream(Paths.get(BRICK_IMAGE)));
+			Player = new MainCharacter();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -33,14 +38,19 @@ public class SoloGameScene extends GeneralScene{
 	@Override
 	public void draw() {
 		activeKeys.clear();
-		bear.moveTo(1*48, 3*48);
+		Player.moveTo(1*48, 3*48);
 		new AnimationTimer() {
 			 public void handle(long currentNanoTime){
 				 	gc.setFill(Color.BLACK);
 				 	gc.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 				 	
 					gc.drawImage(background, 0, 0);
-				 	bear.draw(gc);
+					
+					for(int i=0;i<70;i++) {
+						gc.drawImage(brick, posXBrick[i], posYBrick[i]);
+					}
+					
+				 	Player.draw(gc);
 				 	
 					if(activeKeys.contains(KeyCode.ESCAPE)){
 						this.stop();
@@ -51,16 +61,16 @@ public class SoloGameScene extends GeneralScene{
 						Main.setScene(Main.CREDITS_SCENE);
 					}
 					else if(activeKeys.contains(KeyCode.LEFT)) {
-						bear.move(MainCharacter.LEFT);
+						Player.move(MainCharacter.LEFT);
 					}
 					else if(activeKeys.contains(KeyCode.RIGHT)) {
-						bear.move(MainCharacter.RIGHT);
+						Player.move(MainCharacter.RIGHT);
 					}
 					else if(activeKeys.contains(KeyCode.UP)) {
-						bear.move(MainCharacter.UP);
+						Player.move(MainCharacter.UP);
 					}
 					else if(activeKeys.contains(KeyCode.DOWN)) {
-						bear.move(MainCharacter.DOWN);
+						Player.move(MainCharacter.DOWN);
 					}
 			}
 		}.start();
@@ -72,6 +82,37 @@ public class SoloGameScene extends GeneralScene{
 				AnimatedSprite.wallXCoordinates.add(i*48);
 				AnimatedSprite.wallYCoordinates.add(j*48);
 			}
+		}
+		
+		//random
+		Random rand = new Random();
+		int posX,posY;
+		for(int tmp = 0; tmp < 70; tmp++) {
+			while(true) {
+				posX = rand.nextInt(20)*48;
+				posY = rand.nextInt(14)*48;
+				
+				if(posX == 0 || posY < 3*48) 
+					continue;
+				if(AnimatedSprite.wallXCoordinates.contains(posX) 
+				&& AnimatedSprite.wallYCoordinates.contains(posY))
+					continue;
+				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
+				|| posX == 48 && posY == 4*48) 
+					continue;
+				
+				//showImage
+				posXBrick[tmp] = posX;
+				posYBrick[tmp] = posY;
+				break;
+			}
+			
+		}
+		
+		//add brick
+		for(int i=0;i<100;i++) {
+			AnimatedSprite.wallXCoordinates.add(posXBrick[i]);
+			AnimatedSprite.wallYCoordinates.add(posYBrick[i]);
 		}
 
 	}

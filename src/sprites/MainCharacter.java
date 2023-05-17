@@ -43,7 +43,8 @@ public class MainCharacter extends AnimatedSprite{
 		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
 			newY += STEP;
 		
-		for(int i=0;i<45;i++) {
+		int sz = AnimatedSprite.wallXCoordinates.size();
+		for(int i=0;i<sz;i++) {
 			int wallX = AnimatedSprite.wallXCoordinates.get(i);
 			int wallY = AnimatedSprite.wallYCoordinates.get(i);
 			
@@ -53,7 +54,7 @@ public class MainCharacter extends AnimatedSprite{
 			}
 			
 		}
-		System.out.println(newX);
+
 		moveTo(newX, newY);
 		animate(movement);
 	}
