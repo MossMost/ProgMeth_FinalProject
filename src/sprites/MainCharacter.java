@@ -32,18 +32,28 @@ public class MainCharacter extends AnimatedSprite{
 	}
 	
 	public void move(int movement) {
-		int newX = x;
-		int newY = y;
-		if (movement == LEFT && newX - STEP >= 48)
+		int newX = x, oldX = x;
+		int newY = y, oldY = y;
+		if (movement == LEFT && newX - STEP >= 40)
 			newX -= STEP;
-		else if (movement == RIGHT && newX + STEP <= 1008 - 48*2)
+		else if (movement == RIGHT && newX + STEP <= 1008 - 44*2)
 			newX += STEP;
 		else if (movement == UP && newY - STEP >= 48*3)
 			newY -= STEP;
 		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
 			newY += STEP;
 		
-		//for(int i = 0; i<=)
+		for(int i=0;i<45;i++) {
+			int wallX = AnimatedSprite.wallXCoordinates.get(i);
+			int wallY = AnimatedSprite.wallYCoordinates.get(i);
+			
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
+				newX = oldX;
+				newY = oldY;
+			}
+			
+		}
+		System.out.println(newX);
 		moveTo(newX, newY);
 		animate(movement);
 	}

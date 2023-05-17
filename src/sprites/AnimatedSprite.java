@@ -10,8 +10,8 @@ public class AnimatedSprite extends Sprite{
 	public static final int DOWN = 3;
 	public static final byte SPRITE_CHANGE = 15;
 	
-	public static ArrayList<Integer> wallX = new ArrayList<Integer>();
-	public static ArrayList<Integer> wallY = new ArrayList<Integer>();
+	public static ArrayList<Integer> wallXCoordinates = new ArrayList<Integer>();
+	public static ArrayList<Integer> wallYCoordinates = new ArrayList<Integer>();
 	
 	protected int currentDirection;
 	protected byte currentSprite;

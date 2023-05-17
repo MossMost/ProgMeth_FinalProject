@@ -8,6 +8,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import sprites.AnimatedSprite;
 import sprites.MainCharacter;
 
 
@@ -19,6 +20,7 @@ public class SoloGameScene extends GeneralScene{
 	private MainCharacter bear;
 	public SoloGameScene() {
 		super();
+		addWall();
 		try {
 			background = new Image(Files.newInputStream(Paths.get(BACKGROUND_IMAGE)));
 			bear = new MainCharacter();
@@ -31,7 +33,7 @@ public class SoloGameScene extends GeneralScene{
 	@Override
 	public void draw() {
 		activeKeys.clear();
-		bear.moveTo(48, 144);
+		bear.moveTo(1*48, 3*48);
 		new AnimationTimer() {
 			 public void handle(long currentNanoTime){
 				 	gc.setFill(Color.BLACK);
@@ -62,8 +64,15 @@ public class SoloGameScene extends GeneralScene{
 					}
 			}
 		}.start();
-		
-		
-		
+	}
+	
+	private void addWall() {
+		for(int i=2; i<=18; i+=2) {
+			for(int j=4; j<=12; j+=2) {
+				AnimatedSprite.wallXCoordinates.add(i*48);
+				AnimatedSprite.wallYCoordinates.add(j*48);
+			}
+		}
+
 	}
 }
