@@ -54,7 +54,6 @@ public class MainCharacter extends AnimatedSprite{
 			}
 			
 		}
-
 		moveTo(newX, newY);
 		animate(movement);
 	}

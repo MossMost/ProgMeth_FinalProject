@@ -46,7 +46,7 @@ public class SoloGameScene extends GeneralScene{
 				 	
 					gc.drawImage(background, 0, 0);
 					
-					for(int i=0;i<70;i++) {
+					for(int i=0;i<70 ;i++) {
 						gc.drawImage(brick, posXBrick[i], posYBrick[i]);
 					}
 					
@@ -72,6 +72,9 @@ public class SoloGameScene extends GeneralScene{
 					else if(activeKeys.contains(KeyCode.DOWN)) {
 						Player.move(MainCharacter.DOWN);
 					}
+					else if(activeKeys.contains(KeyCode.SPACE)) {
+						//Player.bomb();
+					}
 			}
 		}.start();
 	}
@@ -84,7 +87,7 @@ public class SoloGameScene extends GeneralScene{
 			}
 		}
 		
-		//random
+		//randomWall
 		Random rand = new Random();
 		int posX,posY;
 		for(int tmp = 0; tmp < 70; tmp++) {
@@ -109,7 +112,7 @@ public class SoloGameScene extends GeneralScene{
 			
 		}
 		
-		//add brick
+		//addWall
 		for(int i=0;i<100;i++) {
 			AnimatedSprite.wallXCoordinates.add(posXBrick[i]);
 			AnimatedSprite.wallYCoordinates.add(posYBrick[i]);
