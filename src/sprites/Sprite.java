@@ -31,4 +31,7 @@ public class Sprite {
 		gc.drawImage(spriteImage, spriteX, spriteY, width, height, x, y, width, height);
 	}
 	
+	public void setSpriteImage(Image image) {
+		spriteImage = image;
+	}
 }

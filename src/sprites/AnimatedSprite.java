@@ -2,11 +2,12 @@ package sprites;
 
 
 public class AnimatedSprite extends Sprite{
-	public static final int ToTAL_MOVEMENTS = 4;
+	public static final int ToTAL_MOVEMENTS = 5;
 	public static final int RIGHT = 0;
 	public static final int LEFT =1;
 	public static final int UP = 2;
 	public static final int DOWN = 3;
+	public static final int DIE = 4;
 	public static final byte SPRITE_CHANGE = 15;
 	
 	protected int currentDirection;

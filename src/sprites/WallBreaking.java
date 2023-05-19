@@ -13,13 +13,14 @@ public class WallBreaking extends AnimatedSprite{
 	private static final String IMAGE_PATH = "assets/Brick_break2.png";
     protected int[] spriteXCoordinates = new int[] {0,48,96,144};
     protected int[] spriteYCoordinates = new int[] {0,0,0,0};
+    public static final byte WALL_CHANGE = 10;
     	
 
     protected byte currentSprite;
     protected byte currentSpriteChange;
 
     public WallBreaking() {
-        super(Constant.SCENE_WIDTH, Constant.SCENE_WIDTH);
+        super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
         currentSprite = 0;
         currentSpriteChange = 0;
         try {
@@ -36,7 +37,7 @@ public class WallBreaking extends AnimatedSprite{
             public void handle(long currentNanoTime) {
                 if(currentNanoTime - time <= 5e8) {
                     currentSpriteChange++;
-                    if(currentSpriteChange >= Bomb.BOMB_CHANGE) {
+                    if(currentSpriteChange >= WALL_CHANGE) {
                         currentSpriteChange = 0;
                         currentSprite = (byte)((currentSprite + 1) % (spriteXCoordinates.length));
                     }

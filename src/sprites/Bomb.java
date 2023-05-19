@@ -12,7 +12,7 @@ import javafx.util.Pair;
 import scenes.SoloGameScene;
 
 public class Bomb extends AnimatedSprite{
-    public static final int INTERVAL_BOMB = 3;
+    public static int amountBomb = 1;
     private static final String IMAGE_PATH = "assets/Bomb.png";
     public static final byte SPRITE_CHANGE = 25;
     public static final byte BOMB_CHANGE = 15;
@@ -47,7 +47,7 @@ public class Bomb extends AnimatedSprite{
                     }
                     updateSpriteCoordinates(gc);
                 }
-                else if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 1e7) {
+                else if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 1e8) {
                 	
                 	Fire middle = new Fire("assets/Central_flame.png");
             		middle.animate(x, y, gc, currentNanoTime);
@@ -56,7 +56,9 @@ public class Bomb extends AnimatedSprite{
                 		Fire top = new Fire("assets/Top_Up_flame.png");
                 		top.animate(x, y-48, gc, currentNanoTime);
                 		if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y-48))) {
-                			int idx = SoloGameScene.wallBrickCoordinates.indexOf(new Pair<>(x,y-48));;
+                			WallBreaking tmp = new WallBreaking();
+                			tmp.animate(x,y-48,gc,currentNanoTime);
+                			int idx = SoloGameScene.wallBrickCoordinates.indexOf(new Pair<>(x,y-48));
                 			SoloGameScene.wallBrickCoordinates.remove(idx);
                 			SoloGameScene.disableWall.add(new Pair<>(x,y-48));
                 		}
@@ -65,31 +67,44 @@ public class Bomb extends AnimatedSprite{
                 		Fire bottom = new Fire("assets/Top_Down_flame.png");
                 		bottom.animate(x, y+48, gc, currentNanoTime);
                 		if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y+48))) {
-                			int idx = SoloGameScene.wallBrickCoordinates.indexOf(new Pair<>(x,y+48));;
+                			WallBreaking tmp = new WallBreaking();
+                			tmp.animate(x,y+48,gc,currentNanoTime);
+                			int idx = SoloGameScene.wallBrickCoordinates.indexOf(new Pair<>(x,y+48));
                 			SoloGameScene.wallBrickCoordinates.remove(idx);
                 			SoloGameScene.disableWall.add(new Pair<>(x,y+48));
+ 
                 		}
                 	}
                 	if(SoloGameScene.wallCoordinates.contains(new Pair<>(x-48,y)) == false) {
                 		Fire left = new Fire("assets/Top_Left_flame.png");
                 		left.animate(x-48, y, gc, currentNanoTime);
                 		if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x-48,y))) {
-                			int idx = SoloGameScene.wallBrickCoordinates.indexOf(new Pair<>(x-48,y));;
+                			WallBreaking tmp = new WallBreaking();
+                			tmp.animate(x-48,y,gc,currentNanoTime);
+                			int idx = SoloGameScene.wallBrickCoordinates.indexOf(new Pair<>(x-48,y));
                 			SoloGameScene.wallBrickCoordinates.remove(idx);
                 			SoloGameScene.disableWall.add(new Pair<>(x-48,y));
+ 
                 		}
                 	}
                 	if(SoloGameScene.wallCoordinates.contains(new Pair<>(x+48,y)) == false) {
                 		Fire right = new Fire("assets/Top_Right_flame.png");
                 		right.animate(x+48, y, gc, currentNanoTime);
                 		if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x+48,y))) {
-                			int idx = SoloGameScene.wallBrickCoordinates.indexOf(new Pair<>(x+48,y));;
+                			WallBreaking tmp = new WallBreaking();
+                			tmp.animate(x+48,y,gc,currentNanoTime);
+                			int idx = SoloGameScene.wallBrickCoordinates.indexOf(new Pair<>(x+48,y));
                 			SoloGameScene.wallBrickCoordinates.remove(idx);
                 			SoloGameScene.disableWall.add(new Pair<>(x+48,y));
+ 
                 		}
                 	}
                 	
                 }
+                
+                /*if(currentNanoTime - time >= 3e9 + 1e8 && currentNanoTime - time <= 3e9 + 3e8) {
+                	Bomb.amountBomb += 4;
+                }*/
                 
             }
         }.start();
