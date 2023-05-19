@@ -12,7 +12,7 @@ public class Enemy5 extends AnimatedSprite{
 	private static final int STEP = 1;
 	
 	public Enemy5() {
-		super(Constant.SCENE_WIDTH,Constant.SCENE_HEIGHT);
+		super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
 		try {
 			spriteImage = new Image(Files.newInputStream(Paths.get(IMAGE_PATH)));
 		} catch (Exception e) {
@@ -73,7 +73,7 @@ public class Enemy5 extends AnimatedSprite{
 	
 	public void flutter(int movement, int newX, int newY) {
 		
-		System.out.println(newY%96);
+
 		if (movement == LEFT && newX - STEP < 40)
 			movement = randomMovement(movement);
 		else if (movement == RIGHT && newX + STEP > 1008 - 44*2)
@@ -88,7 +88,7 @@ public class Enemy5 extends AnimatedSprite{
 			if(movement == LEFT || movement == RIGHT) {
 				int random;
 				Random rand = new Random();
-				random = rand.nextInt(1000);
+				random = rand.nextInt(500);
 				if(random<=5) {
 					moveTo(newX, newY);
 					if(random<=2)
@@ -103,10 +103,9 @@ public class Enemy5 extends AnimatedSprite{
 			}
 			else {
 
-				System.out.println(movement);
 				int random;
 				Random rand = new Random();
-				random = rand.nextInt(100);
+				random = rand.nextInt(500);
 				if(random<=5) {
 					moveTo(newX, newY);
 					if(random<=2)
@@ -125,5 +124,6 @@ public class Enemy5 extends AnimatedSprite{
 			animate(movement);
 		}
 	}
+	
 	
 }

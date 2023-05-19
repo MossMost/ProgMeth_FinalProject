@@ -1,9 +1,9 @@
 package scenes;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Queue;
 import java.util.Random;
 
 import Constant.Constant;
@@ -11,51 +11,95 @@ import application.Main;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.util.Pair;
 import sprites.Bomb;
 import sprites.Enemy1;
 import sprites.Enemy5;
 import sprites.MainCharacter;
 import sprites.Sprite;
-import sprites.WallBreaking;
 
 
 public class SoloGameScene extends GeneralScene{
 	private static final String BACKGROUND_IMAGE = "assets/background.png";
 	private static final String BRICK_IMAGE = "assets/Brick.png";
+	private static final String MUSIC_ON_IMAGE = "assets/MusicOn.png";
+	private static final String MUSIC_OFF_IMAGE = "assets/MusicOff.png";
 
 	public static int posXBrick[] = new int[110];
 	public static int posYBrick[] = new int[110];
+	private int posXEnemy[] = new int[10];
+	private int posYEnemy[] = new int[10];
+	private int posXItem[] = new int[10];
+	private int posYItem[] = new int[10];
+	
 	
 	public static Sprite wall[];
 	public static ArrayList<Pair<Integer, Integer>> disableWall = new ArrayList<Pair<Integer, Integer>>();
 	public static ArrayList<Pair<Integer, Integer>> wallCoordinates = new ArrayList<Pair<Integer, Integer>>();
 	public static ArrayList<Pair<Integer, Integer>> wallBrickCoordinates = new ArrayList<Pair<Integer, Integer>>();
 	
-	private Image background,brick;
+	public static ArrayList<Pair<Integer, Integer>> BombCoordinates = new ArrayList<Pair<Integer, Integer>>();
+	public static ArrayList<Pair<Integer, Integer>> EnemyCoordinates = new ArrayList<Pair<Integer, Integer>>();
+	public static ArrayList<Pair<Integer, Integer>> ItemCoordinates = new ArrayList<Pair<Integer, Integer>>();
+	
+	private Image background,brick,musicOn,musicOff;
 	private MainCharacter Player;
 	private long lastSpace;
 	private Enemy1 enemy1;
 	private Enemy5 enemy5;
 	
+	public static final String BACKGROUND_SONG = "assets/SoloGameSceneMusic.wav";
+	public static final String PLACE_BOMB_EFFECT = "assets/place_bomb.wav";
+	public static final String EXPLOSION_EFFECT = "assets/explosion.wav";
+	
+	private MediaPlayer mediaPlayerEffects;
+	private Media effect;
+	
+	private boolean isMusicEnabled = true;
+	
 	public SoloGameScene() {
 		super();
 		addWall();
+		//GeneratePosEnemy(5);
+		//GeneratePosItem(1, 2, 2);
 		wall = new Sprite[75];
 		try {
 			background = new Image(Files.newInputStream(Paths.get(BACKGROUND_IMAGE)));
 			brick = new Image(Files.newInputStream(Paths.get(BRICK_IMAGE)));
+			
+			musicOn = new Image(Files.newInputStream(Paths.get(MUSIC_ON_IMAGE)));
+			musicOff = new Image(Files.newInputStream(Paths.get(MUSIC_OFF_IMAGE)));
+			
 			Player = new MainCharacter();
 			enemy1 = new Enemy1();
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	private void showMessage() {
+		
+		Font myFont = Font.font("Arial", FontWeight.NORMAL, 16);
+		gc.setFont(myFont);
+		gc.setFill(Color.BLACK);
+		gc.fillText("Press P to turn on/off the music", 50, 30);
+		
+	}
 	
 	@Override
 	public void draw() {
+		
+		sound = new Media(new File(BACKGROUND_SONG).toURI().toString());
+		mediaPlayer = new MediaPlayer(sound);
+		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+		mediaPlayer.play();
+		
 		activeKeys.clear();
 		Player.moveTo(1*48, 3*48);
 		enemy1.moveTo(1*48, 3*48);
@@ -65,8 +109,9 @@ public class SoloGameScene extends GeneralScene{
 			 public void handle(long currentNanoTime){
 				 	gc.setFill(Color.BLACK);
 				 	gc.fillRect(0, 0, Constant.SCENE_WIDTH, Constant.SCENE_HEIGHT);
-				 	
 					gc.drawImage(background, 0, 0);
+					showMessage();
+					drawMusic();
 					
 					for(int i=0;i<70;i++) {
 						if(disableWall.contains(new Pair<>(posXBrick[i], posYBrick[i])) == false) {
@@ -80,9 +125,14 @@ public class SoloGameScene extends GeneralScene{
 						delTime.remove(0);
 						Bomb.amountBomb+=4;
 					}*/
-					if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 1e7 && Player.checkCollition(Player.getX(), Player.getY(), mnX, mnY)) {
+					if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 1e7 && Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY)) {
 						Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
 					}
+					
+					if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 1e7 && enemy1.checkCollision(enemy1.getX(), enemy1.getY(), mnX, mnY) && !enemy1.getDead()) {
+						enemy1.die(enemy1.getX(), enemy1.getY(), gc, currentNanoTime);
+					}
+					
 					if(Player.getDead()) {
 						this.stop();
 						Main.setScene(Main.CREDITS_SCENE);
@@ -91,33 +141,36 @@ public class SoloGameScene extends GeneralScene{
 				 	Player.draw(gc);
 				 	enemy1.draw(gc);
 				 	enemy1.move(enemy1.getCurrentDirection());
-					if(activeKeys.contains(KeyCode.ESCAPE)){         
-						Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
-						this.stop();
-						Main.setScene(Main.WELCOME_SCENE);
-					}
-					else if(activeKeys.contains(KeyCode.ENTER)) {
-						this.stop();
-						Main.setScene(Main.CREDITS_SCENE);
-					}
-					else if(activeKeys.contains(KeyCode.LEFT)) {
-						Player.move(MainCharacter.LEFT);
-					}
-					else if(activeKeys.contains(KeyCode.RIGHT)) {
-						Player.move(MainCharacter.RIGHT);
-					}
-					else if(activeKeys.contains(KeyCode.UP)) {
-						Player.move(MainCharacter.UP);
-					}
-					else if(activeKeys.contains(KeyCode.DOWN)) {
-						Player.move(MainCharacter.DOWN);
-					}
-					else if(currentNanoTime - lastSpace > 3e9 + 1e8 && activeKeys.contains(KeyCode.SPACE)) {
-						Bomb bomb = new Bomb();
-						Bomb.amountBomb--;
-						lastSpace = currentNanoTime;
-						delTime.add((long) (currentNanoTime+3e9+1e8));
-						System.out.println(Bomb.amountBomb);
+			
+				 	if(activeKeys.contains(KeyCode.ESCAPE)){         
+				 		Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
+				 		this.stop();
+				 		Main.setScene(Main.WELCOME_SCENE);
+				 	}
+				 	else if(activeKeys.contains(KeyCode.ENTER)) {
+				 		this.stop();
+				 		Main.setScene(Main.CREDITS_SCENE);
+				 	}
+				 	else if(activeKeys.contains(KeyCode.LEFT)) {
+				 		Player.move(MainCharacter.LEFT);
+				 	}
+				 	else if(activeKeys.contains(KeyCode.RIGHT)) {
+				 		Player.move(MainCharacter.RIGHT);
+				 	}
+		  		 	else if(activeKeys.contains(KeyCode.UP)) {
+				 		Player.move(MainCharacter.UP);
+				 	}
+				 	else if(activeKeys.contains(KeyCode.DOWN)) {
+				 		Player.move(MainCharacter.DOWN);
+				 	}
+				 	else if(currentNanoTime - lastSpace > 3e9 + 1e8 && activeKeys.contains(KeyCode.SPACE)) {
+				 		Bomb bomb = new Bomb();
+				 		Bomb.amountBomb--;
+				 		
+				 		playEffect(PLACE_BOMB_EFFECT);
+				 		
+				 		lastSpace = currentNanoTime;
+				 		delTime.add((long) (currentNanoTime+3e9+1e8));
 						mnX = (Player.getX()/48)*48;
 						if(Math.abs(mnX - Player.getX()) > Math.abs((Player.getX()/48+1)*48 - Player.getX())) {
 							mnX = (Player.getX()/48+1)*48;
@@ -126,9 +179,18 @@ public class SoloGameScene extends GeneralScene{
 						if(Math.abs(mnY - Player.getY()) > Math.abs((Player.getY()/48+1)*48 - Player.getY())) {
 							mnY = (Player.getY()/48+1)*48;
 						}
- 						bomb.animate(mnX, mnY, gc, currentNanoTime);
+						if(BombCoordinates.contains(new Pair<>(mnX,mnY)) == false) {
+	                    	BombCoordinates.add(new Pair<>(mnX,mnY));
+	                    	
+	                    }
+						Player.setIsInBomb(true);
+						bomb.animate(mnX, mnY, gc, currentNanoTime);
+				 	}
+				 	else if(activeKeys.contains(KeyCode.P)) {
+						SwitchMusic();
 					}
-			}
+				 }
+			
 		}.start();
 	}
 	
@@ -185,4 +247,37 @@ public class SoloGameScene extends GeneralScene{
 		return false;
 		
 	}
+	
+	private void playEffect(String path)
+	{
+		effect = new Media(new File(path).toURI().toString());
+		mediaPlayerEffects = new MediaPlayer(effect);
+		mediaPlayerEffects.play();
+	}
+	
+	private void SwitchMusic() {
+		if(isMusicEnabled) {
+			mediaPlayer.pause();
+			isMusicEnabled = false;
+			
+		}
+		else {
+			mediaPlayer.play();
+			isMusicEnabled = true;
+		}
+	}
+	
+	private void drawMusic() {
+		if(isMusicEnabled) {
+			gc.drawImage(musicOn,0,0);
+		}
+		else {
+			gc.drawImage(musicOff,0,0);
+		}
+	}
+
+	
+	
+	
 }
+

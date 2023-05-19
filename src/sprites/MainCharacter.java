@@ -14,8 +14,9 @@ public class MainCharacter extends AnimatedSprite{
 	private static final String IMAGE_PATH = "assets/Player01.png";
 	private static final int STEP = 2;
 	private boolean isDead = false;
+	private boolean canwalk = true;
 	public static final byte DIE_FRAME = 90;
-	
+	protected boolean IsInBomb;
 
 	public MainCharacter() {
 		super(Constant.BLOCK_SIZE,Constant.BLOCK_SIZE);
@@ -40,6 +41,9 @@ public class MainCharacter extends AnimatedSprite{
 	}
 	
 	public void move(int movement) {
+		if(!getCanWalk())
+			return;
+		
 		int newX = x, oldX = x;
 		int newY = y, oldY = y;
 		if (movement == LEFT && newX - STEP >= 40)
@@ -73,6 +77,22 @@ public class MainCharacter extends AnimatedSprite{
 				newY = oldY;
 			}
 		}
+		sz = SoloGameScene.BombCoordinates.size();
+		for(int i=0;i<sz;i++) {
+			int wallX = SoloGameScene.BombCoordinates.get(i).getKey();
+			int wallY = SoloGameScene.BombCoordinates.get(i).getValue();
+			if(getIsInBomb() && newX > wallX - 45 && newX < wallX + 49 && newY  < wallY + 49 && newY  > wallY-47) {
+				continue;
+			}
+			
+			setIsInBomb(false);
+			
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
+				newX = oldX;
+				newY = oldY;
+				
+			}
+		}
 		
 		
 		moveTo(newX, newY);
@@ -92,12 +112,16 @@ public class MainCharacter extends AnimatedSprite{
                 }
 				if(currentNanoTime - time > 2e9) {
 					setDead(true);
+					
 				}
 			}
+			
+			
 		}.start();
+		setCanWalk(false);
 	}
 	
-	public boolean checkCollition(int xPlayer, int yPlayer, int xBomb,int yBomb) {
+	public boolean checkCollision(int xPlayer, int yPlayer, int xBomb,int yBomb) {
 		if(yPlayer>=yBomb-48*2+10 && yPlayer<=yBomb+48*2-10 && xPlayer>=xBomb-48+20 && xPlayer<=xBomb+48)
 			return true;
 		if(xPlayer>=xBomb-48*2+10 && xPlayer<=xBomb+48*2 && yPlayer>=yBomb-48+20 && yPlayer<=yBomb+48)
@@ -118,5 +142,20 @@ public class MainCharacter extends AnimatedSprite{
 	
 	public void setDead(boolean dead) {
 		isDead = dead;
+	}
+	public boolean getCanWalk() {
+		return canwalk;
+	}
+	
+	public void setCanWalk(boolean canwalk) {
+		this.canwalk = canwalk;
+	}
+	
+	public void setIsInBomb(boolean IsInBomb) {
+		this.IsInBomb = IsInBomb;
+	}
+	
+	public boolean getIsInBomb() {
+		return IsInBomb;
 	}
 }

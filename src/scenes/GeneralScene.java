@@ -10,6 +10,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 abstract public class GeneralScene extends Scene{
 	public static final int GAME_WIDTH = 1008;
@@ -20,6 +22,9 @@ abstract public class GeneralScene extends Scene{
 	protected GraphicsContext gc;
 	protected Set<KeyCode> activeKeys;
 	protected Set<KeyCode> releasedKeys;
+	
+	protected MediaPlayer mediaPlayer;
+	protected Media sound;
 	
 	public GeneralScene() {
 		

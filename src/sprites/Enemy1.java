@@ -5,6 +5,8 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 import Constant.Constant;
+import javafx.animation.AnimationTimer;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import scenes.SoloGameScene;
 
@@ -12,6 +14,8 @@ import scenes.SoloGameScene;
 public class Enemy1 extends AnimatedSprite{
 	private static final String IMAGE_PATH = "assets/Enemy1.png";
 	private static final int STEP = 1;
+	private boolean isDead = false;
+	public static final byte DIE_FRAME = 62;
 	
 	public Enemy1() {
 		super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
@@ -29,13 +33,20 @@ public class Enemy1 extends AnimatedSprite{
 		spriteYCoordinates[UP] = new int[] {0, 0, 0};
 		spriteXCoordinates[DOWN] = new int[] {0, 48, 96};
 		spriteYCoordinates[DOWN] = new int[] {48, 48, 48};
+		spriteXCoordinates[DIE] = new int[] {0, 48, 96, 0, 48, 96};
+		spriteYCoordinates[DIE] = new int[] {96, 96, 96, 144, 144, 144};
 		
 		updateSpriteCoordinates();
 	}
 	
 	public void move(int movement) {
+		if(getDead())
+			return;
 		int newX = x;
 		int newY = y;
+		int oldX = x;
+		int oldY = y;
+		
 		if (movement == LEFT && newX - STEP >= 40)
 			newX -= STEP;
 		else if (movement == RIGHT && newX + STEP <= 1008 - 44*2)
@@ -44,6 +55,7 @@ public class Enemy1 extends AnimatedSprite{
 			newY -= STEP;
 		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
 			newY += STEP;
+		
 		if (movement == LEFT && newX - STEP < 40)
 			movement = randomMovement(movement);
 		else if (movement == RIGHT && newX + STEP > 1008 - 44*2)
@@ -74,8 +86,28 @@ public class Enemy1 extends AnimatedSprite{
 				break;
 			}
 		}
+		
+		sz = SoloGameScene.BombCoordinates.size();
+		for(int i=0;i<sz;i++) {
+			int wallX = SoloGameScene.BombCoordinates.get(i).getKey();
+			int wallY = SoloGameScene.BombCoordinates.get(i).getValue();
+			
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
+				movement = randomMovement(movement);
+				break;
+			}
+		}
+		
+		if (movement == LEFT && newX - STEP >= 40)
+			oldX -= STEP;
+		else if (movement == RIGHT && newX + STEP <= 1008 - 44*2)
+			oldX += STEP;
+		else if (movement == UP && newY - STEP >= 48*3)
+			oldY -= STEP;
+		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
+			oldY += STEP;
 
-		moveTo(newX, newY);
+		moveTo(oldX, oldY);
 		animate(movement);
 	}
 	
@@ -132,6 +164,46 @@ public class Enemy1 extends AnimatedSprite{
 		}
 		
 		return true;
+	}
+	
+	public void die(int x,int y,GraphicsContext gc,long time) {
+		setDead(true);
+		new AnimationTimer() {
+			public void handle(long currentNanoTime) {
+				if(currentNanoTime - time <= 5e9) {
+                    currentSpriteChange++;
+                    if(currentSpriteChange >= DIE_FRAME) {
+                        currentSpriteChange = 0;
+                        currentSprite = (byte)((currentSprite + 1) % (spriteXCoordinates[DIE].length));
+                    }
+                    updateSpriteCoordinates(gc);
+                }
+			}
+		}.start();
+	}
+	
+	public boolean checkCollision(int xPlayer, int yPlayer, int xBomb,int yBomb) {
+		if(yPlayer>=yBomb-48*2+10 && yPlayer<=yBomb+48*2-10 && xPlayer>=xBomb-48+20 && xPlayer<=xBomb+48)
+			return true;
+		if(xPlayer>=xBomb-48*2+10 && xPlayer<=xBomb+48*2 && yPlayer>=yBomb-48+20 && yPlayer<=yBomb+48)
+			return true;
+		return false;
+	}
+	
+	protected void updateSpriteCoordinates(GraphicsContext gc) {
+
+		spriteX = spriteXCoordinates[DIE][currentSprite];
+		spriteY = spriteYCoordinates[DIE][currentSprite];
+        draw(gc);
+        
+    }
+	
+	public boolean getDead() {
+		return isDead;
+	}
+	
+	public void setDead(boolean dead) {
+		isDead = dead;
 	}
 	
 
