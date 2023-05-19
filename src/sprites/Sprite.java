@@ -30,4 +30,5 @@ public class Sprite {
 	public void draw(GraphicsContext gc) {
 		gc.drawImage(spriteImage, spriteX, spriteY, width, height, x, y, width, height);
 	}
+	
 }

@@ -3,6 +3,8 @@ package scenes;
 import java.util.HashSet;
 import java.util.Set;
 
+import Constant.Constant;
+
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -21,12 +23,12 @@ abstract public class GeneralScene extends Scene{
 	
 	public GeneralScene() {
 		
-		super(new StackPane(), GAME_WIDTH, GAME_HEIGHT);
+		super(new StackPane(), Constant.SCENE_WIDTH, Constant.SCENE_HEIGHT);
 		
 		root = new StackPane();
 		this.setRoot(root);
 		
-		Canvas canvas = new Canvas(GAME_WIDTH,GAME_HEIGHT);
+		Canvas canvas = new Canvas(Constant.SCENE_WIDTH, Constant.SCENE_HEIGHT);
 		root.getChildren().add(canvas);
 		gc = canvas.getGraphicsContext2D();
 		

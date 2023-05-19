@@ -3,16 +3,16 @@ package sprites;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import Constant.Constant;
 import javafx.scene.image.Image;
+import scenes.SoloGameScene;
 
 public class MainCharacter extends AnimatedSprite{
 	
-	public static final int MAIN_CHARACTER_WIDTH = 48;
-	public static final int MAIN_CHARACTER_HEIGHT = 48;
 	private static final String IMAGE_PATH = "assets/Player01.png";
 	private static final int STEP = 2;
 	public MainCharacter() {
-		super(MAIN_CHARACTER_WIDTH,MAIN_CHARACTER_HEIGHT);
+		super(Constant.BLOCK_SIZE,Constant.BLOCK_SIZE);
 		try {
 			spriteImage = new Image(Files.newInputStream(Paths.get(IMAGE_PATH)));
 		} catch (Exception e) {
@@ -43,17 +43,30 @@ public class MainCharacter extends AnimatedSprite{
 		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
 			newY += STEP;
 		
-		int sz = AnimatedSprite.wallXCoordinates.size();
+		//check wall
+		int sz = SoloGameScene.wallCoordinates.size();
 		for(int i=0;i<sz;i++) {
-			int wallX = AnimatedSprite.wallXCoordinates.get(i);
-			int wallY = AnimatedSprite.wallYCoordinates.get(i);
+			int wallX = SoloGameScene.wallCoordinates.get(i).getKey();
+			int wallY = SoloGameScene.wallCoordinates.get(i).getValue();
 			
 			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
 				newX = oldX;
 				newY = oldY;
 			}
-			
 		}
+		
+		sz = SoloGameScene.wallBrickCoordinates.size();
+		for(int i=0;i<sz;i++) {
+			int wallX = SoloGameScene.wallBrickCoordinates.get(i).getKey();
+			int wallY = SoloGameScene.wallBrickCoordinates.get(i).getValue();
+			
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
+				newX = oldX;
+				newY = oldY;
+			}
+		}
+		
+		
 		moveTo(newX, newY);
 		animate(movement);
 	}
