@@ -128,13 +128,10 @@ public class SoloGameScene extends GeneralScene{
 							wall[i].draw(gc);
 						}
 					}
-					
-					
-					/*if(ch && Player.checkCollision(Player.getX(), Player.getY(), 2*48, 3*48)) {
-						ch = false;
-						Player.setAmountBomb(Player.getAmountBomb() + 1);
-					}*/
-					
+					if(!delTime.isEmpty() && currentNanoTime - delTime.get(0) >= 3e9+1e8) {
+						Player.setAmountBomb(Player.getAmountBomb()+1);
+						delTime.remove(0);
+					}
 					
 					if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 2e7 && (Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY)
 						|| Player.checkCollision(Player.getX(), Player.getY(), mnX-48, mnY) || Player.checkCollision(Player.getX(), Player.getY(), mnX+48, mnY)
@@ -190,7 +187,7 @@ public class SoloGameScene extends GeneralScene{
 				 		Player.setAmountBomb(Player.getAmountBomb() - 1);
 				 		playEffect(PLACE_BOMB_EFFECT);
 				 		lastSpace = currentNanoTime;
-				 		delTime.add((long) (currentNanoTime+3e9+1e8));
+				 		delTime.add((long) (currentNanoTime));
 						mnX = (Player.getX()/48)*48;
 						if(Math.abs(mnX - Player.getX()) > Math.abs((Player.getX()/48+1)*48 - Player.getX())) {
 							mnX = (Player.getX()/48+1)*48;

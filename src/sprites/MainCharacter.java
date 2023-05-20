@@ -14,7 +14,7 @@ public class MainCharacter extends AnimatedSprite{
 	private static final String IMAGE_PATH = "assets/Player01.png";
 	private int STEP = 2;
 	private int fireRange = 1;
-	private int amountBomb = 1;
+	private int amountBomb = 2;
 	private boolean isDead = false;
 	private boolean canwalk = true;
 	public static final byte DIE_FRAME = 90;

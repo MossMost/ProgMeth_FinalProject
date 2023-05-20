@@ -54,9 +54,8 @@ public class Bomb extends AnimatedSprite{
                     updateSpriteCoordinates(gc);
                 }
                 else if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 1e8) {
-                	int idx;
                 	if(!SoloGameScene.BombCoordinates.isEmpty() && ch) {
-                		idx = SoloGameScene.BombCoordinates.indexOf(new Pair<>(x,y));
+                		int idx = SoloGameScene.BombCoordinates.indexOf(new Pair<>(x,y));
                 		SoloGameScene.BombCoordinates.remove(idx);
                 		ch=false;
                 	}
@@ -69,49 +68,22 @@ public class Bomb extends AnimatedSprite{
                 	if(SoloGameScene.wallCoordinates.contains(new Pair<>(x,y-48)) == false) {
                 		Fire top = new Fire("assets/Top_Up_flame.png");
                 		top.animate(x, y-48, gc, currentNanoTime);
-                		if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y-48))) {
-                			WallBreaking tmp = new WallBreaking();
-                			tmp.animate(x,y-48,gc,currentNanoTime);
-                			idx = SoloGameScene.wallBrickCoordinates.indexOf(new Pair<>(x,y-48));
-                			SoloGameScene.wallBrickCoordinates.remove(idx);
-                			SoloGameScene.disableWall.add(new Pair<>(x,y-48));
-                		}
+                		checkWallBrick(x,y-48,gc,currentNanoTime);
                 	}
                 	if(SoloGameScene.wallCoordinates.contains(new Pair<>(x,y+48)) == false) {
                 		Fire bottom = new Fire("assets/Top_Down_flame.png");
                 		bottom.animate(x, y+48, gc, currentNanoTime);
-                		if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y+48))) {
-                			WallBreaking tmp = new WallBreaking();
-                			tmp.animate(x,y+48,gc,currentNanoTime);
-                			idx = SoloGameScene.wallBrickCoordinates.indexOf(new Pair<>(x,y+48));
-                			SoloGameScene.wallBrickCoordinates.remove(idx);
-                			SoloGameScene.disableWall.add(new Pair<>(x,y+48));
- 
-                		}
+                		checkWallBrick(x,y+48,gc,currentNanoTime);
                 	}
                 	if(SoloGameScene.wallCoordinates.contains(new Pair<>(x-48,y)) == false) {
                 		Fire left = new Fire("assets/Top_Left_flame.png");
                 		left.animate(x-48, y, gc, currentNanoTime);
-                		if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x-48,y))) {
-                			WallBreaking tmp = new WallBreaking();
-                			tmp.animate(x-48,y,gc,currentNanoTime);
-                			idx = SoloGameScene.wallBrickCoordinates.indexOf(new Pair<>(x-48,y));
-                			SoloGameScene.wallBrickCoordinates.remove(idx);
-                			SoloGameScene.disableWall.add(new Pair<>(x-48,y));
- 
-                		}
+                		checkWallBrick(x-48,y,gc,currentNanoTime);
                 	}
                 	if(SoloGameScene.wallCoordinates.contains(new Pair<>(x+48,y)) == false) {
                 		Fire right = new Fire("assets/Top_Right_flame.png");
                 		right.animate(x+48, y, gc, currentNanoTime);
-                		if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x+48,y))) {
-                			WallBreaking tmp = new WallBreaking();
-                			tmp.animate(x+48,y,gc,currentNanoTime);
-                			idx = SoloGameScene.wallBrickCoordinates.indexOf(new Pair<>(x+48,y));
-                			SoloGameScene.wallBrickCoordinates.remove(idx);
-                			SoloGameScene.disableWall.add(new Pair<>(x+48,y));
- 
-                		}
+                		checkWallBrick(x+48,y,gc,currentNanoTime);
                 	}
                 	
                 	
@@ -131,8 +103,15 @@ public class Bomb extends AnimatedSprite{
         
     }
     
-    public void checkIsInBomb() {
-    	
+    private void checkWallBrick(int x, int y, GraphicsContext gc,long currentNanoTime) {
+    	int idx;
+    	if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y))) {
+			WallBreaking tmp = new WallBreaking();
+			tmp.animate(x,y,gc,currentNanoTime);
+			idx = SoloGameScene.wallBrickCoordinates.indexOf(new Pair<>(x,y));
+			SoloGameScene.wallBrickCoordinates.remove(idx);
+			SoloGameScene.disableWall.add(new Pair<>(x,y));
+		}
     }
     
     public void setIsInBomb(boolean IsInBomb) {
