@@ -12,7 +12,6 @@ import javafx.util.Pair;
 import scenes.SoloGameScene;
 
 public class Bomb extends AnimatedSprite{
-    public static int amountBomb = 1;
     private static final String IMAGE_PATH = "assets/Bomb.png";
     public static final byte SPRITE_CHANGE = 25;
     public static final byte BOMB_CHANGE = 15;
@@ -22,9 +21,12 @@ public class Bomb extends AnimatedSprite{
 
     protected byte currentSprite;
     protected byte currentSpriteChange;
+    protected boolean IsInBomb;
+    private boolean ch;
 
     public Bomb() {
         super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
+        setIsInBomb(true);
         currentSprite = 0;
         currentSpriteChange = 0;
         try {
@@ -38,6 +40,7 @@ public class Bomb extends AnimatedSprite{
     	
         this.x = x;
         this.y = y;
+        ch = true;
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 if(currentNanoTime - time < 3e9) {
@@ -49,12 +52,18 @@ public class Bomb extends AnimatedSprite{
                     updateSpriteCoordinates(gc);
                 }
                 else if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 1e8) {
+                	
                 	int idx;
-                	if(!SoloGameScene.BombCoordinates.isEmpty()) {
+                	if(!SoloGameScene.BombCoordinates.isEmpty() && ch) {
+                		System.out.println(SoloGameScene.BombCoordinates);
                 		idx = SoloGameScene.BombCoordinates.indexOf(new Pair<>(x,y));
                 		SoloGameScene.BombCoordinates.remove(idx);
+                		ch=false;
                 	}
-            		
+                	if(!SoloGameScene.BombArr.isEmpty()) {
+                		SoloGameScene.BombArr.remove(0);
+                		
+                	}
                 	Fire middle = new Fire("assets/Central_flame.png");
             		middle.animate(x, y, gc, currentNanoTime);
                 	if(SoloGameScene.wallCoordinates.contains(new Pair<>(x,y-48)) == false) {
@@ -107,10 +116,6 @@ public class Bomb extends AnimatedSprite{
                 	
                 	
                 }
-                
-                /*if(currentNanoTime - time >= 3e9 + 1e8 && currentNanoTime - time <= 3e9 + 3e8) {
-                	Bomb.amountBomb += 4;
-                }*/
             }
         }.start();
 
@@ -125,6 +130,18 @@ public class Bomb extends AnimatedSprite{
         draw(gc);
         
     }
+    
+    public void checkIsInBomb() {
+    	
+    }
+    
+    public void setIsInBomb(boolean IsInBomb) {
+		this.IsInBomb = IsInBomb;
+	}
+	
+	public boolean getIsInBomb() {
+		return IsInBomb;
+	}
 
 
 }

@@ -46,6 +46,7 @@ public class SoloGameScene extends GeneralScene{
 	public static ArrayList<Pair<Integer, Integer>> BombCoordinates = new ArrayList<Pair<Integer, Integer>>();
 	public static ArrayList<Pair<Integer, Integer>> EnemyCoordinates = new ArrayList<Pair<Integer, Integer>>();
 	public static ArrayList<Pair<Integer, Integer>> ItemCoordinates = new ArrayList<Pair<Integer, Integer>>();
+	public static ArrayList<Bomb> BombArr = new ArrayList<Bomb>();
 	
 	private Image background,brick,musicOn,musicOff;
 	private MainCharacter Player;
@@ -111,6 +112,7 @@ public class SoloGameScene extends GeneralScene{
 		new AnimationTimer() {
 			 int mnX,mnY;
 			 boolean chEnemyCollision = true;
+			 boolean ch = true;
 			 ArrayList<Long> delTime = new ArrayList<Long>();
 			 public void handle(long currentNanoTime){
 				 	gc.setFill(Color.BLACK);
@@ -118,7 +120,6 @@ public class SoloGameScene extends GeneralScene{
 					gc.drawImage(background, 0, 0);
 					showMessage();
 					drawMusic();
-					
 					for(int i=0;i<70;i++) {
 						if(disableWall.contains(new Pair<>(posXBrick[i], posYBrick[i])) == false) {
 							wall[i] = new Sprite(48,48);
@@ -127,6 +128,14 @@ public class SoloGameScene extends GeneralScene{
 							wall[i].draw(gc);
 						}
 					}
+					
+					
+					if(ch && Player.checkCollision(Player.getX(), Player.getY(), 2*48, 3*48)) {
+						ch = false;
+						Player.setAmountBomb(Player.getAmountBomb() + 1);
+					}
+					
+					
 					if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 2e7 && (Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY)
 						|| Player.checkCollision(Player.getX(), Player.getY(), mnX-48, mnY) || Player.checkCollision(Player.getX(), Player.getY(), mnX+48, mnY)
 						|| Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY-48) || Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY+48))) {
@@ -175,10 +184,10 @@ public class SoloGameScene extends GeneralScene{
 				 	else if(activeKeys.contains(KeyCode.DOWN)) {
 				 		Player.move(MainCharacter.DOWN);
 				 	}
-				 	else if(currentNanoTime - lastSpace > 3e9 + 1e8 && activeKeys.contains(KeyCode.SPACE)) {
+				 	else if(Player.getAmountBomb()>0 && currentNanoTime - lastSpace >= 2e8 * 4 && activeKeys.contains(KeyCode.SPACE)) {
 				 		Bomb bomb = new Bomb();
-				 		Bomb.amountBomb--;
-				 		
+				 		BombArr.add(bomb);
+				 		Player.setAmountBomb(Player.getAmountBomb() - 1);
 				 		playEffect(PLACE_BOMB_EFFECT);
 				 		
 				 		lastSpace = currentNanoTime;
@@ -195,14 +204,14 @@ public class SoloGameScene extends GeneralScene{
 	                    	BombCoordinates.add(new Pair<>(mnX,mnY));
 	                    	
 	                    }
-						Player.setIsInBomb(true);
 						bomb.animate(mnX, mnY, gc, currentNanoTime);
-						
+
 						
 				 	}
 				 	else if(activeKeys.contains(KeyCode.P)) {
 						SwitchMusic();
 					}
+				 	
 				 }
 			
 		}.start();
@@ -227,8 +236,12 @@ public class SoloGameScene extends GeneralScene{
 		
 		//randomWall
 		Random rand = new Random();
+		wallBrickCoordinates.add(new Pair<>(3*48,3*48));
+		posXBrick[68] = 3*48;posYBrick[68] = 3*48;
+		wallBrickCoordinates.add(new Pair<>(1*48,5*48));
+		posXBrick[69] = 1*48;posYBrick[69] = 5*48;
 		int posX, posY;
-		for(int tmp = 0; tmp < 70; tmp++) {
+		for(int tmp = 0; tmp < 68; tmp++) {
 			while(true) {
 				posX = rand.nextInt(20)*48;
 				posY = rand.nextInt(14)*48;

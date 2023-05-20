@@ -12,7 +12,9 @@ import scenes.SoloGameScene;
 public class MainCharacter extends AnimatedSprite{
 	
 	private static final String IMAGE_PATH = "assets/Player01.png";
-	private static final int STEP = 2;
+	private int STEP = 2;
+	private int fireRange = 1;
+	private int amountBomb = 2;
 	private boolean isDead = false;
 	private boolean canwalk = true;
 	public static final byte DIE_FRAME = 90;
@@ -81,11 +83,11 @@ public class MainCharacter extends AnimatedSprite{
 		for(int i=0;i<sz;i++) {
 			int wallX = SoloGameScene.BombCoordinates.get(i).getKey();
 			int wallY = SoloGameScene.BombCoordinates.get(i).getValue();
-			if(getIsInBomb() && newX > wallX - 45 && newX < wallX + 49 && newY  < wallY + 49 && newY  > wallY-47) {
+			if(SoloGameScene.BombArr.get(i).getIsInBomb() && newX > wallX - 45 && newX < wallX + 49 && newY  < wallY + 49 && newY  > wallY-47) {
 				continue;
 			}
 			
-			setIsInBomb(false);
+			SoloGameScene.BombArr.get(i).setIsInBomb(false);
 			
 			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
 				newX = oldX;
@@ -121,9 +123,6 @@ public class MainCharacter extends AnimatedSprite{
 		setCanWalk(false);
 	}
 	
-	/*public boolean checkMonster() {
-		
-	}*/
 	
 	public boolean checkCollision(int xPlayer, int yPlayer, int xObj,int yObj) {
 		if(xPlayer>=xObj-48+15 && xPlayer<=xObj+48-15 && yPlayer>=yObj-48+7 && yPlayer<=yObj+48-15)
@@ -138,6 +137,23 @@ public class MainCharacter extends AnimatedSprite{
         draw(gc);
         
     }
+	
+	public int getFireRange() {
+		return fireRange;
+	}
+	
+	public void setFireRange(int num) {
+		fireRange = num;
+	}
+	
+	public int getAmountBomb() {
+		return amountBomb;
+	}
+	
+	public void setAmountBomb(int num) {
+		amountBomb = num;
+	}
+	
 	public boolean getDead() {
 		return isDead;
 	}
@@ -151,13 +167,5 @@ public class MainCharacter extends AnimatedSprite{
 	
 	public void setCanWalk(boolean canwalk) {
 		this.canwalk = canwalk;
-	}
-	
-	public void setIsInBomb(boolean IsInBomb) {
-		this.IsInBomb = IsInBomb;
-	}
-	
-	public boolean getIsInBomb() {
-		return IsInBomb;
 	}
 }
