@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 
 import Constant.Constant;
 import javafx.scene.image.Image;
+import sprites.MainCharacter;
 
 public class SpeedUp extends Item{
 

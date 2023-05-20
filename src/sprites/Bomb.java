@@ -22,12 +22,16 @@ public class Bomb extends AnimatedSprite{
     protected byte currentSprite;
     protected byte currentSpriteChange;
     protected boolean IsInBomb;
-    private boolean ch;
-    private boolean ch_;
+    private boolean isignite1;
+    private boolean isignite2;
+    private boolean hasflame;
 
     public Bomb() {
         super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
         setIsInBomb(true);
+        hasflame = false;
+        isignite1 =  true;
+        isignite2 = true;
         currentSprite = 0;
         currentSpriteChange = 0;
         try {
@@ -41,8 +45,6 @@ public class Bomb extends AnimatedSprite{
     	
         this.x = x;
         this.y = y;
-        ch = true;
-        ch_ = true;
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 if(currentNanoTime - time < 3e9) {
@@ -54,14 +56,18 @@ public class Bomb extends AnimatedSprite{
                     updateSpriteCoordinates(gc);
                 }
                 if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 6e7) {
-                	if(!SoloGameScene.BombCoordinates.isEmpty() && ch) {
+                	if(!SoloGameScene.BombCoordinates.isEmpty() && isignite1) {
                 		int idx = SoloGameScene.BombCoordinates.indexOf(new Pair<>(x,y));
                 		SoloGameScene.BombCoordinates.remove(idx);
-                		ch=false;
+                		isignite1 = false;
                 	}
-                	if(!SoloGameScene.BombArr.isEmpty() && ch_) {
+                	if(!SoloGameScene.BombArr.isEmpty() && isignite2) {
                 		SoloGameScene.BombArr.remove(0);
-                		ch_=false;
+                		isignite2 = false;
+                	}
+                	if(hasflame==false) {
+                		SoloGameScene.playEffect(SoloGameScene.EXPLOSION_EFFECT);
+                		hasflame = true;
                 	}
                 	Fire middle = new Fire("assets/Central_flame.png");
             		middle.animate(x, y, gc, currentNanoTime);

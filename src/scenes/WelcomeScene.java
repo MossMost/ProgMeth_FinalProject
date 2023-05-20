@@ -1,20 +1,25 @@
 package scenes;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import Music.MusicPlayable;
 
 import Constant.Constant;
 import application.Main;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class WelcomeScene extends GeneralScene{
+public class WelcomeScene extends GeneralScene implements MusicPlayable{
 	private static final String BACKGROUND_IMAGE = "assets/Welcome_Background.png";
-	
+	public static final String BACKGROUND_SONG = "assets/WelcomeSceneMusic.wav";
 	private Image background;
 	
 	public WelcomeScene() {
@@ -22,18 +27,14 @@ public class WelcomeScene extends GeneralScene{
 		
 		try {
 			background = new Image(Files.newInputStream(Paths.get(BACKGROUND_IMAGE)));
+			showWelcomeMessage();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		showWelcomeMessage();
+		
 	}
 	
 	private void showWelcomeMessage() {
-		/*Font myFont = Font.font("THSarabunPSK", FontWeight.NORMAL, 32);
-		gc.setFont(myFont);
-		gc.setFill(Color.RED);
-		gc.fillText("Bomber Boy", 275, 250);*/
-		
 		Font myFont = Font.font("THSarabunPSK", FontWeight.EXTRA_BOLD, 40);
 		gc.setFont(myFont);
 		gc.setFill(Color.WHITE);
@@ -42,6 +43,7 @@ public class WelcomeScene extends GeneralScene{
 
 	@Override
 	public void draw() {
+		playloopmusic();
 		activeKeys.clear();
 		
 		new AnimationTimer() {
@@ -53,6 +55,7 @@ public class WelcomeScene extends GeneralScene{
 					showWelcomeMessage();
 					
 					if(activeKeys.contains(KeyCode.SPACE)){
+						stopmusic();
 						this.stop();
 						Main.setScene(Main.SOLO_GAME_SCENE);
 					}
@@ -64,5 +67,19 @@ public class WelcomeScene extends GeneralScene{
 		}.start();
 		
 	}
+	
+	@Override
+	public void playloopmusic() {
+		sound = new Media(new File(BACKGROUND_SONG).toURI().toString());
+		mediaPlayer = new MediaPlayer(sound);
+		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+		mediaPlayer.play();
+	}
+
+	@Override
+	public void stopmusic() {
+		mediaPlayer.stop();
+	}
+	
 
 }

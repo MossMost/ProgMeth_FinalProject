@@ -16,7 +16,7 @@ public class MainCharacter extends AnimatedSprite{
 	private int Step = 2;
 	private int life = 3;
 	private int fireRange = 1;
-	private int amountBomb = 2;
+	private int amountBomb = 1;
 	private boolean isDead = false;
 	private boolean canwalk = true;
 	public static final byte DIE_FRAME = 90;

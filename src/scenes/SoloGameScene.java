@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import Constant.Constant;
+import Item.AmountUp;
+import Item.Door;
+import Item.RangeUp;
+import Item.SpeedUp;
 import application.Main;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
@@ -15,7 +19,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.util.Pair;
 import sprites.Bomb;
@@ -40,19 +43,29 @@ public class SoloGameScene extends GeneralScene{
 	
 	public static ArrayList<Pair<Integer, Integer>> BombCoordinates = new ArrayList<Pair<Integer, Integer>>();
 	public static ArrayList<Pair<Integer, Integer>> EnemyCoordinates = new ArrayList<Pair<Integer, Integer>>();
+	
 	public static ArrayList<Pair<Integer, Integer>> ItemCoordinates = new ArrayList<Pair<Integer, Integer>>();
+	public static ArrayList<Pair<Integer, Integer>> DoorCoordinates = new ArrayList<Pair<Integer, Integer>>();
+	public static ArrayList<Pair<Integer, Integer>> RangeCoordinates = new ArrayList<Pair<Integer, Integer>>();
+	public static ArrayList<Pair<Integer, Integer>> SpeedCoordinates = new ArrayList<Pair<Integer, Integer>>();
+	public static ArrayList<Pair<Integer, Integer>> AmountCoordinates = new ArrayList<Pair<Integer, Integer>>();
+	
 	public static ArrayList<Bomb> BombArr = new ArrayList<Bomb>();
 	
 	private Image background,brick,musicOn,musicOff;
 	private MainCharacter Player;
 	private Enemy1[] enemy1;
+	private Door[] door;
+	private RangeUp[] rangeUp;
+	private SpeedUp[] speedUp;
+	private AmountUp[] amountUp;
 	
 	public static final String BACKGROUND_SONG = "assets/SoloGameSceneMusic.wav";
 	public static final String PLACE_BOMB_EFFECT = "assets/place_bomb.wav";
-	public static final String EXPLOSION_EFFECT = "assets/explosion.wav";
+	public static final String EXPLOSION_EFFECT = "assets/explosion.wav";	
 	
-	private MediaPlayer mediaPlayerEffects;
-	private Media effect;
+	private static MediaPlayer mediaPlayerEffects;
+	private static Media effect;
 	
 	private boolean isMusicEnabled = true;
 	
@@ -60,7 +73,7 @@ public class SoloGameScene extends GeneralScene{
 		super();
 		addObject();
 		//GeneratePosEnemy(5);
-		//GeneratePosItem(1, 2, 2);
+		GeneratePosItem(1, 5, 5, 5);
 		wall = new Sprite[75];
 		try {
 			background = new Image(Files.newInputStream(Paths.get(BACKGROUND_IMAGE)));
@@ -71,23 +84,32 @@ public class SoloGameScene extends GeneralScene{
 			
 			Player = new MainCharacter();
 			enemy1 = new Enemy1[6];
+			door = new Door[2];
+			rangeUp = new RangeUp[10];
+			speedUp = new SpeedUp[10];
+			amountUp = new AmountUp[10];
+			
 			for(int i=0;i<5;i++) {
 				enemy1[i] = new Enemy1();
+			}
+			
+			for(int i=0;i<1;i++) {
+				door[i] = new Door();
+			}
+			for(int i=0;i<8;i++) {
+				rangeUp[i] = new RangeUp();
+			}
+			for(int i=0;i<8;i++) {
+				speedUp[i] = new SpeedUp();
+			}
+			for(int i=0;i<8;i++) {
+				amountUp[i] = new AmountUp();
 			}
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	/*private void showMessage() {
-		
-		Font myFont = Font.font("Arial", FontWeight.NORMAL, 16);
-		gc.setFont(myFont);
-		gc.setFill(Color.BLACK);
-		gc.fillText("Press P to turn on/off the music", 50, 30);
-		
-	}*/
 	
 	@Override
 	public void draw() {
@@ -102,6 +124,22 @@ public class SoloGameScene extends GeneralScene{
 		for(int i=0; i<EnemyCoordinates.size(); i++) {
 			enemy1[i].moveTo(EnemyCoordinates.get(i).getKey(), EnemyCoordinates.get(i).getValue());
 		}
+		for(int i=0; i<DoorCoordinates.size(); i++) {
+			door[i].moveTo(DoorCoordinates.get(i).getKey(), DoorCoordinates.get(i).getValue());
+		}
+		
+		for(int i=0; i<RangeCoordinates.size(); i++) {
+			rangeUp[i].moveTo(RangeCoordinates.get(i).getKey(), RangeCoordinates.get(i).getValue());
+		}
+		
+		for(int i=0; i<SpeedCoordinates.size(); i++) {
+			speedUp[i].moveTo(SpeedCoordinates.get(i).getKey(), SpeedCoordinates.get(i).getValue());
+		}
+		
+		for(int i=0; i<AmountCoordinates.size(); i++) {
+			amountUp[i].moveTo(AmountCoordinates.get(i).getKey(), AmountCoordinates.get(i).getValue());
+		}
+		
 		new AnimationTimer() {
 			 int mnX,mnY;
 			 long lastP,lastSpace,lastDie;
@@ -121,6 +159,53 @@ public class SoloGameScene extends GeneralScene{
 							wall[i].draw(gc);
 						}
 					}
+					
+					for(int i=0; i<DoorCoordinates.size();i++) {
+						if(door[i]!=null&&Player.checkCollision(Player.getX(), Player.getY(), DoorCoordinates.get(i).getKey(), DoorCoordinates.get(i).getValue())) {
+							door[i].ItemEffect(Player);
+						}
+					}
+					
+					for(int i=0; i<RangeCoordinates.size();i++) {
+						if(rangeUp[i]!=null&&Player.checkCollision(Player.getX(), Player.getY(), RangeCoordinates.get(i).getKey(), RangeCoordinates.get(i).getValue())) {
+							rangeUp[i].ItemEffect(Player);
+							rangeUp[i] = null;
+						}
+					}
+					
+					for(int i=0; i<SpeedCoordinates.size();i++) {
+						if(speedUp[i]!=null&&Player.checkCollision(Player.getX(), Player.getY(), SpeedCoordinates.get(i).getKey(), SpeedCoordinates.get(i).getValue())) {
+							speedUp[i].ItemEffect(Player);
+							speedUp[i] = null;
+						}
+					}
+					
+					for(int i=0; i<AmountCoordinates.size();i++) {
+						if(amountUp[i]!=null&&Player.checkCollision(Player.getX(), Player.getY(), AmountCoordinates.get(i).getKey(), AmountCoordinates.get(i).getValue())) {
+							amountUp[i].ItemEffect(Player);
+							amountUp[i] = null;
+						}
+					}
+					
+					for(int i=0;i<DoorCoordinates.size();i++) {
+						door[i].draw(gc);
+					}
+					
+					for(int i=0;i<RangeCoordinates.size();i++) {
+						if(rangeUp[i]!=null)
+							rangeUp[i].draw(gc);
+					}
+					
+					for(int i=0;i<SpeedCoordinates.size();i++) {
+						if(speedUp[i]!=null)
+							speedUp[i].draw(gc);
+					}
+					
+					for(int i=0;i<AmountCoordinates.size();i++) {
+						if(amountUp[i]!=null)
+							amountUp[i].draw(gc);
+					}
+					
 					if(!delTime.isEmpty() && currentNanoTime - delTime.get(0) >= 3e9+1e8) {
 						Player.setAmountBomb(Player.getAmountBomb()+1);
 						delTime.remove(0);
@@ -272,9 +357,98 @@ public class SoloGameScene extends GeneralScene{
 			
 		}
 		
+		//randomItem
+		
+		
 	}
 	
+	private void GeneratePosItem(int numberof_door, int numberof_rangeUp, int numberof_speedUp, int numberof_amountUp) {
+		GenerateDoorItem(numberof_door);
+		GeneratePowerItem(numberof_rangeUp);
+		GenerateSpeedItem(numberof_speedUp);
+		GenerateAmountItem(numberof_amountUp);
+		
+	}
 	
+	private void GenerateDoorItem(int n) {
+		Random rand = new Random();
+		int posX, posY;
+		for(int tmp = 0; tmp < n; tmp++) {
+			while(true) {
+				posX = rand.nextInt(20)*48;
+				posY = rand.nextInt(14)*48;
+				
+				if(ItemCoordinates.contains(new Pair<>(posX,posY)))
+					continue;
+				
+				if(wallBrickCoordinates.contains(new Pair<>(posX,posY))) {
+					ItemCoordinates.add(new Pair<>(posX,posY));
+					DoorCoordinates.add(new Pair<>(posX,posY));
+					break;
+				}
+			}
+		}
+	}
+	
+	private void GenerateSpeedItem(int n) {
+		Random rand = new Random();
+		int posX, posY;
+		for(int tmp = 0; tmp < n; tmp++) {
+			while(true) {
+				posX = rand.nextInt(20)*48;
+				posY = rand.nextInt(14)*48;
+				
+				if(ItemCoordinates.contains(new Pair<>(posX,posY)))
+					continue;
+				
+				if(wallBrickCoordinates.contains(new Pair<>(posX,posY))) {
+					ItemCoordinates.add(new Pair<>(posX,posY));
+					SpeedCoordinates.add(new Pair<>(posX,posY));
+					break;
+				}
+			}
+		}
+	}
+	
+	private void GeneratePowerItem(int n) {
+		Random rand = new Random();
+		int posX, posY;
+		for(int tmp = 0; tmp < n; tmp++) {
+			while(true) {
+				posX = rand.nextInt(20)*48;
+				posY = rand.nextInt(14)*48;
+				
+				if(ItemCoordinates.contains(new Pair<>(posX,posY)))
+					continue;
+				
+				if(wallBrickCoordinates.contains(new Pair<>(posX,posY))) {
+					ItemCoordinates.add(new Pair<>(posX,posY));
+					RangeCoordinates.add(new Pair<>(posX,posY));
+					break;
+				}
+			}
+		}
+	}
+	
+	private void GenerateAmountItem(int n) {
+		Random rand = new Random();
+		int posX, posY;
+		for(int tmp = 0; tmp < n; tmp++) {
+			while(true) {
+				posX = rand.nextInt(20)*48;
+				posY = rand.nextInt(14)*48;
+				
+				if(ItemCoordinates.contains(new Pair<>(posX,posY)))
+					continue;
+				
+				if(wallBrickCoordinates.contains(new Pair<>(posX,posY))) {
+					ItemCoordinates.add(new Pair<>(posX,posY));
+					AmountCoordinates.add(new Pair<>(posX,posY));
+					break;
+				}
+			}
+		}
+	}
 	
 	public static Boolean checkWall(int x, int y) { 
 		if(wallCoordinates.contains(new Pair<>(x,y)) || wallBrickCoordinates.contains(new Pair<>(x,y))) {
@@ -284,7 +458,7 @@ public class SoloGameScene extends GeneralScene{
 		
 	}
 	
-	private void playEffect(String path)
+	public static void playEffect(String path)
 	{
 		effect = new Media(new File(path).toURI().toString());
 		mediaPlayerEffects = new MediaPlayer(effect);
