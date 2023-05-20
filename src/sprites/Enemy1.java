@@ -16,7 +16,7 @@ public class Enemy1 extends AnimatedSprite{
 	private static final String IMAGE_PATH = "assets/Enemy1.png";
 	private static final int STEP = 1;
 	private boolean isDead = false;
-	public static final byte DIE_FRAME = 62;
+	public static final byte DIE_FRAME = 31;
 	
 	public Enemy1() {
 		super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
@@ -32,10 +32,10 @@ public class Enemy1 extends AnimatedSprite{
 		spriteYCoordinates[LEFT] = new int[] {48, 48, 48};
 		spriteXCoordinates[UP] = new int[] {0, 48, 96};
 		spriteYCoordinates[UP] = new int[] {0, 0, 0};
-		spriteXCoordinates[DOWN] = new int[] {0, 48, 96};
+		spriteXCoordinates[DOWN] = new int[] {0, 48, 96}; 
 		spriteYCoordinates[DOWN] = new int[] {48, 48, 48};
-		spriteXCoordinates[DIE] = new int[] {0, 48, 96, 0, 48, 96};
-		spriteYCoordinates[DIE] = new int[] {96, 96, 96, 144, 144, 144};
+		spriteXCoordinates[DIE] = new int[] {0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96};
+		spriteYCoordinates[DIE] = new int[] {96, 96, 96, 144, 144, 144, 192, 192, 192, 240, 240, 240, 288, 288, 288, 336, 336, 336};
 		
 		updateSpriteCoordinates();
 	}

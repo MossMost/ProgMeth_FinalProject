@@ -15,11 +15,11 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.util.Pair;
 import sprites.Bomb;
 import sprites.Enemy1;
-import sprites.Enemy5;
 import sprites.MainCharacter;
 import sprites.Sprite;
 
@@ -27,16 +27,11 @@ import sprites.Sprite;
 public class SoloGameScene extends GeneralScene{
 	private static final String BACKGROUND_IMAGE = "assets/background.png";
 	private static final String BRICK_IMAGE = "assets/Brick.png";
-	private static final String MUSIC_ON_IMAGE = "assets/MusicOn.png";
-	private static final String MUSIC_OFF_IMAGE = "assets/MusicOff.png";
+	private static final String MUSIC_ON_IMAGE = "assets/MusicGoldOn.png";
+	private static final String MUSIC_OFF_IMAGE = "assets/MusicGoldOff.png";
 
 	public static int posXBrick[] = new int[110];
 	public static int posYBrick[] = new int[110];
-	private int posXEnemy[] = new int[10];
-	private int posYEnemy[] = new int[10];
-	private int posXItem[] = new int[10];
-	private int posYItem[] = new int[10];
-	
 	
 	public static Sprite wall[];
 	public static ArrayList<Pair<Integer, Integer>> disableWall = new ArrayList<Pair<Integer, Integer>>();
@@ -85,14 +80,14 @@ public class SoloGameScene extends GeneralScene{
 		}
 	}
 	
-	private void showMessage() {
+	/*private void showMessage() {
 		
 		Font myFont = Font.font("Arial", FontWeight.NORMAL, 16);
 		gc.setFont(myFont);
 		gc.setFill(Color.BLACK);
 		gc.fillText("Press P to turn on/off the music", 50, 30);
 		
-	}
+	}*/
 	
 	@Override
 	public void draw() {
@@ -116,8 +111,8 @@ public class SoloGameScene extends GeneralScene{
 				 	gc.setFill(Color.BLACK);
 				 	gc.fillRect(0, 0, Constant.SCENE_WIDTH, Constant.SCENE_HEIGHT);
 					gc.drawImage(background, 0, 0);
-					showMessage();
-					drawMusic();
+					//showMessage();
+					drawMusicAndInfo();
 					for(int i=0;i<70;i++) {
 						if(disableWall.contains(new Pair<>(posXBrick[i], posYBrick[i])) == false) {
 							wall[i] = new Sprite(48,48);
@@ -146,7 +141,6 @@ public class SoloGameScene extends GeneralScene{
 							chEnemyCollision = false;
 						}
 					}
-					
 					
 					if(Player.getDead()) {
 						this.stop();
@@ -309,13 +303,47 @@ public class SoloGameScene extends GeneralScene{
 		}
 	}
 	
-	private void drawMusic() {
+	private void drawMusicAndInfo() {
 		if(isMusicEnabled) {
-			gc.drawImage(musicOn,0,0);
+			gc.drawImage(musicOn,912,10);
 		}
 		else {
-			gc.drawImage(musicOff,0,0);
+			gc.drawImage(musicOff,912,10);
 		}
+		Font State = Font.font("verdana", FontWeight.BOLD, 40);
+		gc.setFont(State);
+		gc.setFill(Color.WHITE);
+		gc.fillText("1", 49*2+10 , 53);
+		
+		Font Life = Font.font("verdana", FontWeight.BOLD, 40);
+		gc.setFont(Life);
+		gc.setFill(Color.WHITE);
+		gc.fillText(Integer.toString(Player.getLife()), 49*5+10 , 53);
+		
+		Font Monster = Font.font("verdana", FontWeight.BOLD, 40);
+		gc.setFont(Monster);
+		gc.setFill(Color.WHITE);
+		int cnt = 0;
+		for(int i=0;i<5;i++) {
+			if(enemy1[i].getDead() == false)
+				cnt++;
+		}
+		gc.fillText(Integer.toString(cnt), 49*8+10 , 53);
+		
+		Font Bomb = Font.font("verdana", FontWeight.BOLD, 40);
+		gc.setFont(Bomb);
+		gc.setFill(Color.WHITE);
+		gc.fillText(Integer.toString(Player.getAmountBomb()), 49*11+10 , 53);
+		
+		Font Range = Font.font("verdana", FontWeight.BOLD, 40);
+		gc.setFont(Range);
+		gc.setFill(Color.WHITE);
+		gc.fillText(Integer.toString(Player.getFireRange()), 49*14+10 , 53);
+		
+		Font Speed = Font.font("verdana", FontWeight.BOLD, 40);
+		gc.setFont(Speed);
+		gc.setFill(Color.WHITE);
+		gc.fillText(Integer.toString(Player.getStep()), 49*17+10 , 53);
 	}
 
 	

@@ -13,8 +13,9 @@ import scenes.SoloGameScene;
 public class MainCharacter extends AnimatedSprite{
 	
 	private static final String IMAGE_PATH = "assets/Player01.png";
-	private int STEP = 2;
-	private int fireRange = 4;
+	private int Step = 2;
+	private int life = 3;
+	private int fireRange = 1;
 	private int amountBomb = 2;
 	private boolean isDead = false;
 	private boolean canwalk = true;
@@ -49,14 +50,14 @@ public class MainCharacter extends AnimatedSprite{
 		
 		int newX = x, oldX = x;
 		int newY = y, oldY = y;
-		if (movement == LEFT && newX - STEP >= 40)
-			newX -= STEP;
-		else if (movement == RIGHT && newX + STEP <= 1008 - 44*2)
-			newX += STEP;
-		else if (movement == UP && newY - STEP >= 48*3)
-			newY -= STEP;
-		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
-			newY += STEP;
+		if (movement == LEFT && newX - Step >= 40)
+			newX -= Step;
+		else if (movement == RIGHT && newX + Step <= 1008 - 44*2)
+			newX += Step;
+		else if (movement == UP && newY - Step >= 48*3)
+			newY -= Step;
+		else if (movement == DOWN && newY + Step <= 720 - 48*2)
+			newY += Step;
 		
 		//check wall
 		int sz = SoloGameScene.wallCoordinates.size();
@@ -102,7 +103,7 @@ public class MainCharacter extends AnimatedSprite{
 		moveTo(newX, newY);
 		animate(movement);
 	}
-	
+
 	public void die(int x,int y,GraphicsContext gc,long time) {
 		new AnimationTimer() {
 			public void handle(long currentNanoTime) {
@@ -206,5 +207,21 @@ public class MainCharacter extends AnimatedSprite{
 	
 	public void setCanWalk(boolean canwalk) {
 		this.canwalk = canwalk;
+	}
+	
+	public int getLife() {
+		return life;
+	}
+	
+	public void setLife(int num) {
+		life = num;
+	}
+	
+	public int getStep() {
+		return Step;
+	}
+
+	public void setStep(int step) {
+		Step = step;
 	}
 }
