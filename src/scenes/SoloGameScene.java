@@ -110,6 +110,7 @@ public class SoloGameScene extends GeneralScene{
 		}
 		new AnimationTimer() {
 			 int mnX,mnY;
+			 boolean chEnemyCollision = true;
 			 ArrayList<Long> delTime = new ArrayList<Long>();
 			 public void handle(long currentNanoTime){
 				 	gc.setFill(Color.BLACK);
@@ -126,8 +127,7 @@ public class SoloGameScene extends GeneralScene{
 							wall[i].draw(gc);
 						}
 					}
-					//System.out.println(Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY+48));
-					if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 1e7 && (Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY)
+					if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 2e7 && (Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY)
 						|| Player.checkCollision(Player.getX(), Player.getY(), mnX-48, mnY) || Player.checkCollision(Player.getX(), Player.getY(), mnX+48, mnY)
 						|| Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY-48) || Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY+48))) {
 						Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
@@ -138,9 +138,9 @@ public class SoloGameScene extends GeneralScene{
 						if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 1e7 && enemy1[i].checkCollision(enemy1[i].getX(), enemy1[i].getY(), mnX, mnY) && !enemy1[i].getDead()) {
 							enemy1[i].die(enemy1[i].getX(), enemy1[i].getY(), gc, currentNanoTime);
 						}
-						if(Player.getDead() == false && enemy1[i].getDead() == false && Player.checkCollision(Player.getX(), Player.getY(), enemy1[i].getX(), enemy1[i].getY())) {
+						if(chEnemyCollision && enemy1[i].getDead() == false && Player.checkCollision(Player.getX(), Player.getY(), enemy1[i].getX(), enemy1[i].getY())) {
 							Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
-							break;
+							chEnemyCollision = false;
 						}
 					}
 					
@@ -258,7 +258,7 @@ public class SoloGameScene extends GeneralScene{
 				
 				if(posX == 0 || posY < 3*48) 
 					continue;
-				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)))
+				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)) || EnemyCoordinates.contains(new Pair<>(posX,posY)))
 					continue;
 				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
 				|| posX == 48 && posY == 4*48) 
