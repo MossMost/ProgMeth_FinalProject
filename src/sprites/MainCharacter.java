@@ -115,13 +115,10 @@ public class MainCharacter extends AnimatedSprite{
                     }
                     updateSpriteCoordinates(gc);
                 }
-				if(currentNanoTime - time > 2e9) {
+				if(currentNanoTime - time > 1e9 && currentNanoTime - time <= 1e9 + 2e8) {
 					setDead(true);
-					
 				}
 			}
-			
-			
 		}.start();
 		setCanWalk(false);
 	}
