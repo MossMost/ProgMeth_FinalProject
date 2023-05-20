@@ -133,15 +133,13 @@ public class SoloGameScene extends GeneralScene{
 						delTime.remove(0);
 					}
 					
-					if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 2e7 && (Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY)
-						|| Player.checkCollision(Player.getX(), Player.getY(), mnX-48, mnY) || Player.checkCollision(Player.getX(), Player.getY(), mnX+48, mnY)
-						|| Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY-48) || Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY+48))) {
+					if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 2e7 && Player.checkBomb(mnX,mnY, Player.getFireRange())) {
 						Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
 					}
 					for(int i=0; i<EnemyCoordinates.size(); i++) {
 						enemy1[i].draw(gc);
 						enemy1[i].move(enemy1[i].getCurrentDirection());
-						if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 1e7 && enemy1[i].checkCollision(enemy1[i].getX(), enemy1[i].getY(), mnX, mnY) && !enemy1[i].getDead()) {
+						if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 1e7 && enemy1[i].checkBomb(mnX, mnY, Player.getFireRange()) && !enemy1[i].getDead()) {
 							enemy1[i].die(enemy1[i].getX(), enemy1[i].getY(), gc, currentNanoTime);
 						}
 						if(chEnemyCollision && enemy1[i].getDead() == false && Player.checkCollision(Player.getX(), Player.getY(), enemy1[i].getX(), enemy1[i].getY())) {
@@ -200,7 +198,7 @@ public class SoloGameScene extends GeneralScene{
 	                    	BombCoordinates.add(new Pair<>(mnX,mnY));
 	                    	
 	                    }
-						bomb.animate(mnX, mnY, gc, currentNanoTime);
+						bomb.animate(mnX, mnY, gc, currentNanoTime, Player.getFireRange());
 
 						
 				 	}

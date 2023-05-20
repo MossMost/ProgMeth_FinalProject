@@ -13,7 +13,7 @@ public class MainCharacter extends AnimatedSprite{
 	
 	private static final String IMAGE_PATH = "assets/Player01.png";
 	private int STEP = 2;
-	private int fireRange = 1;
+	private int fireRange = 4;
 	private int amountBomb = 2;
 	private boolean isDead = false;
 	private boolean canwalk = true;
@@ -123,6 +123,17 @@ public class MainCharacter extends AnimatedSprite{
 		setCanWalk(false);
 	}
 	
+	public boolean checkBomb(int x,int y, int range) {
+		if(checkCollision(this.getX(), this.getY(), x, y)) 
+			return true;
+		for(int i=1;i<=range;i++) {
+			if(checkCollision(this.getX(),this.getY(),x,y-48*i) || checkCollision(this.getX(),this.getY(),x,y+48*i)
+				|| checkCollision(this.getX(),this.getY(),x-48*i,y) || checkCollision(this.getX(),this.getY(),x+48*i,y)) {
+				return true;
+			}
+		}
+		return false;		
+	}
 	
 	public boolean checkCollision(int xPlayer, int yPlayer, int xObj,int yObj) {
 		if(xPlayer>=xObj-48+15 && xPlayer<=xObj+48-15 && yPlayer>=yObj-48+7 && yPlayer<=yObj+48-15)

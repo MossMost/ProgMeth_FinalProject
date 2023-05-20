@@ -182,6 +182,18 @@ public class Enemy1 extends AnimatedSprite{
 		}.start();
 	}
 	
+	public boolean checkBomb(int x,int y,int range) {
+		if(checkCollision(this.getX(), this.getY(), x, y)) 
+			return true;
+		for(int i=1;i<=range;i++) {
+			if(checkCollision(this.getX(),this.getY(),x,y-48*i) || checkCollision(this.getX(),this.getY(),x,y+48*i)
+				|| checkCollision(this.getX(),this.getY(),x-48*i,y) || checkCollision(this.getX(),this.getY(),x+48*i,y)) {
+				return true;
+			}
+		}
+		return false;		
+	}
+	
 	public boolean checkCollision(int xPlayer, int yPlayer, int xBomb,int yBomb) {
 		if(yPlayer>=yBomb-48*2+10 && yPlayer<=yBomb+48*2-10 && xPlayer>=xBomb-48+20 && xPlayer<=xBomb+48)
 			return true;
