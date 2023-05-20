@@ -23,6 +23,7 @@ public class Bomb extends AnimatedSprite{
     protected byte currentSpriteChange;
     protected boolean IsInBomb;
     private boolean ch;
+    private boolean ch_;
 
     public Bomb() {
         super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
@@ -41,6 +42,7 @@ public class Bomb extends AnimatedSprite{
         this.x = x;
         this.y = y;
         ch = true;
+        ch_ = true;
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 if(currentNanoTime - time < 3e9) {
@@ -52,17 +54,15 @@ public class Bomb extends AnimatedSprite{
                     updateSpriteCoordinates(gc);
                 }
                 else if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 1e8) {
-                	
                 	int idx;
                 	if(!SoloGameScene.BombCoordinates.isEmpty() && ch) {
-                		System.out.println(SoloGameScene.BombCoordinates);
                 		idx = SoloGameScene.BombCoordinates.indexOf(new Pair<>(x,y));
                 		SoloGameScene.BombCoordinates.remove(idx);
                 		ch=false;
                 	}
-                	if(!SoloGameScene.BombArr.isEmpty()) {
+                	if(!SoloGameScene.BombArr.isEmpty() && ch_) {
                 		SoloGameScene.BombArr.remove(0);
-                		
+                		ch_=false;
                 	}
                 	Fire middle = new Fire("assets/Central_flame.png");
             		middle.animate(x, y, gc, currentNanoTime);
