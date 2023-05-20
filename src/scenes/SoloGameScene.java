@@ -50,9 +50,7 @@ public class SoloGameScene extends GeneralScene{
 	
 	private Image background,brick,musicOn,musicOff;
 	private MainCharacter Player;
-	private long lastSpace;
 	private Enemy1[] enemy1;
-	private Enemy5 enemy5;
 	
 	public static final String BACKGROUND_SONG = "assets/SoloGameSceneMusic.wav";
 	public static final String PLACE_BOMB_EFFECT = "assets/place_bomb.wav";
@@ -111,8 +109,8 @@ public class SoloGameScene extends GeneralScene{
 		}
 		new AnimationTimer() {
 			 int mnX,mnY;
+			 long lastP,lastSpace,lastDie;
 			 boolean chEnemyCollision = true;
-			 boolean ch = true;
 			 ArrayList<Long> delTime = new ArrayList<Long>();
 			 public void handle(long currentNanoTime){
 				 	gc.setFill(Color.BLACK);
@@ -133,7 +131,8 @@ public class SoloGameScene extends GeneralScene{
 						delTime.remove(0);
 					}
 					
-					if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 2e7 && Player.checkBomb(mnX,mnY, Player.getFireRange())) {
+					if(currentNanoTime - lastDie >= 2e8 && currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 5e8 && Player.checkBomb(mnX,mnY, Player.getFireRange())) {
+						lastDie = currentNanoTime;
 						Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
 					}
 					for(int i=0; i<EnemyCoordinates.size(); i++) {
@@ -202,7 +201,8 @@ public class SoloGameScene extends GeneralScene{
 
 						
 				 	}
-				 	else if(activeKeys.contains(KeyCode.P)) {
+				 	else if(currentNanoTime - lastP >= 3e8 && activeKeys.contains(KeyCode.P)) {
+				 		lastP = currentNanoTime;
 						SwitchMusic();
 					}
 				 	

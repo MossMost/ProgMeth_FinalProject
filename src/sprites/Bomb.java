@@ -53,7 +53,7 @@ public class Bomb extends AnimatedSprite{
                     }
                     updateSpriteCoordinates(gc);
                 }
-                else if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 1e8) {
+                if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 1e7) {
                 	if(!SoloGameScene.BombCoordinates.isEmpty() && ch) {
                 		int idx = SoloGameScene.BombCoordinates.indexOf(new Pair<>(x,y));
                 		SoloGameScene.BombCoordinates.remove(idx);
@@ -68,7 +68,7 @@ public class Bomb extends AnimatedSprite{
                 	if(SoloGameScene.wallCoordinates.contains(new Pair<>(x,y-48)) == false) {
                 		int i;
                 		for(i=1;i<=range-1;i++) {
-                			if(SoloGameScene.wallCoordinates.contains(new Pair<>(x,y-48*(i+1)))) {
+                			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y-48*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y-48*(i+1)))) {
                 				break;
                 			}
                 			Fire tmp = new Fire("assets/Up_flame.png");
@@ -82,7 +82,7 @@ public class Bomb extends AnimatedSprite{
                 	if(SoloGameScene.wallCoordinates.contains(new Pair<>(x,y+48)) == false) {
                 		int i;
                 		for(i=1;i<=range-1;i++) {
-                			if(SoloGameScene.wallCoordinates.contains(new Pair<>(x,y+48*(i+1)))) {
+                			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y+48*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y+48*(i+1)))) {
                 				break;
                 			}
                 			Fire tmp = new Fire("assets/Up_flame.png");
@@ -96,7 +96,7 @@ public class Bomb extends AnimatedSprite{
                 	if(SoloGameScene.wallCoordinates.contains(new Pair<>(x-48,y)) == false) {
                 		int i;
                 		for(i=1;i<=range-1;i++) {
-                			if(SoloGameScene.wallCoordinates.contains(new Pair<>(x-48*(i+1),y))) {
+                			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x-48*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x-48*(i+1),y))) {
                 				break;
                 			}
                 			Fire tmp = new Fire("assets/Right_flame.png");
@@ -110,7 +110,7 @@ public class Bomb extends AnimatedSprite{
                 	if(SoloGameScene.wallCoordinates.contains(new Pair<>(x+48,y)) == false) {
                 		int i;
                 		for(i=1;i<=range-1;i++) {
-                			if(SoloGameScene.wallCoordinates.contains(new Pair<>(x+48*(i+1),y))) {
+                			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x+48*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x+48*(i+1),y))) {
                 				break;
                 			}
                 			Fire tmp = new Fire("assets/Right_flame.png");
