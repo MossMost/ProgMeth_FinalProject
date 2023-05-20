@@ -170,7 +170,7 @@ public class Enemy1 extends AnimatedSprite{
 		setDead(true);
 		new AnimationTimer() {
 			public void handle(long currentNanoTime) {
-				if(currentNanoTime - time <= 5e9) {
+				if(currentNanoTime - time <= 3e9) {
                     currentSpriteChange++;
                     if(currentSpriteChange >= DIE_FRAME) {
                         currentSpriteChange = 0;

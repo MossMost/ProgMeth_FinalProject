@@ -50,7 +50,7 @@ public class SoloGameScene extends GeneralScene{
 	private Image background,brick,musicOn,musicOff;
 	private MainCharacter Player;
 	private long lastSpace;
-	private Enemy1 enemy1;
+	private Enemy1[] enemy1;
 	private Enemy5 enemy5;
 	
 	public static final String BACKGROUND_SONG = "assets/SoloGameSceneMusic.wav";
@@ -64,7 +64,7 @@ public class SoloGameScene extends GeneralScene{
 	
 	public SoloGameScene() {
 		super();
-		addWall();
+		addObject();
 		//GeneratePosEnemy(5);
 		//GeneratePosItem(1, 2, 2);
 		wall = new Sprite[75];
@@ -76,7 +76,10 @@ public class SoloGameScene extends GeneralScene{
 			musicOff = new Image(Files.newInputStream(Paths.get(MUSIC_OFF_IMAGE)));
 			
 			Player = new MainCharacter();
-			enemy1 = new Enemy1();
+			enemy1 = new Enemy1[6];
+			for(int i=0;i<5;i++) {
+				enemy1[i] = new Enemy1();
+			}
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -102,7 +105,9 @@ public class SoloGameScene extends GeneralScene{
 		
 		activeKeys.clear();
 		Player.moveTo(1*48, 3*48);
-		enemy1.moveTo(1*48, 3*48);
+		for(int i=0; i<EnemyCoordinates.size(); i++) {
+			enemy1[i].moveTo(EnemyCoordinates.get(i).getKey(), EnemyCoordinates.get(i).getValue());
+		}
 		new AnimationTimer() {
 			 int mnX,mnY;
 			 ArrayList<Long> delTime = new ArrayList<Long>();
@@ -121,26 +126,33 @@ public class SoloGameScene extends GeneralScene{
 							wall[i].draw(gc);
 						}
 					}
-					/*if(lastSpace != 0 && currentNanoTime - delTime.get(0) > 3e9 + 1e8 && currentNanoTime - delTime.get(0) < 3e9+1e8+3e8) {
-						delTime.remove(0);
-						Bomb.amountBomb+=4;
-					}*/
-					if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 1e7 && Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY)) {
+					//System.out.println(Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY+48));
+					if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 1e7 && (Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY)
+						|| Player.checkCollision(Player.getX(), Player.getY(), mnX-48, mnY) || Player.checkCollision(Player.getX(), Player.getY(), mnX+48, mnY)
+						|| Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY-48) || Player.checkCollision(Player.getX(), Player.getY(), mnX, mnY+48))) {
 						Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
 					}
-					
-					if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 1e7 && enemy1.checkCollision(enemy1.getX(), enemy1.getY(), mnX, mnY) && !enemy1.getDead()) {
-						enemy1.die(enemy1.getX(), enemy1.getY(), gc, currentNanoTime);
+					for(int i=0; i<EnemyCoordinates.size(); i++) {
+						enemy1[i].draw(gc);
+						enemy1[i].move(enemy1[i].getCurrentDirection());
+						if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 1e7 && enemy1[i].checkCollision(enemy1[i].getX(), enemy1[i].getY(), mnX, mnY) && !enemy1[i].getDead()) {
+							enemy1[i].die(enemy1[i].getX(), enemy1[i].getY(), gc, currentNanoTime);
+						}
+						if(Player.getDead() == false && enemy1[i].getDead() == false && Player.checkCollision(Player.getX(), Player.getY(), enemy1[i].getX(), enemy1[i].getY())) {
+							Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
+							break;
+						}
 					}
+					
 					
 					if(Player.getDead()) {
 						this.stop();
 						Main.setScene(Main.CREDITS_SCENE);
 					}
 					
+					
 				 	Player.draw(gc);
-				 	enemy1.draw(gc);
-				 	enemy1.move(enemy1.getCurrentDirection());
+				 	
 			
 				 	if(activeKeys.contains(KeyCode.ESCAPE)){         
 				 		Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
@@ -185,6 +197,8 @@ public class SoloGameScene extends GeneralScene{
 	                    }
 						Player.setIsInBomb(true);
 						bomb.animate(mnX, mnY, gc, currentNanoTime);
+						
+						
 				 	}
 				 	else if(activeKeys.contains(KeyCode.P)) {
 						SwitchMusic();
@@ -194,7 +208,7 @@ public class SoloGameScene extends GeneralScene{
 		}.start();
 	}
 	
-	private void addWall() {
+	private void addObject() {
 		for(int i=1; i<=19; i++) {
 			wallCoordinates.add(new Pair<>(i*48,2*48));
 			wallCoordinates.add(new Pair<>(i*48,14*48));
@@ -236,9 +250,30 @@ public class SoloGameScene extends GeneralScene{
 			
 		}
 		
+		//randomMonster
+		for(int tmp = 0; tmp < 5; tmp++) {
+			while(true) {
+				posX = rand.nextInt(20)*48;
+				posY = rand.nextInt(14)*48;
+				
+				if(posX == 0 || posY < 3*48) 
+					continue;
+				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)))
+					continue;
+				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
+				|| posX == 48 && posY == 4*48) 
+					continue;
+				
+				//showImage
+				EnemyCoordinates.add(new Pair<>(posX, posY));
+				break;
+			}
+			
+		}
 		
-
 	}
+	
+	
 	
 	public static Boolean checkWall(int x, int y) { 
 		if(wallCoordinates.contains(new Pair<>(x,y)) || wallBrickCoordinates.contains(new Pair<>(x,y))) {

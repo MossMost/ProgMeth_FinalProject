@@ -121,10 +121,12 @@ public class MainCharacter extends AnimatedSprite{
 		setCanWalk(false);
 	}
 	
-	public boolean checkCollision(int xPlayer, int yPlayer, int xBomb,int yBomb) {
-		if(yPlayer>=yBomb-48*2+10 && yPlayer<=yBomb+48*2-10 && xPlayer>=xBomb-48+20 && xPlayer<=xBomb+48)
-			return true;
-		if(xPlayer>=xBomb-48*2+10 && xPlayer<=xBomb+48*2 && yPlayer>=yBomb-48+20 && yPlayer<=yBomb+48)
+	/*public boolean checkMonster() {
+		
+	}*/
+	
+	public boolean checkCollision(int xPlayer, int yPlayer, int xObj,int yObj) {
+		if(xPlayer>=xObj-48+15 && xPlayer<=xObj+48-15 && yPlayer>=yObj-48+7 && yPlayer<=yObj+48-15)
 			return true;
 		return false;
 	}
