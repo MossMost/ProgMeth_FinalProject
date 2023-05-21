@@ -23,7 +23,7 @@ public class Door extends Item{
 
 		@Override
 		public void ItemEffect(MainCharacter Player) {
-			Main.setScene(Main.CREDITS_SCENE);
+			Main.setScene(Main.NEXTSTAGE_SCENE);
 			Player.setLife(3);
 		}
 

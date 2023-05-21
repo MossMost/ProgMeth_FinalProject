@@ -41,7 +41,7 @@ public class CreditsScene extends GeneralScene implements MusicPlayable{
 	@Override
 	public void draw() {
 		activeKeys.clear();
-		playloopmusic();
+		playLoopMusic();
 		new AnimationTimer() {
 			 public void handle(long currentNanoTime){
 				 	gc.setFill(Color.BLACK);
@@ -53,7 +53,7 @@ public class CreditsScene extends GeneralScene implements MusicPlayable{
 					
 					if(activeKeys.contains(KeyCode.SPACE)){
 						this.stop();
-						stopmusic();
+						stopMusic();
 						Main.setScene(Main.WELCOME_SCENE);
 					}	
 			}
@@ -61,7 +61,7 @@ public class CreditsScene extends GeneralScene implements MusicPlayable{
 	}
 
 	@Override
-	public void playloopmusic() {
+	public void playLoopMusic() {
 		sound = new Media(new File(BACKGROUND_SONG).toURI().toString());
 		mediaPlayer = new MediaPlayer(sound);
 		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
@@ -69,7 +69,7 @@ public class CreditsScene extends GeneralScene implements MusicPlayable{
 	}
 	
 	@Override
-	public void stopmusic() {
+	public void stopMusic() {
 		mediaPlayer.stop();
 	}
 }

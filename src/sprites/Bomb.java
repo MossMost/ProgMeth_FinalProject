@@ -56,16 +56,16 @@ public class Bomb extends AnimatedSprite{
                     updateSpriteCoordinates(gc);
                 }
                 //too slow -> not work, too fast -> multiple block
-                if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 2e7 + 1e6) {
-                	if(!SoloGameScene.BombCoordinates.isEmpty() && isignite1) {
+                if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 2e7) {
+                	/*if(!SoloGameScene.BombCoordinates.isEmpty() && isignite1) {
                 		int idx = SoloGameScene.BombCoordinates.indexOf(new Pair<>(x,y));
                 		SoloGameScene.BombCoordinates.remove(idx);
                 		isignite1 = false;
-                	}
-                	if(!SoloGameScene.BombArr.isEmpty() && isignite2) {
+                	}*/
+                	/*if(!SoloGameScene.BombArr.isEmpty() && isignite2) {
                 		SoloGameScene.BombArr.remove(0);
                 		isignite2 = false;
-                	}
+                	}*/
                 	if(hasflame==false) {
                 		SoloGameScene.playEffect(SoloGameScene.EXPLOSION_EFFECT);
                 		hasflame = true;

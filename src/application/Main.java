@@ -11,13 +11,11 @@ import scenes.WelcomeScene;
 
 public class Main extends Application {
 	
-	public static final int MAX_SCENES = 6;
+	public static final int MAX_SCENES = 4;
 	public static final int WELCOME_SCENE = 0;
-	public static final int SOLO_GAME_SCENE_1 = 1;
-	public static final int SOLO_GAME_SCENE_2 = 2;
-	public static final int SOLO_GAME_SCENE_3 = 3;
-	public static final int CREDITS_SCENE = 4;
-	public static final int NEXTSTAGE_SCENE = 5;
+	public static final int SOLO_GAME_SCENE = 1;
+	public static final int CREDITS_SCENE = 2;
+	public static final int NEXTSTAGE_SCENE = 3;
 	
 	public static final GeneralScene[] scenes = new GeneralScene[MAX_SCENES];
 	
@@ -29,8 +27,8 @@ public class Main extends Application {
 		
 		scenes[0] = new WelcomeScene();
 		scenes[1] = new SoloGameScene();
-		scenes[4] = new CreditsScene();
-		scenes[5] = new NextStage();
+		scenes[2] = new CreditsScene();
+		scenes[3] = new NextStage();
 		
 		stage.setTitle("Trinity Boy");
 		setScene(WELCOME_SCENE);

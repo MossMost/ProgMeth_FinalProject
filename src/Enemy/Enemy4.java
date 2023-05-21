@@ -15,7 +15,7 @@ import sprites.AnimatedSprite;
 
 public class Enemy4 extends AnimatedSprite{
 	private static final String IMAGE_PATH = "assets/Enemy4.png";
-	private static final int STEP = 1;
+	private static final int STEP = 2;
 	private boolean isDead = false;
 	public static final byte DIE_FRAME = 31;
 	

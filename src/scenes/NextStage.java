@@ -20,8 +20,6 @@ import sprites.AnimatedSprite;
 public class NextStage extends GeneralScene{
 	public static final String NEXTSTAGE_EFFECT = "assets/NextStage.wav";
 	
-	public static int stage;
-	
 	private static MediaPlayer mediaPlayerEffects;
 	private static Media effect;
 	
@@ -42,11 +40,11 @@ public class NextStage extends GeneralScene{
 	
 	private void showStageMessage() {
 		
-		if(stage == 1) {
+		if(SoloGameScene.stage == 1) {
 			Font myFont = Font.font("THSarabunPSK", FontWeight.EXTRA_BOLD, 120);
 			gc.setFont(myFont);
 			gc.setFill(Color.WHITE);
-			gc.fillText("Stage " + stage, 300, 360);
+			gc.fillText("Stage " + SoloGameScene.stage, 300, 360);
 		
 			myFont = Font.font("verdana", FontWeight.BOLD, 50);
 			gc.setFont(myFont);
@@ -60,11 +58,11 @@ public class NextStage extends GeneralScene{
 		
 		}
 		
-		if(stage == 2) {
+		if(SoloGameScene.stage == 2) {
 			Font myFont = Font.font("THSarabunPSK", FontWeight.EXTRA_BOLD, 120);
 			gc.setFont(myFont);
 			gc.setFill(Color.WHITE);
-			gc.fillText("Stage " + stage, 300, 360);
+			gc.fillText("Stage " + SoloGameScene.stage, 300, 360);
 			
 			myFont = Font.font("verdana", FontWeight.BOLD, 50);
 			gc.setFont(myFont);
@@ -82,11 +80,11 @@ public class NextStage extends GeneralScene{
 			gc.fillText("X 2", 775, 570);
 		}
 		
-		if(stage == 3) {
+		if(SoloGameScene.stage == 3) {
 			Font myFont = Font.font("THSarabunPSK", FontWeight.EXTRA_BOLD, 120);
 			gc.setFont(myFont);
 			gc.setFill(Color.WHITE);
-			gc.fillText("Stage " + stage, 300, 260);
+			gc.fillText("Stage " + SoloGameScene.stage, 300, 260);
 			
 			myFont = Font.font("verdana", FontWeight.BOLD, 50);
 			gc.setFont(myFont);
@@ -133,17 +131,12 @@ public class NextStage extends GeneralScene{
 				 	
 				 	if(currentNanoTime - time >= 3e9) {
 				 		this.stop();
-				 		if(stage == 1)
-				 			Main.setScene(Main.SOLO_GAME_SCENE_1);
-				 		else if(stage == 2)
-				 			Main.setScene(Main.SOLO_GAME_SCENE_2);
-				 		else if(stage == 3)
-				 			Main.setScene(Main.SOLO_GAME_SCENE_3);
+				 		Main.setScene(Main.SOLO_GAME_SCENE);
 				 	}
 				 	gc.setFill(Color.BLACK);
 				 	gc.fillRect(0, 0, Constant.SCENE_WIDTH, Constant.SCENE_HEIGHT);
 				 	
-				 	if(stage == 1) {
+				 	if(SoloGameScene.stage == 1) {
 				 		enemy1.moveTo(275, 500);
 				 		enemy1.draw(gc,2,2);
 				 		enemy1.animate(AnimatedSprite.LEFT);
@@ -152,7 +145,7 @@ public class NextStage extends GeneralScene{
 				 		enemy2.animate(AnimatedSprite.LEFT);
 				 	}
 				 	
-				 	if(stage == 2) {
+				 	if(SoloGameScene.stage == 2) {
 				 		enemy1.moveTo(145, 500);
 				 		enemy1.draw(gc,2,2);
 				 		enemy1.animate(AnimatedSprite.LEFT);
@@ -164,7 +157,7 @@ public class NextStage extends GeneralScene{
 				 		enemy3.animate(AnimatedSprite.LEFT);
 				 	}
 				 	
-				 	if(stage == 3) {
+				 	if(SoloGameScene.stage == 3) {
 				 		enemy1.moveTo(270, 350);
 				 		enemy1.draw(gc,2,2);
 				 		enemy1.animate(AnimatedSprite.LEFT);
@@ -188,10 +181,6 @@ public class NextStage extends GeneralScene{
 			}
 		}.start();
 		
-	}
-	
-	public static void setStage(int n) {
-		stage = n;
 	}
 	
 	public void playEffect(String path)

@@ -43,7 +43,7 @@ public class WelcomeScene extends GeneralScene implements MusicPlayable{
 
 	@Override
 	public void draw() {
-		playloopmusic();
+		playLoopMusic();
 		activeKeys.clear();
 		
 		new AnimationTimer() {
@@ -55,9 +55,9 @@ public class WelcomeScene extends GeneralScene implements MusicPlayable{
 					showWelcomeMessage();
 					
 					if(activeKeys.contains(KeyCode.SPACE)){
-						stopmusic();
+						stopMusic();
 						this.stop();
-						NextStage.setStage(1);
+						SoloGameScene.setStage(1);
 						Main.setScene(Main.NEXTSTAGE_SCENE);
 					}
 					else if(activeKeys.contains(KeyCode.ESCAPE)) {
@@ -70,7 +70,7 @@ public class WelcomeScene extends GeneralScene implements MusicPlayable{
 	}
 	
 	@Override
-	public void playloopmusic() {
+	public void playLoopMusic() {
 		sound = new Media(new File(BACKGROUND_SONG).toURI().toString());
 		mediaPlayer = new MediaPlayer(sound);
 		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
@@ -78,7 +78,7 @@ public class WelcomeScene extends GeneralScene implements MusicPlayable{
 	}
 
 	@Override
-	public void stopmusic() {
+	public void stopMusic() {
 		mediaPlayer.stop();
 	}
 	

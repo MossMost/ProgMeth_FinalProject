@@ -8,6 +8,10 @@ import java.util.Random;
 
 import Constant.Constant;
 import Enemy.Enemy1;
+import Enemy.Enemy2;
+import Enemy.Enemy3;
+import Enemy.Enemy4;
+import Enemy.Enemy5;
 import Item.AmountUp;
 import Item.Door;
 import Item.RangeUp;
@@ -56,6 +60,10 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	private Image background,brick,musicOn,musicOff;
 	private MainCharacter Player;
 	private Enemy1[] enemy1;
+	private Enemy2[] enemy2;
+	private Enemy3[] enemy3;
+	private Enemy4[] enemy4;
+	private Enemy5[] enemy5;
 	private Door[] door;
 	private RangeUp[] rangeUp;
 	private SpeedUp[] speedUp;
@@ -66,6 +74,8 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	public static final String EXPLOSION_EFFECT = "assets/explosion.wav";	
 	public static final String DIE_EFFECT = "assets/PlayerDie.wav";
 	public static final String ITEM_EFFECT = "assets/Collectitem.wav";
+	
+	public static int stage;
 	
 	private static MediaPlayer mediaPlayerEffects;
 	private static Media effect;
@@ -92,15 +102,15 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	public void draw() {
 		reset();
 		if(isMusicEnabled == true)
-			playloopmusic();
+			playLoopMusic();
 		
 		activeKeys.clear();
 		Player.moveTo(1*48, 3*48);
 		Player.setDead(false);
 		//enemy1[0].moveTo(48*5,48*5);
-		for(int i=0; i<EnemyCoordinates.size(); i++) {
+		/*for(int i=0; i<EnemyCoordinates.size(); i++) {
 			enemy1[i].moveTo(EnemyCoordinates.get(i).getKey(), EnemyCoordinates.get(i).getValue());
-		}
+		}*/
 		for(int i=0; i<DoorCoordinates.size(); i++) {
 			door[i].moveTo(DoorCoordinates.get(i).getKey(), DoorCoordinates.get(i).getValue());
 		}
@@ -119,6 +129,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		new AnimationTimer() {
 			 int mnX,mnY;
 			 long lastP,lastSpace,lastDie;
+			 boolean chRange = true;
 			 ArrayList<Long> delTime = new ArrayList<Long>();
 			 public void handle(long currentNanoTime){
 					
@@ -129,12 +140,30 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 					
 					for(int i=0; i<DoorCoordinates.size();i++) {
 						boolean ch = true;
-						for(int j=0;j<5;j++) {
+						for(int j=0;j<Constant.STATE_ENEMY[stage][0];j++) {
 							if(enemy1[j].getDead() == false)
+								ch = false;
+						}
+						for(int j=0;j<Constant.STATE_ENEMY[stage][1];j++) {
+							if(enemy2[j].getDead() == false)
+								ch = false;
+						}
+						for(int j=0;j<Constant.STATE_ENEMY[stage][2];j++) {
+							if(enemy3[j].getDead() == false)
+								ch = false;
+						}
+						for(int j=0;j<Constant.STATE_ENEMY[stage][3];j++) {
+							if(enemy4[j].getDead() == false)
+								ch = false;
+						}
+						for(int j=0;j<Constant.STATE_ENEMY[stage][4];j++) {
+							if(enemy5[j].getDead() == false)
 								ch = false;
 						}
 						if(door[i]!=null && ch && Player.checkCollision(Player.getX(), Player.getY(), DoorCoordinates.get(i).getKey(), DoorCoordinates.get(i).getValue())) {
 							this.stop();
+							stopMusic();
+							setStage(stage + 1);
 							door[i].ItemEffect(Player);
 						}
 					}
@@ -163,9 +192,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 						}
 					}
 					
-					for(int i=0;i<DoorCoordinates.size();i++) {
-						door[i].draw(gc);
-					}
+					
 					
 					for(int i=0;i<RangeCoordinates.size();i++) {
 						if(rangeUp[i]!=null)
@@ -190,22 +217,43 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 							wall[i].draw(gc);
 						}
 					}
+					for(int i=0;i<DoorCoordinates.size();i++) {///
+						door[i].draw(gc);
+					}
+					
+					
+					if(!Player.ch && !delTime.isEmpty() && currentNanoTime - delTime.get(0) > 3e9) {
+						System.out.println("ptrue");
+						Player.ch = true;
+					}
 					
 					if(!delTime.isEmpty() && currentNanoTime - delTime.get(0) >= 3e9+1e8) {
 						Player.setAmountBomb(Player.getAmountBomb()+1);
+						BombCoordinates.remove(0);
+						BombArr.remove(0);
+						//chRange = true;
 						delTime.remove(0);
 					}
 					
-					for(int i=0;i<delTime.size();i++) {
+					
+						
+					if(Player.ch == true && !delTime.isEmpty() && !BombCoordinates.isEmpty() && currentNanoTime - lastDie >= 2e8 && currentNanoTime - delTime.get(0) > 3e9 && currentNanoTime - delTime.get(0) <= 3e9 + 3e8 && Player.checkBomb(BombCoordinates.get(0).getKey(), BombCoordinates.get(0).getValue(), Player.getFireRange())) {
+						//Player.ch = false;
+						System.out.println("kuy");
+						chRange = false;
+						lastDie = currentNanoTime;
+						Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
+					}
+					/*for(int i=0;i<delTime.size();i++) {
 						if(currentNanoTime - lastDie >= 2e8 && currentNanoTime - delTime.get(i) > 3e9 && currentNanoTime - delTime.get(i) <= 3e9 + 3e8 && Player.checkBomb(mnX,mnY, Player.getFireRange())) {
 							lastDie = currentNanoTime;
 							Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
 						}
-					}
+					}*/
 					
 					
-					
-					for(int i=0; i<EnemyCoordinates.size(); i++) {
+					//enemy
+					for(int i=0; i<Constant.STATE_ENEMY[stage][0]; i++) {
 						enemy1[i].draw(gc);
 						enemy1[i].move(enemy1[i].getCurrentDirection());
 						for(int j=0; j<delTime.size();j++) {
@@ -219,17 +267,74 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 							lastDie = currentNanoTime;
 						}
 					}
+					for(int i=0; i<Constant.STATE_ENEMY[stage][1]; i++) {
+						enemy2[i].draw(gc);
+						enemy2[i].move(enemy2[i].getCurrentDirection());
+						for(int j=0; j<delTime.size();j++) {
+							if(currentNanoTime - delTime.get(j) >= 3e9 && currentNanoTime - delTime.get(j) <= 3e9 + 1e7 && enemy2[i].checkBomb(mnX, mnY, Player.getFireRange()) && !enemy2[i].getDead()) {
+								enemy2[i].die(enemy2[i].getX(), enemy2[i].getY(), gc, currentNanoTime);
+							}
+						}
+						
+						if(currentNanoTime - lastDie >= 2e8 && enemy2[i].getDead() == false && Player.checkEnemy(Player.getX(), Player.getY(), enemy2[i].getX(), enemy2[i].getY())) {
+							Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
+							lastDie = currentNanoTime;
+						}
+					}
+					for(int i=0; i<Constant.STATE_ENEMY[stage][2]; i++) {
+						enemy3[i].draw(gc);
+						enemy3[i].move(enemy3[i].getCurrentDirection());
+						for(int j=0; j<delTime.size();j++) {
+							if(currentNanoTime - delTime.get(j) >= 3e9 && currentNanoTime - delTime.get(j) <= 3e9 + 1e7 && enemy3[i].checkBomb(mnX, mnY, Player.getFireRange()) && !enemy3[i].getDead()) {
+								enemy3[i].die(enemy3[i].getX(), enemy3[i].getY(), gc, currentNanoTime);
+							}
+						}
+						
+						if(currentNanoTime - lastDie >= 2e8 && enemy3[i].getDead() == false && Player.checkEnemy(Player.getX(), Player.getY(), enemy3[i].getX(), enemy3[i].getY())) {
+							Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
+							lastDie = currentNanoTime;
+						}
+					}
+					for(int i=0; i<Constant.STATE_ENEMY[stage][3]; i++) {
+						enemy4[i].draw(gc);
+						enemy4[i].move(enemy4[i].getCurrentDirection());
+						for(int j=0; j<delTime.size();j++) {
+							if(currentNanoTime - delTime.get(j) >= 3e9 && currentNanoTime - delTime.get(j) <= 3e9 + 1e7 && enemy4[i].checkBomb(mnX, mnY, Player.getFireRange()) && !enemy4[i].getDead()) {
+								enemy4[i].die(enemy4[i].getX(), enemy4[i].getY(), gc, currentNanoTime);
+							}
+						}
+						
+						if(currentNanoTime - lastDie >= 2e8 && enemy4[i].getDead() == false && Player.checkEnemy(Player.getX(), Player.getY(), enemy4[i].getX(), enemy4[i].getY())) {
+							Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
+							lastDie = currentNanoTime;
+						}
+					}
+					for(int i=0; i<Constant.STATE_ENEMY[stage][4]; i++) {
+						enemy5[i].draw(gc);
+						enemy5[i].move(enemy5[i].getCurrentDirection());
+						for(int j=0; j<delTime.size();j++) {
+							if(currentNanoTime - delTime.get(j) >= 3e9 && currentNanoTime - delTime.get(j) <= 3e9 + 1e7 && enemy5[i].checkBomb(mnX, mnY, Player.getFireRange()) && !enemy5[i].getDead()) {
+								enemy5[i].die(enemy5[i].getX(), enemy5[i].getY(), gc, currentNanoTime);
+							}
+						}
+						
+						if(currentNanoTime - lastDie >= 2e8 && enemy5[i].getDead() == false && Player.checkEnemy(Player.getX(), Player.getY(), enemy5[i].getX(), enemy5[i].getY())) {
+							Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
+							lastDie = currentNanoTime;
+						}
+					}
 					
+					//CheckDead
 					if(currentNanoTime - lastDie >= 2e9 && Player.getDead()) {
 						this.stop();
-						stopmusic();
+						stopMusic();
 						Player.setLife(Player.getLife()-1);
 						if(Player.getLife() == 0) {
 							Main.setScene(Main.CREDITS_SCENE);
 							Player.setLife(3);
 						}
 						else {
-							Main.setScene(Main.SOLO_GAME_SCENE_1);
+							Main.setScene(Main.SOLO_GAME_SCENE);
 						}
 					}
 					
@@ -338,7 +443,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		}
 		
 		//randomMonster
-		for(int tmp = 0; tmp < 5; tmp++) {
+		/*for(int tmp = 0; tmp < 5; tmp++) {
 			while(true) {
 				posX = rand.nextInt(20)*48;
 				posY = rand.nextInt(14)*48;
@@ -356,7 +461,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 				break;
 			}
 			
-		}
+		}*/
 		
 		//randomItem
 		
@@ -451,6 +556,110 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		}
 	}
 	
+	private void GenerateEnemy(int type1,int type2, int type3, int type4, int type5) {
+		Random rand = new Random();
+		int posX, posY;
+		for(int tmp = 0; tmp < type1; tmp++) {
+			while(true) {
+				posX = rand.nextInt(20)*48;
+				posY = rand.nextInt(14)*48;
+				
+				if(posX == 0 || posY < 3*48) 
+					continue;
+				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)) || EnemyCoordinates.contains(new Pair<>(posX,posY)))
+					continue;
+				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
+				|| posX == 48 && posY == 4*48) 
+					continue;
+				
+				enemy1[tmp].moveTo(posX, posY);
+				//showImage
+				EnemyCoordinates.add(new Pair<>(posX, posY));
+				break;
+			}
+		}
+		
+		for(int tmp = 0; tmp < type2; tmp++) {
+			while(true) {
+				posX = rand.nextInt(20)*48;
+				posY = rand.nextInt(14)*48;
+				
+				if(posX == 0 || posY < 3*48) 
+					continue;
+				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)) || EnemyCoordinates.contains(new Pair<>(posX,posY)))
+					continue;
+				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
+				|| posX == 48 && posY == 4*48) 
+					continue;
+				
+				enemy2[tmp].moveTo(posX, posY);
+				//showImage
+				EnemyCoordinates.add(new Pair<>(posX, posY));
+				break;
+			}
+		}
+		
+		for(int tmp = 0; tmp < type3; tmp++) {
+			while(true) {
+				posX = rand.nextInt(20)*48;
+				posY = rand.nextInt(14)*48;
+				
+				if(posX == 0 || posY < 3*48) 
+					continue;
+				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)) || EnemyCoordinates.contains(new Pair<>(posX,posY)))
+					continue;
+				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
+				|| posX == 48 && posY == 4*48) 
+					continue;
+				
+				enemy3[tmp].moveTo(posX, posY);
+				//showImage
+				EnemyCoordinates.add(new Pair<>(posX, posY));
+				break;
+			}
+		}
+		
+		for(int tmp = 0; tmp < type4; tmp++) {
+			while(true) {
+				posX = rand.nextInt(20)*48;
+				posY = rand.nextInt(14)*48;
+				
+				if(posX == 0 || posY < 3*48) 
+					continue;
+				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)) || EnemyCoordinates.contains(new Pair<>(posX,posY)))
+					continue;
+				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
+				|| posX == 48 && posY == 4*48) 
+					continue;
+				
+				enemy4[tmp].moveTo(posX, posY);
+				//showImage
+				EnemyCoordinates.add(new Pair<>(posX, posY));
+				break;
+			}
+		}
+		
+		for(int tmp = 0; tmp < type5; tmp++) {
+			while(true) {
+				posX = rand.nextInt(20)*48;
+				posY = rand.nextInt(14)*48;
+				
+				if(posX == 0 || posY < 3*48) 
+					continue;
+				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)) || EnemyCoordinates.contains(new Pair<>(posX,posY)))
+					continue;
+				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
+				|| posX == 48 && posY == 4*48) 
+					continue;
+				
+				enemy5[tmp].moveTo(posX, posY);
+				//showImage
+				EnemyCoordinates.add(new Pair<>(posX, posY));
+				break;
+			}
+		}
+	}
+	
 	public static Boolean checkWall(int x, int y) { 
 		if(wallCoordinates.contains(new Pair<>(x,y)) || wallBrickCoordinates.contains(new Pair<>(x,y))) {
 			return true;
@@ -499,8 +708,24 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		gc.setFont(Monster);
 		gc.setFill(Color.WHITE);
 		int cnt = 0;
-		for(int i=0;i<5;i++) {
+		for(int i=0;i<Constant.STATE_ENEMY[stage][0];i++) {
 			if(enemy1[i].getDead() == false)
+				cnt++;
+		}
+		for(int i=0;i<Constant.STATE_ENEMY[stage][1];i++) {
+			if(enemy2[i].getDead() == false)
+				cnt++;
+		}
+		for(int i=0;i<Constant.STATE_ENEMY[stage][2];i++) {
+			if(enemy3[i].getDead() == false)
+				cnt++;
+		}
+		for(int i=0;i<Constant.STATE_ENEMY[stage][3];i++) {
+			if(enemy4[i].getDead() == false)
+				cnt++;
+		}
+		for(int i=0;i<Constant.STATE_ENEMY[stage][4];i++) {
+			if(enemy5[i].getDead() == false)
 				cnt++;
 		}
 		gc.fillText(Integer.toString(cnt), 49*8+10 , 53);
@@ -538,18 +763,32 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		SpeedCoordinates = new ArrayList<Pair<Integer, Integer>>();
 		AmountCoordinates = new ArrayList<Pair<Integer, Integer>>();
 		
-		addObject();
-		GeneratePosItem(1, 5, 5, 5);
 		wall = new Sprite[75];
 		
 		enemy1 = new Enemy1[6];
+		enemy2 = new Enemy2[6];
+		enemy3 = new Enemy3[6];
+		enemy4 = new Enemy4[6];
+		enemy5 = new Enemy5[6];
 		door = new Door[2];
 		rangeUp = new RangeUp[10];
 		speedUp = new SpeedUp[10];
 		amountUp = new AmountUp[10];
 		
-		for(int i=0;i<5;i++) {
+		for(int i=0;i<3;i++) {
 			enemy1[i] = new Enemy1();
+		}
+		for(int i=0;i<3;i++) {
+			enemy2[i] = new Enemy2();
+		}
+		for(int i=0;i<3;i++) {
+			enemy3[i] = new Enemy3();
+		}
+		for(int i=0;i<3;i++) {
+			enemy4[i] = new Enemy4();
+		}
+		for(int i=0;i<3;i++) {
+			enemy5[i] = new Enemy5();
 		}
 		
 		for(int i=0;i<1;i++) {
@@ -564,10 +803,14 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		for(int i=0;i<8;i++) {
 			amountUp[i] = new AmountUp();
 		}
+		
+		addObject();
+		GeneratePosItem(1, 5, 5, 5);
+		GenerateEnemy(Constant.STATE_ENEMY[stage][0],Constant.STATE_ENEMY[stage][1],Constant.STATE_ENEMY[stage][2],Constant.STATE_ENEMY[stage][3],Constant.STATE_ENEMY[stage][4]);
 	}
 	
 	@Override
-	public void playloopmusic() {
+	public void playLoopMusic() {
 		sound = new Media(new File(BACKGROUND_SONG).toURI().toString());
 		mediaPlayer = new MediaPlayer(sound);
 		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
@@ -575,8 +818,12 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	}
 	
 	@Override
-	public void stopmusic() {
+	public void stopMusic() {
 		mediaPlayer.stop();
+	}
+	
+	public static void setStage(int n) {
+		stage = n;
 	}
 	
 }

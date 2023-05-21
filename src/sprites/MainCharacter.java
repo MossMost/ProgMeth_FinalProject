@@ -13,13 +13,14 @@ import scenes.SoloGameScene;
 public class MainCharacter extends AnimatedSprite{
 	
 	private static final String IMAGE_PATH = "assets/Player01.png";
-	private double Step = 2.0;
+	private double Step = 3.0;
 	private int life = 3;
-	private int fireRange = 1;
-	private int amountBomb = 2;
+	private int fireRange = 3;
+	private int amountBomb = 3;
 	private boolean isDead = false;
 	private boolean canwalk = true;
 	private boolean IsturntoDust = false;
+	public boolean ch = true;
 	public static final byte DIE_FRAME = 90;
 	protected boolean IsInBomb;
 
@@ -91,8 +92,7 @@ public class MainCharacter extends AnimatedSprite{
 			}
 		}
 		//checkbomb
-		sz = SoloGameScene.BombCoordinates.size();
-		for(int i=0;i<sz;i++) {
+		for(int i=0;i<SoloGameScene.BombCoordinates.size();i++) {
 			int wallX = SoloGameScene.BombCoordinates.get(i).getKey();
 			int wallY = SoloGameScene.BombCoordinates.get(i).getValue();
 			if(SoloGameScene.BombArr.get(i).getIsInBomb() && newX > wallX - 45 && newX < wallX + 49 && newY  < wallY + 49 && newY  > wallY-47) {
@@ -141,30 +141,38 @@ public class MainCharacter extends AnimatedSprite{
 			return true;
 		for(int i=1;i<=range;i++) {
 			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y-48*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y-48*i))) {
+				//System.out.println("true");
 				break;
 			}
 			if(checkCollision(this.getX(),this.getY(),x,y-48*i)) {
+				
 				return true;
 			}
 		}
 		for(int i=1;i<=range;i++) {
 			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y+48*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y+48*i))) {
+				//System.out.println("true");
 				break;
 			}
 			if(checkCollision(this.getX(),this.getY(),x,y+48*i)) {
+				
 				return true;
 			}
 		}
 		for(int i=1;i<=range;i++) {
 			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x-48*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x-48*i,y))) {
+				//System.out.println("true");
 				break;
 			}
 			if(checkCollision(this.getX(),this.getY(),x-48*i,y)) {
+				
 				return true;
 			}
 		}
 		for(int i=1;i<=range;i++) {
-			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x+48*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x+48*i,y))) {
+			if(ch && SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x+48*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x+48*i,y))) {
+				System.out.println("true");
+				ch=false;
 				break;
 			}
 			if(checkCollision(this.getX(),this.getY(),x+48*i,y)) {
