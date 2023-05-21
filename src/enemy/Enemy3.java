@@ -2,7 +2,6 @@ package enemy;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Random;
 
 import javafx.scene.image.Image;
 import scenes.SoloGameScene;
@@ -52,13 +51,13 @@ public class Enemy3 extends Monster{
 			newY += STEP;
 		
 		if (movement == LEFT && newX - STEP < 40)
-			movement = randomMovement(movement);
+			movement = randomMovement(movement, STEP);
 		else if (movement == RIGHT && newX + STEP > 1008 - 44*2)
-			movement = randomMovement(movement);
+			movement = randomMovement(movement, STEP);
 		else if (movement == UP && newY - STEP < 48*3)
-			movement = randomMovement(movement);
+			movement = randomMovement(movement, STEP);
 		else if (movement == DOWN && newY + STEP > 720 - 48*2)
-			movement = randomMovement(movement);
+			movement = randomMovement(movement, STEP);
 		
 		int sz = SoloGameScene.wallCoordinates.size();
 		for(int i=0;i<sz;i++) {
@@ -66,7 +65,7 @@ public class Enemy3 extends Monster{
 			int wallY = SoloGameScene.wallCoordinates.get(i).getValue();
 			
 			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
-				movement = randomMovement(movement);
+				movement = randomMovement(movement, STEP);
 				break;
 			}
 		}
@@ -77,7 +76,7 @@ public class Enemy3 extends Monster{
 			int wallY = SoloGameScene.wallBrickCoordinates.get(i).getValue();
 			
 			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
-				movement = randomMovement(movement);
+				movement = randomMovement(movement, STEP);
 				break;
 			}
 		}
@@ -88,7 +87,7 @@ public class Enemy3 extends Monster{
 			int wallY = SoloGameScene.BombCoordinates.get(i).getValue();
 			
 			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
-				movement = randomMovement(movement);
+				movement = randomMovement(movement, STEP);
 				break;
 			}
 		}
@@ -105,60 +104,4 @@ public class Enemy3 extends Monster{
 		moveTo(oldX, oldY);
 		animate(movement);
 	}
-	
-	public int randomMovement(int movement) {
-		int random;
-		Random rand = new Random();
-		while(true) {
-			random = rand.nextInt(4);
-			if(checkwall(random)) {
-				break;
-			}
-		}
-		return random;
-	}
-	
-	public boolean checkwall(int movement) {
-		if (movement == LEFT && x - STEP < 40)
-			return false;
-		else if (movement == RIGHT && x + STEP > 1008 - 44*2)
-			return false;
-		else if (movement == UP && y - STEP < 48*3)
-			return false;
-		else if (movement == DOWN && y + STEP > 720 - 48*2)
-			return false;
-		int newX = x;
-		int newY = y;
-		if (movement == LEFT && newX - STEP >= 40)
-			newX -= STEP;
-		else if (movement == RIGHT && newX + STEP <= 1008 - 44*2)
-			newX += STEP;
-		else if (movement == UP && newY - STEP >= 48*3)
-			newY -= STEP;
-		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
-			newY += STEP;
-		
-		int sz = SoloGameScene.wallCoordinates.size();
-		for(int i=0;i<sz;i++) {
-			int wallX = SoloGameScene.wallCoordinates.get(i).getKey();
-			int wallY = SoloGameScene.wallCoordinates.get(i).getValue();
-			
-			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
-				return false;
-			}
-		}
-		
-		sz = SoloGameScene.wallBrickCoordinates.size();
-		for(int i=0;i<sz;i++) {
-			int wallX = SoloGameScene.wallBrickCoordinates.get(i).getKey();
-			int wallY = SoloGameScene.wallBrickCoordinates.get(i).getValue();
-			
-			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-
 }
