@@ -18,7 +18,6 @@ public class Bomb extends AnimatedSprite{
 
     protected byte currentSprite;
     protected byte currentSpriteChange;
-    //protected boolean IsInBomb;
     private boolean hasFlame;
 
     public Bomb() {
@@ -39,7 +38,8 @@ public class Bomb extends AnimatedSprite{
         this.y = y;
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
-                if(currentNanoTime - time < 3e9) {
+            	//bomb
+                if(currentNanoTime - time < 3 * Constant.SEC) {
                     currentSpriteChange++;
                     if(currentSpriteChange >= SPRITE_CHANGE) {
                         currentSpriteChange = 0;
@@ -47,8 +47,8 @@ public class Bomb extends AnimatedSprite{
                     }
                     updateSpriteCoordinates(gc);
                 }
-                
-                if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 2e7 + 4e6) {
+                //flame
+                if(currentNanoTime - time > 3 * Constant.SEC && currentNanoTime - time < 3 * Constant.SEC + 2e7 + 4e6) {
                 	if(!getFlame()) {
                 		SoloGameScene.playEffect(SoloGameScene.EXPLOSION_EFFECT);
                 		setFlame(true);

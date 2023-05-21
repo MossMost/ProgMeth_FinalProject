@@ -13,15 +13,12 @@ import scenes.SoloGameScene;
 public class MainCharacter extends AnimatedSprite{
 	
 	private static final String IMAGE_PATH = "assets/Player01.png";
-	private double Step = 2.0;
-	private int life = 3;
-	private int fireRange = 1;
-	private int amountBomb = 1;
-	private boolean isDead = false;
-	private boolean canwalk = true;
-	private boolean IsturntoDust = false;
-	public boolean ch = true;
-	protected boolean IsInBomb;
+	private double Step;
+	private int life;
+	private int fireRange;
+	private int amountBomb;
+	private boolean isDead;
+	private boolean isInstantDead;
 
 	public MainCharacter() {
 		super(Constant.BLOCK_SIZE,Constant.BLOCK_SIZE);
@@ -30,23 +27,29 @@ public class MainCharacter extends AnimatedSprite{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		setStep(2.0);
+		setLife(3);
+		setFireRange(2);
+		setAmountBomb(1);
+		setDead(false);
+		setInstantDead(false);
 		
-		spriteXCoordinates[RIGHT] = new int[] {0, Constant.BLOCK_SIZE, 96, 144};
+		spriteXCoordinates[RIGHT] = new int[] {0, 48, 96, 144};
 		spriteYCoordinates[RIGHT] = new int[] {0, 0, 0, 0};
-		spriteXCoordinates[LEFT] = new int[] {0, Constant.BLOCK_SIZE, 96, 144};
-		spriteYCoordinates[LEFT] = new int[] {Constant.BLOCK_SIZE, Constant.BLOCK_SIZE, Constant.BLOCK_SIZE, Constant.BLOCK_SIZE};
-		spriteXCoordinates[UP] = new int[] {0, Constant.BLOCK_SIZE, 96, 144};
+		spriteXCoordinates[LEFT] = new int[] {0, 48, 96, 144};
+		spriteYCoordinates[LEFT] = new int[] {48, 48, 48, 48};
+		spriteXCoordinates[UP] = new int[] {0, 48, 96, 144};
 		spriteYCoordinates[UP] = new int[] {96, 96, 96, 96};
-		spriteXCoordinates[DOWN] = new int[] {0, Constant.BLOCK_SIZE, 96, 144};
+		spriteXCoordinates[DOWN] = new int[] {0, 48, 96, 144};
 		spriteYCoordinates[DOWN] = new int[] {144, 144, 144, 144};
-		spriteXCoordinates[DIE] = new int[] {0, Constant.BLOCK_SIZE, 96, 144};
+		spriteXCoordinates[DIE] = new int[] {0, 48, 96, 144};
 		spriteYCoordinates[DIE] = new int[] {192, 192, 192, 192};
 		
 		updateSpriteCoordinates();
 	}
 	
 	public void move(int movement) {
-		if(!getCanWalk())
+		if(getInstantDead())
 			return;
 		
 		int newX = x, oldX = x;
@@ -59,14 +62,14 @@ public class MainCharacter extends AnimatedSprite{
 			newX += Step;
 		else if(movement == RIGHT && newX + Step > 1008 - 44*2)
 			newX = 1008 - 44*2;
-		if (movement == UP && newY - Step >= Constant.BLOCK_SIZE*3)
+		if (movement == UP && newY - Step >= 48*3)
 			newY -= Step;
-		else if(movement == UP && newY - Step < Constant.BLOCK_SIZE*3)
-			newY = Constant.BLOCK_SIZE*3;
-		if (movement == DOWN && newY + Step <= 720 - Constant.BLOCK_SIZE*2)
+		else if(movement == UP && newY - Step < 48*3)
+			newY = 48*3;
+		if (movement == DOWN && newY + Step <= 720 - 48*2)
 			newY += Step;
-		else if(movement == DOWN && newY + Step > 720 - Constant.BLOCK_SIZE*2)
-			newY = 720 - Constant.BLOCK_SIZE*2;
+		else if(movement == DOWN && newY + Step > 720 - 48*2)
+			newY = 720 - 48*2;
 		
 		//check wall
 		int sz = SoloGameScene.wallCoordinates.size();
@@ -111,9 +114,9 @@ public class MainCharacter extends AnimatedSprite{
 	}
 
 	public void die(int x,int y,GraphicsContext gc,long time) {
-		if(IsturntoDust == false) {
+		if(!getInstantDead()) {
 			SoloGameScene.playEffect(SoloGameScene.DIE_EFFECT);
-			IsturntoDust = true;
+			setInstantDead(true);
 		}
 		new AnimationTimer() {
 			public void handle(long currentNanoTime) {
@@ -130,49 +133,33 @@ public class MainCharacter extends AnimatedSprite{
 				}
 			}
 		}.start();
-		setCanWalk(false);
 	}
 	
 	public boolean checkBomb(int x,int y, int range) {
 		if(checkCollision(this.getX(), this.getY(), x, y)) 
 			return true;
-		for(int i=1;i<=range;i++) {
-			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y-Constant.BLOCK_SIZE*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y-Constant.BLOCK_SIZE*i))) {
-				break;
+		//1 = minus, 2 = plus
+		return (checkCollisionBrick(range,x,y,0,1)||checkCollisionBrick(range,x,y,0,2)
+			  ||checkCollisionBrick(range,x,y,1,0)||checkCollisionBrick(range,x,y,2,0));
+	}
+	
+	private boolean checkCollisionBrick(int range, int x, int y, int oprX, int oprY) {
+		int newX, newY;
+		for(int i = 1; i <= range; i++) {
+			newX = x + Constant.BLOCK_SIZE * i * (int)(Math.pow(-1, oprX));
+			newY = y + Constant.BLOCK_SIZE * i * (int)(Math.pow(-1, oprY));
+			if(oprX == 0) newX = x;
+			if(oprY == 0) newY = y;
+			
+			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(newX, newY)) 
+			|| SoloGameScene.wallCoordinates.contains(new Pair<>(newX, newY))) {
+				return false;
 			}
-			if(checkCollision(this.getX(),this.getY(),x,y-Constant.BLOCK_SIZE*i)) {
-				
+			if(checkCollision(this.getX(), this.getY(), newX, newY)) {
 				return true;
 			}
 		}
-		for(int i=1;i<=range;i++) {
-			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y+Constant.BLOCK_SIZE*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y+Constant.BLOCK_SIZE*i))) {
-				break;
-			}
-			if(checkCollision(this.getX(),this.getY(),x,y+Constant.BLOCK_SIZE*i)) {
-				
-				return true;
-			}
-		}
-		for(int i=1;i<=range;i++) {
-			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x-Constant.BLOCK_SIZE*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x-Constant.BLOCK_SIZE*i,y))) {
-				//System.out.println("true");
-				break;
-			}
-			if(checkCollision(this.getX(),this.getY(),x-Constant.BLOCK_SIZE*i,y)) {
-				
-				return true;
-			}
-		}
-		for(int i=1;i<=range;i++) {
-			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x+Constant.BLOCK_SIZE*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x+Constant.BLOCK_SIZE*i,y))) {
-				break;
-			}
-			if(checkCollision(this.getX(),this.getY(),x+Constant.BLOCK_SIZE*i,y)) {
-				return true;
-			}
-		}
-		return false;		
+		return false;
 	}
 	
 	public boolean checkEnemy(int xPlayer, int yPlayer, int xObj,int yObj) {
@@ -219,12 +206,12 @@ public class MainCharacter extends AnimatedSprite{
 	public void setDead(boolean dead) {
 		isDead = dead;
 	}
-	public boolean getCanWalk() {
-		return canwalk;
+	public boolean getInstantDead() {
+		return isInstantDead;
 	}
 	
-	public void setCanWalk(boolean canwalk) {
-		this.canwalk = canwalk;
+	public void setInstantDead(boolean dead) {
+		this.isInstantDead = dead;
 	}
 	
 	public int getLife() {
