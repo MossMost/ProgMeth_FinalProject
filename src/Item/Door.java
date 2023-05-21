@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import Constant.Constant;
 import application.Main;
 import javafx.scene.image.Image;
+import scenes.SoloGameScene;
 import sprites.MainCharacter;
 
 public class Door extends Item{
@@ -23,7 +24,10 @@ public class Door extends Item{
 
 		@Override
 		public void ItemEffect(MainCharacter Player) {
-			Main.setScene(Main.NEXTSTAGE_SCENE);
+			if(SoloGameScene.stage == 4)
+				Main.setScene(Main.CONGRAT_SCENE);
+			else
+				Main.setScene(Main.NEXTSTAGE_SCENE);
 			Player.setLife(3);
 		}
 

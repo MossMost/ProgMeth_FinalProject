@@ -2,8 +2,8 @@ package scenes;
 
 import java.io.File;
 
-
-import Music.MusicPlayable;
+import Constant.Constant;
+import Enemy.MonsterLove;
 import application.Main;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
@@ -12,46 +12,44 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import Enemy.MonsterCry;
 
-public class CreditsScene extends GeneralScene implements MusicPlayable, Animateable{
+public class VictoryScene extends GeneralScene implements Animateable{
+	public static final String VICTORY_EFFECT = "assets/Victory.wav";
 	
-	public static final String BACKGROUND_SONG = "assets/CreditSceneMusic.wav";
-	private MonsterCry monster;
+	private MonsterLove monster;
 	
-	protected MediaPlayer mediaPlayer;
-	protected Media sound;
-	public CreditsScene()
-	{
+	private static MediaPlayer mediaPlayerEffects;
+	private static Media effect;
+	
+	public VictoryScene() {
 		super();
-		monster = new MonsterCry();
+		monster = new MonsterLove();
 	}
-	
-
-
 	@Override
 	public void draw() {
 		activeKeys.clear();
-		playLoopMusic();
+		playEffect(VICTORY_EFFECT);
 		new AnimationTimer() {
 			 public void handle(long currentNanoTime){
-				 	showImage();
+				 
+					showImage();
 				 	showMessage();
-					showAnimate();
+				 	showAnimate();
+				 	
 					if(activeKeys.contains(KeyCode.SPACE)){
 						this.stop();
-						stopMusic();
 						Main.setScene(Main.WELCOME_SCENE);
-					}	
+					}
 			}
 		}.start();
 	}
+
 	@Override
 	public void showMessage() {
 		Font myFont = Font.font("Arial", FontWeight.NORMAL, 80);
 		gc.setFont(myFont);
-		gc.setFill(Color.RED);
-		gc.fillText("GAME OVER", 250, 200);
+		gc.setFill(Color.YELLOW);
+		gc.fillText("VICTORY", 330, 200);
 		
 		myFont = Font.font("Arial", FontWeight.NORMAL, 40);
 		gc.setFont(myFont);
@@ -61,11 +59,10 @@ public class CreditsScene extends GeneralScene implements MusicPlayable, Animate
 
 	@Override
 	public void showImage() {
-	 	gc.setFill(Color.BLACK);
-	 	gc.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+		gc.setFill(Color.BLACK);
+	 	gc.fillRect(0, 0, Constant.SCENE_WIDTH, Constant.SCENE_HEIGHT);
 	 	
 	}
-
 	@Override
 	public void showAnimate() {
 		monster.moveTo(430, 300);
@@ -73,17 +70,11 @@ public class CreditsScene extends GeneralScene implements MusicPlayable, Animate
 	 	monster.animate();
 	}
 	
-	@Override
-	public void playLoopMusic() {
-		sound = new Media(new File(BACKGROUND_SONG).toURI().toString());
-		mediaPlayer = new MediaPlayer(sound);
-		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-		mediaPlayer.play();
-	}
-	
-	@Override
-	public void stopMusic() {
-		mediaPlayer.stop();
+	public void playEffect(String path)
+	{
+		effect = new Media(new File(path).toURI().toString());
+		mediaPlayerEffects = new MediaPlayer(effect);
+		mediaPlayerEffects.play();
 	}
 
 }

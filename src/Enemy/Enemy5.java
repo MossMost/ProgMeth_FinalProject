@@ -68,14 +68,36 @@ public class Enemy5 extends AnimatedSprite{
 	}
 	
 	public boolean checkwall(int movement) {
-		if (movement == LEFT && x - STEP < 40)
-			return false;
-		else if (movement == RIGHT && x + STEP > 1008 - 44*2)
-			return false;
-		else if (movement == UP && y - STEP < 48*3)
-			return false;
-		else if (movement == DOWN && y + STEP > 720 - 48*2)
-			return false;
+		int newX = x, newY = y;
+		if (movement == LEFT)
+			newX = x - STEP;
+		else if (movement == RIGHT)
+			newX = x + STEP;
+		else if (movement == UP)
+			newY = y - STEP;
+		else if (movement == DOWN)
+			newY = y + STEP;
+		
+		int sz = SoloGameScene.wallCoordinates.size();
+		for(int i=0;i<sz;i++) {
+			int wallX = SoloGameScene.wallCoordinates.get(i).getKey();
+			int wallY = SoloGameScene.wallCoordinates.get(i).getValue();
+			
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
+				return false;
+			}
+		}
+		
+		sz = SoloGameScene.BombCoordinates.size();
+		for(int i=0;i<sz;i++) {
+			int wallX = SoloGameScene.BombCoordinates.get(i).getKey();
+			int wallY = SoloGameScene.BombCoordinates.get(i).getValue();
+			
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
+				return false;
+			}
+		}
+		
 		return true;
 	}
 	
@@ -134,7 +156,7 @@ public class Enemy5 extends AnimatedSprite{
 	}
 	
 	public void die(int x,int y,GraphicsContext gc,long time) {
-		setDead(true);
+		
 		new AnimationTimer() {
 			public void handle(long currentNanoTime) {
 				if(currentNanoTime - time <= 3e9 + 5e8) {
@@ -147,6 +169,7 @@ public class Enemy5 extends AnimatedSprite{
                 }
 			}
 		}.start();
+		setDead(true);
 	}
 	
 	public boolean checkBomb(int x,int y, int range) {

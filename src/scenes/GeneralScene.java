@@ -49,4 +49,6 @@ abstract public class GeneralScene extends Scene{
 	}
 	
 	public abstract void draw();
+	public abstract void showMessage();
+	public abstract void showImage();
 }

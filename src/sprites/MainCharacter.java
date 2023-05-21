@@ -13,10 +13,10 @@ import scenes.SoloGameScene;
 public class MainCharacter extends AnimatedSprite{
 	
 	private static final String IMAGE_PATH = "assets/Player01.png";
-	private double Step = 3.0;
+	private double Step = 2.0;
 	private int life = 3;
-	private int fireRange = 3;
-	private int amountBomb = 3;
+	private int fireRange = 2;
+	private int amountBomb = 1;
 	private boolean isDead = false;
 	private boolean canwalk = true;
 	private boolean IsturntoDust = false;
@@ -170,9 +170,7 @@ public class MainCharacter extends AnimatedSprite{
 			}
 		}
 		for(int i=1;i<=range;i++) {
-			if(ch && SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x+48*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x+48*i,y))) {
-				System.out.println("true");
-				ch=false;
+			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x+48*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x+48*i,y))) {
 				break;
 			}
 			if(checkCollision(this.getX(),this.getY(),x+48*i,y)) {

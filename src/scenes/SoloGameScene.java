@@ -107,10 +107,6 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		activeKeys.clear();
 		Player.moveTo(1*48, 3*48);
 		Player.setDead(false);
-		//enemy1[0].moveTo(48*5,48*5);
-		/*for(int i=0; i<EnemyCoordinates.size(); i++) {
-			enemy1[i].moveTo(EnemyCoordinates.get(i).getKey(), EnemyCoordinates.get(i).getValue());
-		}*/
 		for(int i=0; i<DoorCoordinates.size(); i++) {
 			door[i].moveTo(DoorCoordinates.get(i).getKey(), DoorCoordinates.get(i).getValue());
 		}
@@ -129,15 +125,11 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		new AnimationTimer() {
 			 int mnX,mnY;
 			 long lastP,lastSpace,lastDie;
-			 boolean chRange = true;
 			 ArrayList<Long> delTime = new ArrayList<Long>();
 			 public void handle(long currentNanoTime){
 					
-				 	gc.setFill(Color.BLACK);
-				 	gc.fillRect(0, 0, Constant.SCENE_WIDTH, Constant.SCENE_HEIGHT);
-					gc.drawImage(background, 0, 0);
-					drawMusicAndInfo();
-					
+				 	showImage();
+				 	showMessage();
 					for(int i=0; i<DoorCoordinates.size();i++) {
 						boolean ch = true;
 						for(int j=0;j<Constant.STATE_ENEMY[stage][0];j++) {
@@ -221,35 +213,17 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 						door[i].draw(gc);
 					}
 					
-					
-					if(!Player.ch && !delTime.isEmpty() && currentNanoTime - delTime.get(0) > 3e9) {
-						System.out.println("ptrue");
-						Player.ch = true;
-					}
-					
 					if(!delTime.isEmpty() && currentNanoTime - delTime.get(0) >= 3e9+1e8) {
 						Player.setAmountBomb(Player.getAmountBomb()+1);
 						BombCoordinates.remove(0);
 						BombArr.remove(0);
-						//chRange = true;
 						delTime.remove(0);
 					}
 					
-					
-						
-					if(Player.ch == true && !delTime.isEmpty() && !BombCoordinates.isEmpty() && currentNanoTime - lastDie >= 2e8 && currentNanoTime - delTime.get(0) > 3e9 && currentNanoTime - delTime.get(0) <= 3e9 + 3e8 && Player.checkBomb(BombCoordinates.get(0).getKey(), BombCoordinates.get(0).getValue(), Player.getFireRange())) {
-						//Player.ch = false;
-						System.out.println("kuy");
-						chRange = false;
+					if(!delTime.isEmpty() && !BombCoordinates.isEmpty() && currentNanoTime - lastDie >= 2e8 && currentNanoTime - delTime.get(0) > 3e9 && currentNanoTime - delTime.get(0) <= 3e9 + 1e7 && Player.checkBomb(BombCoordinates.get(0).getKey(), BombCoordinates.get(0).getValue(), Player.getFireRange())) {
 						lastDie = currentNanoTime;
 						Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
 					}
-					/*for(int i=0;i<delTime.size();i++) {
-						if(currentNanoTime - lastDie >= 2e8 && currentNanoTime - delTime.get(i) > 3e9 && currentNanoTime - delTime.get(i) <= 3e9 + 3e8 && Player.checkBomb(mnX,mnY, Player.getFireRange())) {
-							lastDie = currentNanoTime;
-							Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
-						}
-					}*/
 					
 					
 					//enemy
@@ -311,7 +285,8 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 					}
 					for(int i=0; i<Constant.STATE_ENEMY[stage][4]; i++) {
 						enemy5[i].draw(gc);
-						enemy5[i].move(enemy5[i].getCurrentDirection());
+						if(!enemy5[i].getDead())
+							enemy5[i].move(enemy5[i].getCurrentDirection());
 						for(int j=0; j<delTime.size();j++) {
 							if(currentNanoTime - delTime.get(j) >= 3e9 && currentNanoTime - delTime.get(j) <= 3e9 + 1e7 && enemy5[i].checkBomb(mnX, mnY, Player.getFireRange()) && !enemy5[i].getDead()) {
 								enemy5[i].die(enemy5[i].getX(), enemy5[i].getY(), gc, currentNanoTime);
@@ -442,26 +417,6 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 			
 		}
 		
-		//randomMonster
-		/*for(int tmp = 0; tmp < 5; tmp++) {
-			while(true) {
-				posX = rand.nextInt(20)*48;
-				posY = rand.nextInt(14)*48;
-				
-				if(posX == 0 || posY < 3*48) 
-					continue;
-				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)) || EnemyCoordinates.contains(new Pair<>(posX,posY)))
-					continue;
-				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
-				|| posX == 48 && posY == 4*48) 
-					continue;
-				
-				//showImage
-				EnemyCoordinates.add(new Pair<>(posX, posY));
-				break;
-			}
-			
-		}*/
 		
 		//randomItem
 		
@@ -687,65 +642,6 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		}
 	}
 	
-	private void drawMusicAndInfo() {
-		if(isMusicEnabled) {
-			gc.drawImage(musicOn,912,10);
-		}
-		else {
-			gc.drawImage(musicOff,912,10);
-		}
-		Font State = Font.font("verdana", FontWeight.BOLD, 40);
-		gc.setFont(State);
-		gc.setFill(Color.WHITE);
-		gc.fillText("1", 49*2+10 , 53);
-		
-		Font Life = Font.font("verdana", FontWeight.BOLD, 40);
-		gc.setFont(Life);
-		gc.setFill(Color.WHITE);
-		gc.fillText(Integer.toString(Player.getLife()), 49*5+10 , 53);
-		
-		Font Monster = Font.font("verdana", FontWeight.BOLD, 40);
-		gc.setFont(Monster);
-		gc.setFill(Color.WHITE);
-		int cnt = 0;
-		for(int i=0;i<Constant.STATE_ENEMY[stage][0];i++) {
-			if(enemy1[i].getDead() == false)
-				cnt++;
-		}
-		for(int i=0;i<Constant.STATE_ENEMY[stage][1];i++) {
-			if(enemy2[i].getDead() == false)
-				cnt++;
-		}
-		for(int i=0;i<Constant.STATE_ENEMY[stage][2];i++) {
-			if(enemy3[i].getDead() == false)
-				cnt++;
-		}
-		for(int i=0;i<Constant.STATE_ENEMY[stage][3];i++) {
-			if(enemy4[i].getDead() == false)
-				cnt++;
-		}
-		for(int i=0;i<Constant.STATE_ENEMY[stage][4];i++) {
-			if(enemy5[i].getDead() == false)
-				cnt++;
-		}
-		gc.fillText(Integer.toString(cnt), 49*8+10 , 53);
-		
-		Font Bomb = Font.font("verdana", FontWeight.BOLD, 40);
-		gc.setFont(Bomb);
-		gc.setFill(Color.WHITE);
-		gc.fillText(Integer.toString(Player.getAmountBomb()), 49*11+10 , 53);
-		
-		Font Range = Font.font("verdana", FontWeight.BOLD, 40);
-		gc.setFont(Range);
-		gc.setFill(Color.WHITE);
-		gc.fillText(Integer.toString(Player.getFireRange()), 49*14+10 , 53);
-		
-		Font Speed = Font.font("verdana", FontWeight.BOLD, 40);
-		gc.setFont(Speed);
-		gc.setFill(Color.WHITE);
-		gc.fillText(Integer.toString( (int)((Player.getStep()-2)*2) + 1 ), 49*17+10 , 53);
-	}
-	
 	private void reset() {
 		int playerLife = Player.getLife();
 		Player = new MainCharacter();
@@ -824,6 +720,76 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	
 	public static void setStage(int n) {
 		stage = n;
+	}
+
+	@Override
+	public void showMessage() {
+		
+		Font State = Font.font("verdana", FontWeight.BOLD, 40);
+		gc.setFont(State);
+		gc.setFill(Color.WHITE);
+		gc.fillText(Integer.toString(stage), 49*2+10 , 53);
+		
+		Font Life = Font.font("verdana", FontWeight.BOLD, 40);
+		gc.setFont(Life);
+		gc.setFill(Color.WHITE);
+		gc.fillText(Integer.toString(Player.getLife()), 49*5+10 , 53);
+		
+		Font Monster = Font.font("verdana", FontWeight.BOLD, 40);
+		gc.setFont(Monster);
+		gc.setFill(Color.WHITE);
+		int cnt = 0;
+		for(int i=0;i<Constant.STATE_ENEMY[stage][0];i++) {
+			if(enemy1[i].getDead() == false)
+				cnt++;
+		}
+		for(int i=0;i<Constant.STATE_ENEMY[stage][1];i++) {
+			if(enemy2[i].getDead() == false)
+				cnt++;
+		}
+		for(int i=0;i<Constant.STATE_ENEMY[stage][2];i++) {
+			if(enemy3[i].getDead() == false)
+				cnt++;
+		}
+		for(int i=0;i<Constant.STATE_ENEMY[stage][3];i++) {
+			if(enemy4[i].getDead() == false)
+				cnt++;
+		}
+		for(int i=0;i<Constant.STATE_ENEMY[stage][4];i++) {
+			if(enemy5[i].getDead() == false)
+				cnt++;
+		}
+		gc.fillText(Integer.toString(cnt), 49*8+10 , 53);
+		
+		Font Bomb = Font.font("verdana", FontWeight.BOLD, 40);
+		gc.setFont(Bomb);
+		gc.setFill(Color.WHITE);
+		gc.fillText(Integer.toString(Player.getAmountBomb()), 49*11+10 , 53);
+		
+		Font Range = Font.font("verdana", FontWeight.BOLD, 40);
+		gc.setFont(Range);
+		gc.setFill(Color.WHITE);
+		gc.fillText(Integer.toString(Player.getFireRange()), 49*14+10 , 53);
+		
+		Font Speed = Font.font("verdana", FontWeight.BOLD, 40);
+		gc.setFont(Speed);
+		gc.setFill(Color.WHITE);
+		gc.fillText(Integer.toString( (int)((Player.getStep()-2)*2) + 1 ), 49*17+10 , 53);
+		
+	}
+
+	@Override
+	public void showImage() {
+		gc.setFill(Color.BLACK);
+	 	gc.fillRect(0, 0, Constant.SCENE_WIDTH, Constant.SCENE_HEIGHT);
+		gc.drawImage(background, 0, 0);
+		
+		if(isMusicEnabled) {
+			gc.drawImage(musicOn,912,10);
+		}
+		else {
+			gc.drawImage(musicOff,912,10);
+		}
 	}
 	
 }

@@ -27,18 +27,10 @@ public class WelcomeScene extends GeneralScene implements MusicPlayable{
 		
 		try {
 			background = new Image(Files.newInputStream(Paths.get(BACKGROUND_IMAGE)));
-			showWelcomeMessage();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
-	}
-	
-	private void showWelcomeMessage() {
-		Font myFont = Font.font("THSarabunPSK", FontWeight.EXTRA_BOLD, 40);
-		gc.setFont(myFont);
-		gc.setFill(Color.WHITE);
-		gc.fillText("Press Spacebar to play", 500, 500);
 	}
 
 	@Override
@@ -48,16 +40,14 @@ public class WelcomeScene extends GeneralScene implements MusicPlayable{
 		
 		new AnimationTimer() {
 			 public void handle(long currentNanoTime){
-				 	gc.setFill(Color.BLACK);
-				 	gc.fillRect(0, 0, Constant.SCENE_WIDTH, Constant.SCENE_HEIGHT);
-
-				 	gc.drawImage(background, 0, 0);
-					showWelcomeMessage();
+				 
+				 	showImage();
+					showMessage();
 					
 					if(activeKeys.contains(KeyCode.SPACE)){
 						stopMusic();
 						this.stop();
-						SoloGameScene.setStage(1);
+						SoloGameScene.setStage(2);
 						Main.setScene(Main.NEXTSTAGE_SCENE);
 					}
 					else if(activeKeys.contains(KeyCode.ESCAPE)) {
@@ -67,6 +57,21 @@ public class WelcomeScene extends GeneralScene implements MusicPlayable{
 			}
 		}.start();
 		
+	}
+	
+	@Override
+	public void showMessage() {
+		Font myFont = Font.font("THSarabunPSK", FontWeight.EXTRA_BOLD, 40);
+		gc.setFont(myFont);
+		gc.setFill(Color.WHITE);
+		gc.fillText("Press Spacebar to play", 500, 500);
+	}
+
+	@Override
+	public void showImage() {
+		gc.setFill(Color.BLACK);
+	 	gc.fillRect(0, 0, Constant.SCENE_WIDTH, Constant.SCENE_HEIGHT);
+	 	gc.drawImage(background, 0, 0);
 	}
 	
 	@Override
@@ -81,6 +86,5 @@ public class WelcomeScene extends GeneralScene implements MusicPlayable{
 	public void stopMusic() {
 		mediaPlayer.stop();
 	}
-	
 
 }
