@@ -18,13 +18,12 @@ public class Bomb extends AnimatedSprite{
 
     protected byte currentSprite;
     protected byte currentSpriteChange;
-    protected boolean IsInBomb;
-    private boolean hasflame;
+    //protected boolean IsInBomb;
+    private boolean hasFlame;
 
     public Bomb() {
         super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
-        setIsInBomb(true);
-        hasflame = false;
+        setFlame(false);
         currentSprite = 0;
         currentSpriteChange = 0;
         try {
@@ -48,11 +47,11 @@ public class Bomb extends AnimatedSprite{
                     }
                     updateSpriteCoordinates(gc);
                 }
-                //too slow -> not work, too fast -> multiple block
+                
                 if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 2e7 + 4e6) {
-                	if(hasflame==false) {
+                	if(!getFlame()) {
                 		SoloGameScene.playEffect(SoloGameScene.EXPLOSION_EFFECT);
-                		hasflame = true;
+                		setFlame(true);
                 	}
                 	Fire middle = new Fire("assets/Central_flame.png");
             		middle.animate(x, y, gc, currentNanoTime);
@@ -112,22 +111,15 @@ public class Bomb extends AnimatedSprite{
                 		right.animate(x+48*i, y, gc, currentNanoTime);
                 		checkWallBrick(x+48*i,y,gc,currentNanoTime);
                 	}
-                	
-                	
                 }
             }
         }.start();
-
-
-
-
     }
+    
     protected void updateSpriteCoordinates(GraphicsContext gc) {
-
         spriteX = spriteXCoordinates[currentSprite];
         spriteY = spriteYCoordinates[currentSprite];
         draw(gc);
-        
     }
     
     private void checkWallBrick(int x, int y, GraphicsContext gc,long currentNanoTime) {
@@ -141,13 +133,15 @@ public class Bomb extends AnimatedSprite{
 		}
     }
     
-    public void setIsInBomb(boolean IsInBomb) {
-		this.IsInBomb = IsInBomb;
-	}
-	
-	public boolean getIsInBomb() {
-		return IsInBomb;
-	}
-
+    
+    
+    //getter&setter
+    public void setFlame(boolean flame) {
+    	hasFlame = flame;
+    }
+    
+    public boolean getFlame() {
+    	return hasFlame;
+    }
 
 }
