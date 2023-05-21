@@ -156,40 +156,40 @@ public class NextStage extends GeneralScene implements Animateable{
 		if(SoloGameScene.stage == 1) {
 	 		enemy1.moveTo(275, 500);
 	 		enemy1.draw(gc,2,2);
-	 		enemy1.animate(AnimatedSprite.LEFT);
+	 		enemy1.animate(Constant.LEFT);
 	 		enemy2.moveTo(535, 500);
 	 		enemy2.draw(gc,2,2);
-	 		enemy2.animate(AnimatedSprite.LEFT);
+	 		enemy2.animate(Constant.LEFT);
 	 	}
 	 	
 	 	if(SoloGameScene.stage == 2) {
 	 		enemy1.moveTo(145, 500);
 	 		enemy1.draw(gc,2,2);
-	 		enemy1.animate(AnimatedSprite.LEFT);
+	 		enemy1.animate(Constant.LEFT);
 	 		enemy2.moveTo(405, 500);
 	 		enemy2.draw(gc,2,2);
-	 		enemy2.animate(AnimatedSprite.LEFT);
+	 		enemy2.animate(Constant.LEFT);
 	 		enemy3.moveTo(665, 500);
 	 		enemy3.draw(gc,2,2);
-	 		enemy3.animate(AnimatedSprite.LEFT);
+	 		enemy3.animate(Constant.LEFT);
 	 	}
 	 	
 	 	if(SoloGameScene.stage == 3) {
 	 		enemy1.moveTo(270, 350);
 	 		enemy1.draw(gc,2,2);
-	 		enemy1.animate(AnimatedSprite.LEFT);
+	 		enemy1.animate(Constant.LEFT);
 	 		enemy2.moveTo(530, 350);
 	 		enemy2.draw(gc,2,2);
-	 		enemy2.animate(AnimatedSprite.LEFT);
+	 		enemy2.animate(Constant.LEFT);
 	 		enemy3.moveTo(145, 500);
 	 		enemy3.draw(gc,2,2);
-	 		enemy3.animate(AnimatedSprite.LEFT);
+	 		enemy3.animate(Constant.LEFT);
 	 		enemy4.moveTo(405, 500);
 	 		enemy4.draw(gc,2,2);
-	 		enemy4.animate(AnimatedSprite.LEFT);
+	 		enemy4.animate(Constant.LEFT);
 	 		enemy5.moveTo(665, 500);
 	 		enemy5.draw(gc,2,2);
-	 		enemy5.animate(AnimatedSprite.LEFT);
+	 		enemy5.animate(Constant.LEFT);
 	 	}
 	 	
 	}

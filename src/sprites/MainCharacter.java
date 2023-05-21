@@ -34,16 +34,16 @@ public class MainCharacter extends AnimatedSprite{
 		setDead(false);
 		setInstantDead(false);
 		
-		spriteXCoordinates[RIGHT] = new int[] {0, 48, 96, 144};
-		spriteYCoordinates[RIGHT] = new int[] {0, 0, 0, 0};
-		spriteXCoordinates[LEFT] = new int[] {0, 48, 96, 144};
-		spriteYCoordinates[LEFT] = new int[] {48, 48, 48, 48};
-		spriteXCoordinates[UP] = new int[] {0, 48, 96, 144};
-		spriteYCoordinates[UP] = new int[] {96, 96, 96, 96};
-		spriteXCoordinates[DOWN] = new int[] {0, 48, 96, 144};
-		spriteYCoordinates[DOWN] = new int[] {144, 144, 144, 144};
-		spriteXCoordinates[DIE] = new int[] {0, 48, 96, 144};
-		spriteYCoordinates[DIE] = new int[] {192, 192, 192, 192};
+		spriteXCoordinates[Constant.RIGHT] = new int[] {0, 48, 96, 144};
+		spriteYCoordinates[Constant.RIGHT] = new int[] {0, 0, 0, 0};
+		spriteXCoordinates[Constant.LEFT] = new int[] {0, 48, 96, 144};
+		spriteYCoordinates[Constant.LEFT] = new int[] {48, 48, 48, 48};
+		spriteXCoordinates[Constant.UP] = new int[] {0, 48, 96, 144};
+		spriteYCoordinates[Constant.UP] = new int[] {96, 96, 96, 96};
+		spriteXCoordinates[Constant.DOWN] = new int[] {0, 48, 96, 144};
+		spriteYCoordinates[Constant.DOWN] = new int[] {144, 144, 144, 144};
+		spriteXCoordinates[Constant.DIE] = new int[] {0, 48, 96, 144};
+		spriteYCoordinates[Constant.DIE] = new int[] {192, 192, 192, 192};
 		
 		updateSpriteCoordinates();
 	}
@@ -54,21 +54,21 @@ public class MainCharacter extends AnimatedSprite{
 		
 		int newX = x, oldX = x;
 		int newY = y, oldY = y;
-		if (movement == LEFT && newX - Step >= 40)
+		if (movement == Constant.LEFT && newX - Step >= 40)
 			newX -= Step;
-		else if(movement == LEFT && newX - Step < 40)
+		else if(movement == Constant.LEFT && newX - Step < 40)
 			newX = 40;
-		if (movement == RIGHT && newX + Step <= 1008 - 44*2)
+		if (movement == Constant.RIGHT && newX + Step <= 1008 - 44*2)
 			newX += Step;
-		else if(movement == RIGHT && newX + Step > 1008 - 44*2)
+		else if(movement == Constant.RIGHT && newX + Step > 1008 - 44*2)
 			newX = 1008 - 44*2;
-		if (movement == UP && newY - Step >= 48*3)
+		if (movement == Constant.UP && newY - Step >= 48*3)
 			newY -= Step;
-		else if(movement == UP && newY - Step < 48*3)
+		else if(movement == Constant.UP && newY - Step < 48*3)
 			newY = 48*3;
-		if (movement == DOWN && newY + Step <= 720 - 48*2)
+		if (movement == Constant.DOWN && newY + Step <= 720 - 48*2)
 			newY += Step;
-		else if(movement == DOWN && newY + Step > 720 - 48*2)
+		else if(movement == Constant.DOWN && newY + Step > 720 - 48*2)
 			newY = 720 - 48*2;
 		
 		//check wall
@@ -124,7 +124,7 @@ public class MainCharacter extends AnimatedSprite{
                     currentSpriteChange++;
                     if(currentSpriteChange >= Constant.PLAYER_DIE_FRAME) {
                         currentSpriteChange = 0;
-                        currentSprite = (byte)((currentSprite + 1) % (spriteXCoordinates[DIE].length));
+                        currentSprite = (byte)((currentSprite + 1) % (spriteXCoordinates[Constant.DIE].length));
                     }
                     updateSpriteCoordinates(gc);
                 }
@@ -177,8 +177,8 @@ public class MainCharacter extends AnimatedSprite{
 	}
 	
 	protected void updateSpriteCoordinates(GraphicsContext gc) {
-		spriteX = spriteXCoordinates[DIE][currentSprite];
-		spriteY = spriteYCoordinates[DIE][currentSprite];
+		spriteX = spriteXCoordinates[Constant.DIE][currentSprite];
+		spriteY = spriteYCoordinates[Constant.DIE][currentSprite];
         draw(gc);
     }
 	

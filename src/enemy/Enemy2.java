@@ -3,6 +3,7 @@ package enemy;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import constant.Constant;
 import javafx.scene.image.Image;
 import scenes.SoloGameScene;
 
@@ -19,16 +20,16 @@ public class Enemy2 extends Monster{
 			e.printStackTrace();
 		}
 		
-		spriteXCoordinates[LEFT] = new int[] {0, 48, 96};
-		spriteYCoordinates[LEFT] = new int[] {0, 0, 0};
-		spriteXCoordinates[RIGHT] = new int[] {0, 48, 96};
-		spriteYCoordinates[RIGHT] = new int[] {48, 48, 48};
-		spriteXCoordinates[DOWN] = new int[] {0, 48, 96};
-		spriteYCoordinates[DOWN] = new int[] {0, 0, 0};
-		spriteXCoordinates[UP] = new int[] {0, 48, 96}; 
-		spriteYCoordinates[UP] = new int[] {48, 48, 48};
-		spriteXCoordinates[DIE] = new int[] {0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96};
-		spriteYCoordinates[DIE] = new int[] {96, 96, 96, 144, 144, 144, 192, 192, 192, 240, 240, 240, 288, 288, 288, 336, 336, 336};
+		spriteXCoordinates[Constant.LEFT] = new int[] {0, 48, 96};
+		spriteYCoordinates[Constant.LEFT] = new int[] {0, 0, 0};
+		spriteXCoordinates[Constant.RIGHT] = new int[] {0, 48, 96};
+		spriteYCoordinates[Constant.RIGHT] = new int[] {48, 48, 48};
+		spriteXCoordinates[Constant.DOWN] = new int[] {0, 48, 96};
+		spriteYCoordinates[Constant.DOWN] = new int[] {0, 0, 0};
+		spriteXCoordinates[Constant.UP] = new int[] {0, 48, 96}; 
+		spriteYCoordinates[Constant.UP] = new int[] {48, 48, 48};
+		spriteXCoordinates[Constant.DIE] = new int[] {0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96};
+		spriteYCoordinates[Constant.DIE] = new int[] {96, 96, 96, 144, 144, 144, 192, 192, 192, 240, 240, 240, 288, 288, 288, 336, 336, 336};
 		
 		updateSpriteCoordinates();
 	}
@@ -41,22 +42,22 @@ public class Enemy2 extends Monster{
 		int oldX = x;
 		int oldY = y;
 		
-		if (movement == LEFT && newX - STEP >= 40)
+		if (movement == Constant.LEFT && newX - STEP >= 40)
 			newX -= STEP;
-		else if (movement == RIGHT && newX + STEP <= 1008 - 44*2)
+		else if (movement == Constant.RIGHT && newX + STEP <= 1008 - 44*2)
 			newX += STEP;
-		else if (movement == UP && newY - STEP >= 48*3)
+		else if (movement == Constant.UP && newY - STEP >= 48*3)
 			newY -= STEP;
-		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
+		else if (movement == Constant.DOWN && newY + STEP <= 720 - 48*2)
 			newY += STEP;
 		
-		if (movement == LEFT && newX - STEP < 40)
+		if (movement == Constant.LEFT && newX - STEP < 40)
 			movement = randomMovement(movement, STEP);
-		else if (movement == RIGHT && newX + STEP > 1008 - 44*2)
+		else if (movement == Constant.RIGHT && newX + STEP > 1008 - 44*2)
 			movement = randomMovement(movement, STEP);
-		else if (movement == UP && newY - STEP < 48*3)
+		else if (movement == Constant.UP && newY - STEP < 48*3)
 			movement = randomMovement(movement, STEP);
-		else if (movement == DOWN && newY + STEP > 720 - 48*2)
+		else if (movement == Constant.DOWN && newY + STEP > 720 - 48*2)
 			movement = randomMovement(movement, STEP);
 		
 		int sz = SoloGameScene.wallCoordinates.size();
@@ -92,13 +93,13 @@ public class Enemy2 extends Monster{
 			}
 		}
 		
-		if (movement == LEFT && newX - STEP >= 40)
+		if (movement == Constant.LEFT && newX - STEP >= 40)
 			oldX -= STEP;
-		else if (movement == RIGHT && newX + STEP <= 1008 - 44*2)
+		else if (movement == Constant.RIGHT && newX + STEP <= 1008 - 44*2)
 			oldX += STEP;
-		else if (movement == UP && newY - STEP >= 48*3)
+		else if (movement == Constant.UP && newY - STEP >= 48*3)
 			oldY -= STEP;
-		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
+		else if (movement == Constant.DOWN && newY + STEP <= 720 - 48*2)
 			oldY += STEP;
 
 		moveTo(oldX, oldY);

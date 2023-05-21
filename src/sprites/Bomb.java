@@ -41,7 +41,7 @@ public class Bomb extends AnimatedSprite{
             	//bomb
                 if(currentNanoTime - time < 3 * Constant.SEC) {
                     currentSpriteChange++;
-                    if(currentSpriteChange >= SPRITE_CHANGE) {
+                    if(currentSpriteChange >= Constant.SPRITE_CHANGE) {
                         currentSpriteChange = 0;
                         currentSprite = (byte)((currentSprite + 1) % (spriteXCoordinates.length));
                     }

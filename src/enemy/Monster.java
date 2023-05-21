@@ -32,24 +32,24 @@ public abstract class Monster extends AnimatedSprite{
 	}
 	
 	public boolean checkwall(int movement, int STEP) {
-		if (movement == LEFT && x - STEP < 40)
+		if (movement == Constant.LEFT && x - STEP < 40)
 			return false;
-		else if (movement == RIGHT && x + STEP > 1008 - 44*2)
+		else if (movement == Constant.RIGHT && x + STEP > 1008 - 44*2)
 			return false;
-		else if (movement == UP && y - STEP < Constant.BLOCK_SIZE*3)
+		else if (movement == Constant.UP && y - STEP < Constant.BLOCK_SIZE*3)
 			return false;
-		else if (movement == DOWN && y + STEP > 720 - Constant.BLOCK_SIZE*2)
+		else if (movement == Constant.DOWN && y + STEP > 720 - Constant.BLOCK_SIZE*2)
 			return false;
 		
 		int newX = x;
 		int newY = y;
-		if (movement == LEFT && newX - STEP >= 40)
+		if (movement == Constant.LEFT && newX - STEP >= 40)
 			newX -= STEP;
-		else if (movement == RIGHT && newX + STEP <= 1008 - 44*2)
+		else if (movement == Constant.RIGHT && newX + STEP <= 1008 - 44*2)
 			newX += STEP;
-		else if (movement == UP && newY - STEP >= Constant.BLOCK_SIZE*3)
+		else if (movement == Constant.UP && newY - STEP >= Constant.BLOCK_SIZE*3)
 			newY -= STEP;
-		else if (movement == DOWN && newY + STEP <= 720 - Constant.BLOCK_SIZE*2)
+		else if (movement == Constant.DOWN && newY + STEP <= 720 - Constant.BLOCK_SIZE*2)
 			newY += STEP;
 		
 		int sz = SoloGameScene.wallCoordinates.size();
@@ -82,7 +82,7 @@ public abstract class Monster extends AnimatedSprite{
                     currentSpriteChange++;
                     if(currentSpriteChange >= Constant.ENEMY_DIE_FRAME) {
                         currentSpriteChange = 0;
-                        currentSprite = (byte)((currentSprite + 1) % (spriteXCoordinates[DIE].length));
+                        currentSprite = (byte)((currentSprite + 1) % (spriteXCoordinates[Constant.DIE].length));
                     }
                     updateSpriteCoordinates(gc);
                 }
@@ -91,8 +91,8 @@ public abstract class Monster extends AnimatedSprite{
 	}
 	
 	protected void updateSpriteCoordinates(GraphicsContext gc) {
-		spriteX = spriteXCoordinates[DIE][currentSprite];
-		spriteY = spriteYCoordinates[DIE][currentSprite];
+		spriteX = spriteXCoordinates[Constant.DIE][currentSprite];
+		spriteY = spriteYCoordinates[Constant.DIE][currentSprite];
         draw(gc);
     }
 	

@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 
+import constant.Constant;
 import javafx.scene.image.Image;
 
 public class Enemy5 extends Monster{
@@ -18,16 +19,16 @@ public class Enemy5 extends Monster{
 			e.printStackTrace();
 		}
 		
-		spriteXCoordinates[LEFT] = new int[] {0, 48, 96};
-		spriteYCoordinates[LEFT] = new int[] {0, 0, 0};
-		spriteXCoordinates[RIGHT] = new int[] {0, 48, 96};
-		spriteYCoordinates[RIGHT] = new int[] {48, 48, 48};
-		spriteXCoordinates[DOWN] = new int[] {0, 48, 96};
-		spriteYCoordinates[DOWN] = new int[] {0, 0, 0};
-		spriteXCoordinates[UP] = new int[] {0, 48, 96}; 
-		spriteYCoordinates[UP] = new int[] {48, 48, 48};
-		spriteXCoordinates[DIE] = new int[] {0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96};
-		spriteYCoordinates[DIE] = new int[] {96, 96, 96, 144, 144, 144, 192, 192, 192, 240, 240, 240, 288, 288, 288, 336, 336, 336};
+		spriteXCoordinates[Constant.LEFT] = new int[] {0, 48, 96};
+		spriteYCoordinates[Constant.LEFT] = new int[] {0, 0, 0};
+		spriteXCoordinates[Constant.RIGHT] = new int[] {0, 48, 96};
+		spriteYCoordinates[Constant.RIGHT] = new int[] {48, 48, 48};
+		spriteXCoordinates[Constant.DOWN] = new int[] {0, 48, 96};
+		spriteYCoordinates[Constant.DOWN] = new int[] {0, 0, 0};
+		spriteXCoordinates[Constant.UP] = new int[] {0, 48, 96}; 
+		spriteYCoordinates[Constant.UP] = new int[] {48, 48, 48};
+		spriteXCoordinates[Constant.DIE] = new int[] {0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96};
+		spriteYCoordinates[Constant.DIE] = new int[] {96, 96, 96, 144, 144, 144, 192, 192, 192, 240, 240, 240, 288, 288, 288, 336, 336, 336};
 		
 		updateSpriteCoordinates();
 	}
@@ -35,13 +36,13 @@ public class Enemy5 extends Monster{
 	public void move(int movement) {
 		int newX = x;
 		int newY = y;
-		if (movement == LEFT && newX - STEP >= 40)
+		if (movement == Constant.LEFT && newX - STEP >= 40)
 			newX -= STEP;
-		else if (movement == RIGHT && newX + STEP <= 1008 - 44*2)
+		else if (movement == Constant.RIGHT && newX + STEP <= 1008 - 44*2)
 			newX += STEP;
-		else if (movement == UP && newY - STEP >= 48*3)
+		else if (movement == Constant.UP && newY - STEP >= 48*3)
 			newY -= STEP;
-		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
+		else if (movement == Constant.DOWN && newY + STEP <= 720 - 48*2)
 			newY += STEP;
 
 		flutter(getCurrentDirection(), newX, newY);
@@ -51,27 +52,27 @@ public class Enemy5 extends Monster{
 	public void flutter(int movement, int newX, int newY) {
 		
 
-		if (movement == LEFT && newX - STEP < 40)
+		if (movement == Constant.LEFT && newX - STEP < 40)
 			movement = randomMovement(movement, STEP);
-		else if (movement == RIGHT && newX + STEP > 1008 - 44*2)
+		else if (movement == Constant.RIGHT && newX + STEP > 1008 - 44*2)
 			movement = randomMovement(movement, STEP);
-		else if (movement == UP && newY - STEP < 48*3)
+		else if (movement == Constant.UP && newY - STEP < 48*3)
 			movement = randomMovement(movement, STEP);
-		else if (movement == DOWN && newY + STEP > 720 - 48*2)
+		else if (movement == Constant.DOWN && newY + STEP > 720 - 48*2)
 			movement = randomMovement(movement, STEP);
 		
 		if(newX%96  > 40 && newX%96 < 64 && newY%96 > 46 && newY%96 < 64) {
 			
-			if(movement == LEFT || movement == RIGHT) {
+			if(movement == Constant.LEFT || movement == Constant.RIGHT) {
 				int random;
 				Random rand = new Random();
 				random = rand.nextInt(500);
 				if(random<=5) {
 					moveTo(newX, newY);
 					if(random<=2)
-						animate(UP);
+						animate(Constant.UP);
 					else 
-						animate(DOWN);
+						animate(Constant.DOWN);
 				}
 				else {
 					moveTo(newX, newY);
@@ -86,9 +87,9 @@ public class Enemy5 extends Monster{
 				if(random<=5) {
 					moveTo(newX, newY);
 					if(random<=2)
-						animate(LEFT);
+						animate(Constant.LEFT);
 					else 
-						animate(RIGHT);
+						animate(Constant.RIGHT);
 				}
 				else {
 					moveTo(newX, newY);
