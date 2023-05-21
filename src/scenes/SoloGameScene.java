@@ -146,11 +146,11 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 							amountUp[i] = null;
 						}
 					}
-					
+				
 					for(int i = 0; i < DoorCoordinates.size(); i++) {///
 						door[i].draw(gc);
 					}
-					
+
 					for(int i = 0;i < RangeCoordinates.size(); i++) {
 						if(rangeUp[i]!=null)
 							rangeUp[i].draw(gc);
@@ -174,7 +174,6 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 							wall[i].draw(gc);
 						}
 					}
-					
 					
 					if(!delTime.isEmpty() && currentNanoTime - delTime.get(0) >= 3e9 + 1e8) {
 						Player.setAmountBomb(Player.getAmountBomb()+1);
@@ -259,7 +258,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 						if(!enemy5[i].getDead())
 							enemy5[i].move(enemy5[i].getCurrentDirection());
 						for(int j = 0; j < delTime.size(); j++) {
-							if(currentNanoTime - delTime.get(j) >= 3e9 && currentNanoTime - delTime.get(j) <= 3e9 + 1e7 && enemy5[i].checkBomb(mnX, mnY, Player.getFireRange()) && !enemy5[i].getDead()) {
+							if(checkMonsterAlive() == 1 && currentNanoTime - delTime.get(j) >= 3e9 && currentNanoTime - delTime.get(j) <= 3e9 + 1e7 && enemy5[i].checkBomb(mnX, mnY, Player.getFireRange()) && !enemy5[i].getDead()) {
 								enemy5[i].die(enemy5[i].getX(), enemy5[i].getY(), gc, currentNanoTime);
 							}
 						}
