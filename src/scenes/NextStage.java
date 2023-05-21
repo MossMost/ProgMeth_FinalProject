@@ -57,7 +57,7 @@ public class NextStage extends GeneralScene implements Animateable{
 			 	
 			 	if(currentNanoTime - time >= 3e9) {
 			 		this.stop();
-			 		Main.setScene(Main.SOLO_GAME_SCENE);
+			 		Main.setScene(Constant.SOLO_GAME_SCENE);
 			 	}	
 			 	showImage();
 			 	showMessage();

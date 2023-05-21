@@ -39,7 +39,7 @@ public class VictoryScene extends GeneralScene implements Animateable{
 				 	
 					if(activeKeys.contains(KeyCode.SPACE)){
 						this.stop();
-						Main.setScene(Main.WELCOME_SCENE);
+						Main.setScene(Constant.WELCOME_SCENE);
 					}
 			}
 		}.start();

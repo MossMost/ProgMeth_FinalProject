@@ -24,10 +24,10 @@ public class Door extends Item{
 
 		@Override
 		public void ItemEffect(MainCharacter Player) {
-			if(SoloGameScene.stage == Main.VICTORY_SCENE)
-				Main.setScene(Main.VICTORY_SCENE);
+			if(SoloGameScene.stage == Constant.VICTORY_SCENE)
+				Main.setScene(Constant.VICTORY_SCENE);
 			else
-				Main.setScene(Main.NEXTSTAGE_SCENE);
+				Main.setScene(Constant.NEXTSTAGE_SCENE);
 			Player.setLife(Constant.PLAYER_LIFE);
 		}
 

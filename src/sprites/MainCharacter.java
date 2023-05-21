@@ -94,11 +94,9 @@ public class MainCharacter extends AnimatedSprite{
 		for(int i=0;i<SoloGameScene.BombCoordinates.size();i++) {
 			int wallX = SoloGameScene.BombCoordinates.get(i).getKey();
 			int wallY = SoloGameScene.BombCoordinates.get(i).getValue();
-			if(SoloGameScene.BombArr.get(i).getIsInBomb() && newX > wallX - 45 && newX < wallX + 49 && newY  < wallY + 49 && newY  > wallY-47) {
+			if(newX > wallX - 45 && newX < wallX + 49 && newY  < wallY + 49 && newY  > wallY-47) {
 				continue;
 			}
-			
-			SoloGameScene.BombArr.get(i).setIsInBomb(false);
 			
 			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
 				newX = oldX;

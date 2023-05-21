@@ -1,6 +1,14 @@
 package constant;
 
 public class Constant {
+	
+	public static final int MAX_SCENES = 5;
+	public static final int WELCOME_SCENE = 0;
+	public static final int SOLO_GAME_SCENE = 1;
+	public static final int CREDITS_SCENE = 2;
+	public static final int NEXTSTAGE_SCENE = 3;
+	public static final int VICTORY_SCENE = 4;
+	
     public static final int SCENE_WIDTH = 1008;
     public static final int SCENE_HEIGHT = 720;
 
@@ -16,4 +24,5 @@ public class Constant {
 	
 	public static final byte PLAYER_DIE_FRAME = 90;
 	public static final byte BOMB_FRAME = 15;
+    public static final byte WALL_FRAME = 10;
 }

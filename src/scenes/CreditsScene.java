@@ -39,7 +39,7 @@ public class CreditsScene extends GeneralScene implements MusicPlayable, Animate
 					if(activeKeys.contains(KeyCode.SPACE)){
 						this.stop();
 						stopMusic();
-						Main.setScene(Main.WELCOME_SCENE);
+						Main.setScene(Constant.WELCOME_SCENE);
 					}	
 			}
 		}.start();

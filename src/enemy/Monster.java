@@ -96,12 +96,6 @@ public abstract class Monster extends AnimatedSprite{
         draw(gc);
     }
 	
-	/*public boolean checkEnemy(int xPlayer, int yPlayer, int xObj,int yObj) {
-		if(xPlayer>=xObj-Constant.BLOCK_SIZE+17 && xPlayer<=xObj+Constant.BLOCK_SIZE-17 && yPlayer>=yObj-Constant.BLOCK_SIZE+17 && yPlayer<=yObj+Constant.BLOCK_SIZE-17)
-			return true;
-		return false;
-	}*/
-	
 	public boolean checkCollision(int xPlayer, int yPlayer, int xObj, int yObj) {
 		if(yPlayer >= yObj - Constant.BLOCK_SIZE * 2 + 10 && yPlayer <= yObj + Constant.BLOCK_SIZE * 2 - 10 
 		&& xPlayer >= xObj - Constant.BLOCK_SIZE + 20 && xPlayer <= xObj + Constant.BLOCK_SIZE)

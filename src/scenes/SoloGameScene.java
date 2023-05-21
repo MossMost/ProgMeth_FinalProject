@@ -315,11 +315,11 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 						stopMusic();
 						Player.setLife(Player.getLife()-1);
 						if(Player.getLife() == 0) {
-							Main.setScene(Main.CREDITS_SCENE);
+							Main.setScene(Constant.CREDITS_SCENE);
 							Player.setLife(3);
 						}
 						else {
-							Main.setScene(Main.SOLO_GAME_SCENE);
+							Main.setScene(Constant.SOLO_GAME_SCENE);
 						}
 					}
 					
@@ -330,11 +330,11 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 				 	if(activeKeys.contains(KeyCode.ESCAPE)){         
 				 		Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
 				 		this.stop();
-				 		Main.setScene(Main.WELCOME_SCENE);
+				 		Main.setScene(Constant.WELCOME_SCENE);
 				 	}
 				 	else if(activeKeys.contains(KeyCode.ENTER)) {
 				 		this.stop();
-				 		Main.setScene(Main.CREDITS_SCENE);
+				 		Main.setScene(Constant.CREDITS_SCENE);
 				 	}
 				 	else if(activeKeys.contains(KeyCode.LEFT)) {
 				 		Player.move(MainCharacter.LEFT);
