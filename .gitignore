@@ -65,4 +65,3 @@ configurations:
 *.doc
 *.docx
 .DS_Store
-/UML.png
