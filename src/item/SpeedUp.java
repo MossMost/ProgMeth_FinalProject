@@ -1,17 +1,17 @@
-package Item;
+package item;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import Constant.Constant;
+import constant.Constant;
 import javafx.scene.image.Image;
 import sprites.MainCharacter;
 
-public class RangeUp extends Item{
+public class SpeedUp extends Item{
 
-    private static final String IMAGE_PATH = "assets/Flame_Powerup.png";
+    private static final String IMAGE_PATH = "assets/Speed_Powerup.png";
 
-    public RangeUp() {
+    public SpeedUp() {
          super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
          try {
                 spriteImage = new Image(Files.newInputStream(Paths.get(IMAGE_PATH)));
@@ -22,7 +22,9 @@ public class RangeUp extends Item{
 
     @Override
     public void ItemEffect(MainCharacter Player) {
-    	Player.setFireRange(Player.getFireRange()+1);
+        Player.setStep(Player.getStep()+0.5);
     }
+
+
 
 }

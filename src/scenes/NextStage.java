@@ -2,13 +2,13 @@ package scenes;
 
 import java.io.File;
 
-import Constant.Constant;
-import Enemy.Enemy1;
-import Enemy.Enemy2;
-import Enemy.Enemy3;
-import Enemy.Enemy4;
-import Enemy.Enemy5;
 import application.Main;
+import constant.Constant;
+import enemy.Enemy1;
+import enemy.Enemy2;
+import enemy.Enemy3;
+import enemy.Enemy4;
+import enemy.Enemy5;
 import javafx.animation.AnimationTimer;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;

@@ -2,9 +2,8 @@ package scenes;
 
 import java.io.File;
 
-
-import Music.MusicPlayable;
 import application.Main;
+import enemy.MonsterCry;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.Media;
@@ -12,7 +11,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import Enemy.MonsterCry;
+import music.MusicPlayable;
 
 public class CreditsScene extends GeneralScene implements MusicPlayable, Animateable{
 	
@@ -53,10 +52,10 @@ public class CreditsScene extends GeneralScene implements MusicPlayable, Animate
 		gc.setFill(Color.RED);
 		gc.fillText("GAME OVER", 250, 200);
 		
-		myFont = Font.font("Arial", FontWeight.NORMAL, 40);
+		myFont = Font.font("Arial", FontWeight.NORMAL, 25);
 		gc.setFont(myFont);
 		gc.setFill(Color.WHITE);
-		gc.fillText("Press Spacebar to go back to Welcome Scene", 100, 585);
+		gc.fillText("Press Spacebar to go back to Welcome Scene", 250, 545);
 	}
 
 	@Override

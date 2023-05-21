@@ -1,9 +1,9 @@
-package Enemy;
+package enemy;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import Constant.Constant;
+import constant.Constant;
 import javafx.scene.image.Image;
 import sprites.Sprite;
 

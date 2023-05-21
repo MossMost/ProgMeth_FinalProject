@@ -19,7 +19,7 @@ public class AnimatedSprite extends Sprite{
 	
 	public AnimatedSprite(int width, int height) {
 		super(width, height);
-		currentDirection = DOWN;
+		setCurrentDirection(DOWN);
 		currentSprite = 0;
 		currentSpriteChange = 0;
 	}
@@ -46,6 +46,9 @@ public class AnimatedSprite extends Sprite{
 		spriteY = spriteYCoordinates[currentDirection][currentSprite];
 	}
 	
+	public void setCurrentDirection(int tmp) {
+		currentDirection = tmp;
+	}
 	public int getCurrentDirection() {
         return currentDirection;
     }

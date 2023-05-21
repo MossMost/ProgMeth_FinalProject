@@ -6,18 +6,17 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
 
-import Constant.Constant;
-import Enemy.Enemy1;
-import Enemy.Enemy2;
-import Enemy.Enemy3;
-import Enemy.Enemy4;
-import Enemy.Enemy5;
-import Item.AmountUp;
-import Item.Door;
-import Item.RangeUp;
-import Item.SpeedUp;
-import Music.MusicPlayable;
 import application.Main;
+import constant.Constant;
+import enemy.Enemy1;
+import enemy.Enemy2;
+import enemy.Enemy3;
+import enemy.Enemy4;
+import enemy.Enemy5;
+import item.AmountUp;
+import item.Door;
+import item.RangeUp;
+import item.SpeedUp;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -27,6 +26,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Pair;
+import music.MusicPlayable;
+import sprites.AnimatedSprite;
 import sprites.Bomb;
 import sprites.MainCharacter;
 import sprites.Sprite;
@@ -80,7 +81,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	private static MediaPlayer mediaPlayerEffects;
 	private static Media effect;
 	
-	
+	private int dividedDead;
 	private boolean isMusicEnabled = true;
 	
 	public SoloGameScene() {
@@ -101,6 +102,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	@Override
 	public void draw() {
 		reset();
+		setDividedDead(0);
 		if(isMusicEnabled == true)
 			playLoopMusic();
 		
@@ -132,7 +134,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 				 	showMessage();
 					for(int i=0; i<DoorCoordinates.size();i++) {
 						boolean ch = true;
-						for(int j=0;j<Constant.STATE_ENEMY[stage][0];j++) {
+						for(int j=0;j<Constant.STATE_ENEMY[stage][0]+2*getDividedDead();j++) {
 							if(enemy1[j].getDead() == false)
 								ch = false;
 						}
@@ -184,7 +186,9 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 						}
 					}
 					
-					
+					for(int i=0;i<DoorCoordinates.size();i++) {///
+						door[i].draw(gc);
+					}
 					
 					for(int i=0;i<RangeCoordinates.size();i++) {
 						if(rangeUp[i]!=null)
@@ -209,9 +213,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 							wall[i].draw(gc);
 						}
 					}
-					for(int i=0;i<DoorCoordinates.size();i++) {///
-						door[i].draw(gc);
-					}
+					
 					
 					if(!delTime.isEmpty() && currentNanoTime - delTime.get(0) >= 3e9+1e8) {
 						Player.setAmountBomb(Player.getAmountBomb()+1);
@@ -227,7 +229,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 					
 					
 					//enemy
-					for(int i=0; i<Constant.STATE_ENEMY[stage][0]; i++) {
+					for(int i=0; i<Constant.STATE_ENEMY[stage][0]+2*getDividedDead(); i++) {
 						enemy1[i].draw(gc);
 						enemy1[i].move(enemy1[i].getCurrentDirection());
 						for(int j=0; j<delTime.size();j++) {
@@ -260,6 +262,13 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 						enemy3[i].move(enemy3[i].getCurrentDirection());
 						for(int j=0; j<delTime.size();j++) {
 							if(currentNanoTime - delTime.get(j) >= 3e9 && currentNanoTime - delTime.get(j) <= 3e9 + 1e7 && enemy3[i].checkBomb(mnX, mnY, Player.getFireRange()) && !enemy3[i].getDead()) {
+								int newMonster1 = Constant.STATE_ENEMY[stage][1]+2*getDividedDead();
+								System.out.println("eiei");
+								enemy1[newMonster1+1].moveTo(enemy4[i].getX(), enemy4[i].getY());
+								enemy1[newMonster1+1].setCurrentDirection(AnimatedSprite.LEFT);
+								enemy1[newMonster1+2].moveTo(enemy4[i].getX(), enemy4[i].getY());
+								enemy1[newMonster1+2].setCurrentDirection(AnimatedSprite.RIGHT);
+								setDividedDead(getDividedDead()+1);
 								enemy3[i].die(enemy3[i].getX(), enemy3[i].getY(), gc, currentNanoTime);
 							}
 						}
@@ -661,17 +670,17 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		
 		wall = new Sprite[75];
 		
-		enemy1 = new Enemy1[6];
-		enemy2 = new Enemy2[6];
-		enemy3 = new Enemy3[6];
-		enemy4 = new Enemy4[6];
-		enemy5 = new Enemy5[6];
+		enemy1 = new Enemy1[7];
+		enemy2 = new Enemy2[7];
+		enemy3 = new Enemy3[7];
+		enemy4 = new Enemy4[7];
+		enemy5 = new Enemy5[7];
 		door = new Door[2];
 		rangeUp = new RangeUp[10];
 		speedUp = new SpeedUp[10];
 		amountUp = new AmountUp[10];
 		
-		for(int i=0;i<3;i++) {
+		for(int i=0;i<3+4;i++) {
 			enemy1[i] = new Enemy1();
 		}
 		for(int i=0;i<3;i++) {
@@ -739,7 +748,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		gc.setFont(Monster);
 		gc.setFill(Color.WHITE);
 		int cnt = 0;
-		for(int i=0;i<Constant.STATE_ENEMY[stage][0];i++) {
+		for(int i=0;i<Constant.STATE_ENEMY[stage][0]+2*getDividedDead();i++) {
 			if(enemy1[i].getDead() == false)
 				cnt++;
 		}
@@ -790,6 +799,14 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		else {
 			gc.drawImage(musicOff,912,10);
 		}
+	}
+	
+	public int getDividedDead() {
+		return dividedDead;
+	}
+	
+	public void setDividedDead(int n) {
+		dividedDead = n;
 	}
 	
 }

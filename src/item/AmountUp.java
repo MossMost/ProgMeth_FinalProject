@@ -1,17 +1,16 @@
-package Item;
+package item;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import Constant.Constant;
+import constant.Constant;
 import javafx.scene.image.Image;
 import sprites.MainCharacter;
 
-public class SpeedUp extends Item{
+public class AmountUp extends Item{
+	private static final String IMAGE_PATH = "assets/Bomb_Powerup.png";
 
-    private static final String IMAGE_PATH = "assets/Speed_Powerup.png";
-
-    public SpeedUp() {
+    public AmountUp() {
          super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
          try {
                 spriteImage = new Image(Files.newInputStream(Paths.get(IMAGE_PATH)));
@@ -22,9 +21,6 @@ public class SpeedUp extends Item{
 
     @Override
     public void ItemEffect(MainCharacter Player) {
-        Player.setStep(Player.getStep()+0.5);
+    	Player.setAmountBomb(Player.getAmountBomb()+1);
     }
-
-
-
 }

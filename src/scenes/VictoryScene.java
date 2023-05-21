@@ -2,9 +2,9 @@ package scenes;
 
 import java.io.File;
 
-import Constant.Constant;
-import Enemy.MonsterLove;
 import application.Main;
+import constant.Constant;
+import enemy.MonsterLove;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.Media;
@@ -51,10 +51,10 @@ public class VictoryScene extends GeneralScene implements Animateable{
 		gc.setFill(Color.YELLOW);
 		gc.fillText("VICTORY", 330, 200);
 		
-		myFont = Font.font("Arial", FontWeight.NORMAL, 40);
+		myFont = Font.font("Arial", FontWeight.NORMAL, 25);
 		gc.setFont(myFont);
 		gc.setFill(Color.WHITE);
-		gc.fillText("Press Spacebar to go back to Welcome Scene", 100, 585);
+		gc.fillText("Press Spacebar to go back to Welcome Scene", 250, 545);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package Item;
+package item;
 
 import sprites.MainCharacter;
 import sprites.Sprite;

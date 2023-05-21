@@ -4,10 +4,8 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import Music.MusicPlayable;
-
-import Constant.Constant;
 import application.Main;
+import constant.Constant;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -16,6 +14,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import music.MusicPlayable;
 
 public class WelcomeScene extends GeneralScene implements MusicPlayable{
 	private static final String BACKGROUND_IMAGE = "assets/Welcome_Background.png";

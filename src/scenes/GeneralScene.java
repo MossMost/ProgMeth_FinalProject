@@ -3,8 +3,7 @@ package scenes;
 import java.util.HashSet;
 import java.util.Set;
 
-import Constant.Constant;
-
+import constant.Constant;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

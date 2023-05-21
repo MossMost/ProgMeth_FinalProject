@@ -3,8 +3,7 @@ package sprites;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import Constant.Constant;
-
+import constant.Constant;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

@@ -1,10 +1,10 @@
-package Item;
+package item;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import Constant.Constant;
 import application.Main;
+import constant.Constant;
 import javafx.scene.image.Image;
 import scenes.SoloGameScene;
 import sprites.MainCharacter;
@@ -25,7 +25,7 @@ public class Door extends Item{
 		@Override
 		public void ItemEffect(MainCharacter Player) {
 			if(SoloGameScene.stage == 4)
-				Main.setScene(Main.CONGRAT_SCENE);
+				Main.setScene(Main.VICTORY_SCENE);
 			else
 				Main.setScene(Main.NEXTSTAGE_SCENE);
 			Player.setLife(3);

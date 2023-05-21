@@ -1,9 +1,10 @@
-package Enemy;
+package enemy;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
-import Constant.Constant;
+
+import constant.Constant;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -11,13 +12,14 @@ import javafx.util.Pair;
 import scenes.SoloGameScene;
 import sprites.AnimatedSprite;
 
-public class Enemy5 extends AnimatedSprite{
-	private static final String IMAGE_PATH = "assets/Enemy5.png";
-	private static final int STEP = 1;
+
+public class Enemy4 extends AnimatedSprite{
+	private static final String IMAGE_PATH = "assets/Enemy4.png";
+	private static final int STEP = 2;
 	private boolean isDead = false;
 	public static final byte DIE_FRAME = 31;
 	
-	public Enemy5() {
+	public Enemy4() {
 		super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
 		try {
 			spriteImage = new Image(Files.newInputStream(Paths.get(IMAGE_PATH)));
@@ -40,8 +42,13 @@ public class Enemy5 extends AnimatedSprite{
 	}
 	
 	public void move(int movement) {
+		if(getDead())
+			return;
 		int newX = x;
 		int newY = y;
+		int oldX = x;
+		int oldY = y;
+		
 		if (movement == LEFT && newX - STEP >= 40)
 			newX -= STEP;
 		else if (movement == RIGHT && newX + STEP <= 1008 - 44*2)
@@ -50,9 +57,60 @@ public class Enemy5 extends AnimatedSprite{
 			newY -= STEP;
 		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
 			newY += STEP;
-
-		flutter(getCurrentDirection(), newX, newY);
 		
+		if (movement == LEFT && newX - STEP < 40)
+			movement = randomMovement(movement);
+		else if (movement == RIGHT && newX + STEP > 1008 - 44*2)
+			movement = randomMovement(movement);
+		else if (movement == UP && newY - STEP < 48*3)
+			movement = randomMovement(movement);
+		else if (movement == DOWN && newY + STEP > 720 - 48*2)
+			movement = randomMovement(movement);
+		
+		int sz = SoloGameScene.wallCoordinates.size();
+		for(int i=0;i<sz;i++) {
+			int wallX = SoloGameScene.wallCoordinates.get(i).getKey();
+			int wallY = SoloGameScene.wallCoordinates.get(i).getValue();
+			
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
+				movement = randomMovement(movement);
+				break;
+			}
+		}
+		
+		sz = SoloGameScene.wallBrickCoordinates.size();
+		for(int i=0;i<sz;i++) {
+			int wallX = SoloGameScene.wallBrickCoordinates.get(i).getKey();
+			int wallY = SoloGameScene.wallBrickCoordinates.get(i).getValue();
+			
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
+				movement = randomMovement(movement);
+				break;
+			}
+		}
+		
+		sz = SoloGameScene.BombCoordinates.size();
+		for(int i=0;i<sz;i++) {
+			int wallX = SoloGameScene.BombCoordinates.get(i).getKey();
+			int wallY = SoloGameScene.BombCoordinates.get(i).getValue();
+			
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
+				movement = randomMovement(movement);
+				break;
+			}
+		}
+		
+		if (movement == LEFT && newX - STEP >= 40)
+			oldX -= STEP;
+		else if (movement == RIGHT && newX + STEP <= 1008 - 44*2)
+			oldX += STEP;
+		else if (movement == UP && newY - STEP >= 48*3)
+			oldY -= STEP;
+		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
+			oldY += STEP;
+
+		moveTo(oldX, oldY);
+		animate(movement);
 	}
 	
 	public int randomMovement(int movement) {
@@ -68,32 +126,41 @@ public class Enemy5 extends AnimatedSprite{
 	}
 	
 	public boolean checkwall(int movement) {
-		int newX = x, newY = y;
-		if (movement == LEFT)
-			newX = x - STEP;
-		else if (movement == RIGHT)
-			newX = x + STEP;
-		else if (movement == UP)
-			newY = y - STEP;
-		else if (movement == DOWN)
-			newY = y + STEP;
+		if (movement == LEFT && x - STEP < 40)
+			return false;
+		else if (movement == RIGHT && x + STEP > 1008 - 44*2)
+			return false;
+		else if (movement == UP && y - STEP < 48*3)
+			return false;
+		else if (movement == DOWN && y + STEP > 720 - 48*2)
+			return false;
+		int newX = x;
+		int newY = y;
+		if (movement == LEFT && newX - STEP >= 40)
+			newX -= STEP;
+		else if (movement == RIGHT && newX + STEP <= 1008 - 44*2)
+			newX += STEP;
+		else if (movement == UP && newY - STEP >= 48*3)
+			newY -= STEP;
+		else if (movement == DOWN && newY + STEP <= 720 - 48*2)
+			newY += STEP;
 		
 		int sz = SoloGameScene.wallCoordinates.size();
 		for(int i=0;i<sz;i++) {
 			int wallX = SoloGameScene.wallCoordinates.get(i).getKey();
 			int wallY = SoloGameScene.wallCoordinates.get(i).getValue();
 			
-			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
 				return false;
 			}
 		}
 		
-		sz = SoloGameScene.BombCoordinates.size();
+		sz = SoloGameScene.wallBrickCoordinates.size();
 		for(int i=0;i<sz;i++) {
-			int wallX = SoloGameScene.BombCoordinates.get(i).getKey();
-			int wallY = SoloGameScene.BombCoordinates.get(i).getValue();
+			int wallX = SoloGameScene.wallBrickCoordinates.get(i).getKey();
+			int wallY = SoloGameScene.wallBrickCoordinates.get(i).getValue();
 			
-			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
 				return false;
 			}
 		}
@@ -101,62 +168,8 @@ public class Enemy5 extends AnimatedSprite{
 		return true;
 	}
 	
-	public void flutter(int movement, int newX, int newY) {
-		
-
-		if (movement == LEFT && newX - STEP < 40)
-			movement = randomMovement(movement);
-		else if (movement == RIGHT && newX + STEP > 1008 - 44*2)
-			movement = randomMovement(movement);
-		else if (movement == UP && newY - STEP < 48*3)
-			movement = randomMovement(movement);
-		else if (movement == DOWN && newY + STEP > 720 - 48*2)
-			movement = randomMovement(movement);
-		
-		if(newX%96  > 40 && newX%96 < 64 && newY%96 > 46 && newY%96 < 64) {
-			
-			if(movement == LEFT || movement == RIGHT) {
-				int random;
-				Random rand = new Random();
-				random = rand.nextInt(500);
-				if(random<=5) {
-					moveTo(newX, newY);
-					if(random<=2)
-						animate(UP);
-					else 
-						animate(DOWN);
-				}
-				else {
-					moveTo(newX, newY);
-					animate(movement);
-				}
-			}
-			else {
-
-				int random;
-				Random rand = new Random();
-				random = rand.nextInt(500);
-				if(random<=5) {
-					moveTo(newX, newY);
-					if(random<=2)
-						animate(LEFT);
-					else 
-						animate(RIGHT);
-				}
-				else {
-					moveTo(newX, newY);
-					animate(movement);
-				}
-			}
-		}
-		else {
-			moveTo(newX, newY);
-			animate(movement);
-		}
-	}
-	
 	public void die(int x,int y,GraphicsContext gc,long time) {
-		
+		setDead(true);
 		new AnimationTimer() {
 			public void handle(long currentNanoTime) {
 				if(currentNanoTime - time <= 3e9 + 5e8) {
@@ -169,7 +182,6 @@ public class Enemy5 extends AnimatedSprite{
                 }
 			}
 		}.start();
-		setDead(true);
 	}
 	
 	public boolean checkBomb(int x,int y, int range) {
@@ -240,5 +252,5 @@ public class Enemy5 extends AnimatedSprite{
 		isDead = dead;
 	}
 	
-	
+
 }

@@ -1,4 +1,4 @@
-package Constant;
+package constant;
 
 public class Constant {
     public static final int SCENE_WIDTH = 1008;

@@ -1,10 +1,10 @@
-package Enemy;
+package enemy;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 
-import Constant.Constant;
+import constant.Constant;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -13,13 +13,13 @@ import scenes.SoloGameScene;
 import sprites.AnimatedSprite;
 
 
-public class Enemy4 extends AnimatedSprite{
-	private static final String IMAGE_PATH = "assets/Enemy4.png";
-	private static final int STEP = 2;
+public class Enemy1 extends AnimatedSprite{
+	private static final String IMAGE_PATH = "assets/Enemy1.png";
+	private static final int STEP = 1;
 	private boolean isDead = false;
 	public static final byte DIE_FRAME = 31;
 	
-	public Enemy4() {
+	public Enemy1() {
 		super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
 		try {
 			spriteImage = new Image(Files.newInputStream(Paths.get(IMAGE_PATH)));
@@ -27,14 +27,14 @@ public class Enemy4 extends AnimatedSprite{
 			e.printStackTrace();
 		}
 		
-		spriteXCoordinates[LEFT] = new int[] {0, 48, 96};
-		spriteYCoordinates[LEFT] = new int[] {0, 0, 0};
 		spriteXCoordinates[RIGHT] = new int[] {0, 48, 96};
-		spriteYCoordinates[RIGHT] = new int[] {48, 48, 48};
-		spriteXCoordinates[DOWN] = new int[] {0, 48, 96};
-		spriteYCoordinates[DOWN] = new int[] {0, 0, 0};
-		spriteXCoordinates[UP] = new int[] {0, 48, 96}; 
-		spriteYCoordinates[UP] = new int[] {48, 48, 48};
+		spriteYCoordinates[RIGHT] = new int[] {0, 0, 0};
+		spriteXCoordinates[LEFT] = new int[] {0, 48, 96};
+		spriteYCoordinates[LEFT] = new int[] {48, 48, 48};
+		spriteXCoordinates[UP] = new int[] {0, 48, 96};
+		spriteYCoordinates[UP] = new int[] {0, 0, 0};
+		spriteXCoordinates[DOWN] = new int[] {0, 48, 96}; 
+		spriteYCoordinates[DOWN] = new int[] {48, 48, 48};
 		spriteXCoordinates[DIE] = new int[] {0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96};
 		spriteYCoordinates[DIE] = new int[] {96, 96, 96, 144, 144, 144, 192, 192, 192, 240, 240, 240, 288, 288, 288, 336, 336, 336};
 		

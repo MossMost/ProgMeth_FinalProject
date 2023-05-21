@@ -1,16 +1,17 @@
-package Item;
+package item;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import Constant.Constant;
+import constant.Constant;
 import javafx.scene.image.Image;
 import sprites.MainCharacter;
 
-public class AmountUp extends Item{
-	private static final String IMAGE_PATH = "assets/Bomb_Powerup.png";
+public class RangeUp extends Item{
 
-    public AmountUp() {
+    private static final String IMAGE_PATH = "assets/Flame_Powerup.png";
+
+    public RangeUp() {
          super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
          try {
                 spriteImage = new Image(Files.newInputStream(Paths.get(IMAGE_PATH)));
@@ -21,6 +22,7 @@ public class AmountUp extends Item{
 
     @Override
     public void ItemEffect(MainCharacter Player) {
-    	Player.setAmountBomb(Player.getAmountBomb()+1);
+    	Player.setFireRange(Player.getFireRange()+1);
     }
+
 }
