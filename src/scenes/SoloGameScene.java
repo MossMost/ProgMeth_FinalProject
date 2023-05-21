@@ -27,7 +27,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Pair;
 import music.MusicPlayable;
-import sprites.AnimatedSprite;
 import sprites.Bomb;
 import sprites.MainCharacter;
 import sprites.Sprite;

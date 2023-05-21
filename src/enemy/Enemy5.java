@@ -45,13 +45,7 @@ public class Enemy5 extends Monster{
 		else if (movement == Constant.DOWN && newY + STEP <= 720 - 48*2)
 			newY += STEP;
 
-		flutter(getCurrentDirection(), newX, newY);
 		
-	}
-	
-	public void flutter(int movement, int newX, int newY) {
-		
-
 		if (movement == Constant.LEFT && newX - STEP < 40)
 			movement = randomMovement(movement, STEP);
 		else if (movement == Constant.RIGHT && newX + STEP > 1008 - 44*2)
@@ -61,46 +55,9 @@ public class Enemy5 extends Monster{
 		else if (movement == Constant.DOWN && newY + STEP > 720 - 48*2)
 			movement = randomMovement(movement, STEP);
 		
-		if(newX%96  > 40 && newX%96 < 64 && newY%96 > 46 && newY%96 < 64) {
-			
-			if(movement == Constant.LEFT || movement == Constant.RIGHT) {
-				int random;
-				Random rand = new Random();
-				random = rand.nextInt(500);
-				if(random<=5) {
-					moveTo(newX, newY);
-					if(random<=2)
-						animate(Constant.UP);
-					else 
-						animate(Constant.DOWN);
-				}
-				else {
-					moveTo(newX, newY);
-					animate(movement);
-				}
-			}
-			else {
-
-				int random;
-				Random rand = new Random();
-				random = rand.nextInt(500);
-				if(random<=5) {
-					moveTo(newX, newY);
-					if(random<=2)
-						animate(Constant.LEFT);
-					else 
-						animate(Constant.RIGHT);
-				}
-				else {
-					moveTo(newX, newY);
-					animate(movement);
-				}
-			}
-		}
-		else {
-			moveTo(newX, newY);
-			animate(movement);
-		}
+		moveTo(newX, newY);
+		animate(movement);
+		
 	}
 	
 }
