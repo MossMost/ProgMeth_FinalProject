@@ -29,7 +29,7 @@ public class MainCharacter extends AnimatedSprite{
 		}
 		setStep(2.0);
 		setLife(3);
-		setFireRange(2);
+		setFireRange(1);
 		setAmountBomb(1);
 		setDead(false);
 		setInstantDead(false);
@@ -115,7 +115,7 @@ public class MainCharacter extends AnimatedSprite{
 
 	public void die(int x,int y,GraphicsContext gc,long time) {
 		if(!getInstantDead()) {
-			SoloGameScene.playEffect(SoloGameScene.DIE_EFFECT);
+			SoloGameScene.playEffect(Constant.DIE_EFFECT);
 			setInstantDead(true);
 		}
 		new AnimationTimer() {
@@ -163,15 +163,15 @@ public class MainCharacter extends AnimatedSprite{
 	}
 	
 	public boolean checkEnemy(int xPlayer, int yPlayer, int xObj,int yObj) {
-		if(xPlayer >= xObj - Constant.BLOCK_SIZE + 17 && xPlayer <= xObj + Constant.BLOCK_SIZE - 17 && yPlayer >= yObj - Constant.BLOCK_SIZE + 17 
-		&& yPlayer <= yObj + Constant.BLOCK_SIZE - 17)
+		if(xPlayer >= xObj - Constant.BLOCK_SIZE + 17 && xPlayer <= xObj + Constant.BLOCK_SIZE - 17 
+		&& yPlayer >= yObj - Constant.BLOCK_SIZE + 17 && yPlayer <= yObj + Constant.BLOCK_SIZE - 17)
 			return true;
 		return false;
 	}
 	
 	public boolean checkCollision(int xPlayer, int yPlayer, int xObj,int yObj) {
-		if(xPlayer >= xObj - Constant.BLOCK_SIZE + 15 && xPlayer <= xObj + Constant.BLOCK_SIZE - 15 && yPlayer >= yObj - Constant.BLOCK_SIZE + 7 
-		&& yPlayer <= yObj + Constant.BLOCK_SIZE - 15)
+		if(xPlayer >= xObj - Constant.BLOCK_SIZE + 15 && xPlayer <= xObj + Constant.BLOCK_SIZE - 15 
+		&& yPlayer >= yObj - Constant.BLOCK_SIZE + 7  && yPlayer <= yObj + Constant.BLOCK_SIZE - 15)
 			return true;
 		return false;
 	}

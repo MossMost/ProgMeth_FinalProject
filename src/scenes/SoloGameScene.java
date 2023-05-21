@@ -34,13 +34,14 @@ import sprites.Sprite;
 
 
 public class SoloGameScene extends GeneralScene implements MusicPlayable{
-	private static final String BACKGROUND_IMAGE = "assets/background.png";
-	private static final String BRICK_IMAGE = "assets/Brick.png";
-	private static final String MUSIC_ON_IMAGE = "assets/MusicGoldOn.png";
-	private static final String MUSIC_OFF_IMAGE = "assets/MusicGoldOff.png";
+	private final String BACKGROUND_IMAGE = "assets/background.png";
+	private final String BRICK_IMAGE = "assets/Brick.png";
+	private final String MUSIC_ON_IMAGE = "assets/MusicGoldOn.png";
+	private final String MUSIC_OFF_IMAGE = "assets/MusicGoldOff.png";
+	private final String ITEM_EFFECT = "assets/Collectitem.wav";
 
-	public static int posXBrick[] = new int[110];
-	public static int posYBrick[] = new int[110];
+	private int posXBrick[] = new int[110];
+	private int posYBrick[] = new int[110];
 	
 	public static Sprite wall[];
 	public static ArrayList<Pair<Integer, Integer>> disableWall;
@@ -58,7 +59,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	
 	public static ArrayList<Bomb> BombArr = new ArrayList<Bomb>();
 	
-	private Image background,brick,musicOn,musicOff;
+	private Image background, brick, musicOn, musicOff;
 	private MainCharacter Player;
 	private Enemy1[] enemy1;
 	private Enemy2[] enemy2;
@@ -69,12 +70,6 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	private RangeUp[] rangeUp;
 	private SpeedUp[] speedUp;
 	private AmountUp[] amountUp;
-	
-	public static final String BACKGROUND_SONG = "assets/SoloGameSceneMusic.wav";
-	public static final String PLACE_BOMB_EFFECT = "assets/place_bomb.wav";
-	public static final String EXPLOSION_EFFECT = "assets/explosion.wav";	
-	public static final String DIE_EFFECT = "assets/PlayerDie.wav";
-	public static final String ITEM_EFFECT = "assets/Collectitem.wav";
 	
 	public static int stage;
 	
@@ -107,23 +102,9 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 			playLoopMusic();
 		
 		activeKeys.clear();
-		Player.moveTo(1*48, 3*48);
+		Player.moveTo(1*Constant.BLOCK_SIZE, 3*Constant.BLOCK_SIZE);
 		Player.setDead(false);
-		for(int i=0; i<DoorCoordinates.size(); i++) {
-			door[i].moveTo(DoorCoordinates.get(i).getKey(), DoorCoordinates.get(i).getValue());
-		}
 		
-		for(int i=0; i<RangeCoordinates.size(); i++) {
-			rangeUp[i].moveTo(RangeCoordinates.get(i).getKey(), RangeCoordinates.get(i).getValue());
-		}
-		
-		for(int i=0; i<SpeedCoordinates.size(); i++) {
-			speedUp[i].moveTo(SpeedCoordinates.get(i).getKey(), SpeedCoordinates.get(i).getValue());
-		}
-		
-		for(int i=0; i<AmountCoordinates.size(); i++) {
-			amountUp[i].moveTo(AmountCoordinates.get(i).getKey(), AmountCoordinates.get(i).getValue());
-		}
 		new AnimationTimer() {
 			 int mnX,mnY;
 			 long lastP,lastSpace,lastDie;
@@ -133,28 +114,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 				 	showImage();
 				 	showMessage();
 					for(int i=0; i<DoorCoordinates.size();i++) {
-						boolean ch = true;
-						for(int j=0;j<Constant.STATE_ENEMY[stage][0]+2*getDividedDead();j++) {
-							if(enemy1[j].getDead() == false)
-								ch = false;
-						}
-						for(int j=0;j<Constant.STATE_ENEMY[stage][1];j++) {
-							if(enemy2[j].getDead() == false)
-								ch = false;
-						}
-						for(int j=0;j<Constant.STATE_ENEMY[stage][2];j++) {
-							if(enemy3[j].getDead() == false)
-								ch = false;
-						}
-						for(int j=0;j<Constant.STATE_ENEMY[stage][3];j++) {
-							if(enemy4[j].getDead() == false)
-								ch = false;
-						}
-						for(int j=0;j<Constant.STATE_ENEMY[stage][4];j++) {
-							if(enemy5[j].getDead() == false)
-								ch = false;
-						}
-						if(door[i]!=null && ch && Player.checkCollision(Player.getX(), Player.getY(), DoorCoordinates.get(i).getKey(), DoorCoordinates.get(i).getValue())) {
+						if(door[i]!=null && checkMonsterAlive()==0 && Player.checkCollision(Player.getX(), Player.getY(), DoorCoordinates.get(i).getKey(), DoorCoordinates.get(i).getValue())) {
 							this.stop();
 							stopMusic();
 							setStage(stage + 1);
@@ -207,7 +167,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 					
 					for(int i=0;i<70;i++) {
 						if(disableWall.contains(new Pair<>(posXBrick[i], posYBrick[i])) == false) {
-							wall[i] = new Sprite(48,48);
+							wall[i] = new Sprite(Constant.BLOCK_SIZE,Constant.BLOCK_SIZE);
 							wall[i].setSpriteImage(brick);
 							wall[i].moveTo(posXBrick[i], posYBrick[i]);
 							wall[i].draw(gc);
@@ -352,16 +312,16 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 				 		Bomb bomb = new Bomb();
 				 		BombArr.add(bomb);
 				 		Player.setAmountBomb(Player.getAmountBomb() - 1);
-				 		playEffect(PLACE_BOMB_EFFECT);
+				 		playEffect(Constant.PLACE_BOMB_EFFECT);
 				 		lastSpace = currentNanoTime;
 				 		delTime.add((long) (currentNanoTime));
-						mnX = (Player.getX()/48)*48;
-						if(Math.abs(mnX - Player.getX()) > Math.abs((Player.getX()/48+1)*48 - Player.getX())) {
-							mnX = (Player.getX()/48+1)*48;
+						mnX = (Player.getX()/Constant.BLOCK_SIZE)*Constant.BLOCK_SIZE;
+						if(Math.abs(mnX - Player.getX()) > Math.abs((Player.getX()/Constant.BLOCK_SIZE+1)*Constant.BLOCK_SIZE - Player.getX())) {
+							mnX = (Player.getX()/Constant.BLOCK_SIZE+1)*Constant.BLOCK_SIZE;
 						}
-						mnY = (Player.getY()/48)*48;
-						if(Math.abs(mnY - Player.getY()) > Math.abs((Player.getY()/48+1)*48 - Player.getY())) {
-							mnY = (Player.getY()/48+1)*48;
+						mnY = (Player.getY()/Constant.BLOCK_SIZE)*Constant.BLOCK_SIZE;
+						if(Math.abs(mnY - Player.getY()) > Math.abs((Player.getY()/Constant.BLOCK_SIZE+1)*Constant.BLOCK_SIZE - Player.getY())) {
+							mnY = (Player.getY()/Constant.BLOCK_SIZE+1)*Constant.BLOCK_SIZE;
 						}
 						if(BombCoordinates.contains(new Pair<>(mnX,mnY)) == false) {
 	                    	BombCoordinates.add(new Pair<>(mnX,mnY));
@@ -383,39 +343,39 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	
 	private void addObject() {
 		for(int i=1; i<=19; i++) {
-			wallCoordinates.add(new Pair<>(i*48,2*48));
-			wallCoordinates.add(new Pair<>(i*48,14*48));
+			wallCoordinates.add(new Pair<>(i*Constant.BLOCK_SIZE,2*Constant.BLOCK_SIZE));
+			wallCoordinates.add(new Pair<>(i*Constant.BLOCK_SIZE,14*Constant.BLOCK_SIZE));
 		}
 		
 		for(int j=3; j<=13; j++) {
-			wallCoordinates.add(new Pair<>(0,j*48));
-			wallCoordinates.add(new Pair<>(20*48,j*48));
+			wallCoordinates.add(new Pair<>(0,j*Constant.BLOCK_SIZE));
+			wallCoordinates.add(new Pair<>(20*Constant.BLOCK_SIZE,j*Constant.BLOCK_SIZE));
 		}
 		
 		for(int i=2; i<=18; i+=2) {
 			for(int j=4; j<=12; j+=2) {
-				wallCoordinates.add(new Pair<>(i*48,j*48));
+				wallCoordinates.add(new Pair<>(i*Constant.BLOCK_SIZE,j*Constant.BLOCK_SIZE));
 			}
 		}
 		
 		//randomWall
 		Random rand = new Random();
-		wallBrickCoordinates.add(new Pair<>(3*48,3*48));
-		posXBrick[68] = 3*48;posYBrick[68] = 3*48;
-		wallBrickCoordinates.add(new Pair<>(1*48,5*48));
-		posXBrick[69] = 1*48;posYBrick[69] = 5*48;
+		wallBrickCoordinates.add(new Pair<>(3*Constant.BLOCK_SIZE,3*Constant.BLOCK_SIZE));
+		wallBrickCoordinates.add(new Pair<>(1*Constant.BLOCK_SIZE,5*Constant.BLOCK_SIZE));
+		posXBrick[68] = 3*Constant.BLOCK_SIZE;posYBrick[68] = 3*Constant.BLOCK_SIZE;
+		posXBrick[69] = 1*Constant.BLOCK_SIZE;posYBrick[69] = 5*Constant.BLOCK_SIZE;
 		int posX, posY;
 		for(int tmp = 0; tmp < 68; tmp++) {
 			while(true) {
-				posX = rand.nextInt(20)*48;
-				posY = rand.nextInt(14)*48;
+				posX = rand.nextInt(20)*Constant.BLOCK_SIZE;
+				posY = rand.nextInt(14)*Constant.BLOCK_SIZE;
 				
-				if(posX == 0 || posY < 3*48) 
+				if(posX == 0 || posY < 3*Constant.BLOCK_SIZE) 
 					continue;
 				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)))
 					continue;
-				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
-				|| posX == 48 && posY == 4*48) 
+				if(posX == Constant.BLOCK_SIZE && posY == 3*Constant.BLOCK_SIZE || posX == Constant.BLOCK_SIZE*2 && posY == 3*Constant.BLOCK_SIZE 
+				|| posX == Constant.BLOCK_SIZE && posY == 4*Constant.BLOCK_SIZE) 
 					continue;
 				
 				//showImage
@@ -427,27 +387,16 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 			
 		}
 		
-		
-		//randomItem
-		
-		
 	}
 	
 	private void GeneratePosItem(int numberof_door, int numberof_rangeUp, int numberof_speedUp, int numberof_amountUp) {
-		GenerateDoorItem(numberof_door);
-		GeneratePowerItem(numberof_rangeUp);
-		GenerateSpeedItem(numberof_speedUp);
-		GenerateAmountItem(numberof_amountUp);
 		
-	}
-	
-	private void GenerateDoorItem(int n) {
 		Random rand = new Random();
 		int posX, posY;
-		for(int tmp = 0; tmp < n; tmp++) {
+		for(int tmp = 0; tmp < numberof_door; tmp++) {
 			while(true) {
-				posX = rand.nextInt(20)*48;
-				posY = rand.nextInt(14)*48;
+				posX = rand.nextInt(20)*Constant.BLOCK_SIZE;
+				posY = rand.nextInt(14)*Constant.BLOCK_SIZE;
 				
 				if(ItemCoordinates.contains(new Pair<>(posX,posY)))
 					continue;
@@ -459,15 +408,11 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 				}
 			}
 		}
-	}
-	
-	private void GenerateSpeedItem(int n) {
-		Random rand = new Random();
-		int posX, posY;
-		for(int tmp = 0; tmp < n; tmp++) {
+		
+		for(int tmp = 0; tmp < numberof_speedUp; tmp++) {
 			while(true) {
-				posX = rand.nextInt(20)*48;
-				posY = rand.nextInt(14)*48;
+				posX = rand.nextInt(20)*Constant.BLOCK_SIZE;
+				posY = rand.nextInt(14)*Constant.BLOCK_SIZE;
 				
 				if(ItemCoordinates.contains(new Pair<>(posX,posY)))
 					continue;
@@ -479,15 +424,11 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 				}
 			}
 		}
-	}
-	
-	private void GeneratePowerItem(int n) {
-		Random rand = new Random();
-		int posX, posY;
-		for(int tmp = 0; tmp < n; tmp++) {
+		
+		for(int tmp = 0; tmp < numberof_rangeUp; tmp++) {
 			while(true) {
-				posX = rand.nextInt(20)*48;
-				posY = rand.nextInt(14)*48;
+				posX = rand.nextInt(20)*Constant.BLOCK_SIZE;
+				posY = rand.nextInt(14)*Constant.BLOCK_SIZE;
 				
 				if(ItemCoordinates.contains(new Pair<>(posX,posY)))
 					continue;
@@ -499,15 +440,11 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 				}
 			}
 		}
-	}
-	
-	private void GenerateAmountItem(int n) {
-		Random rand = new Random();
-		int posX, posY;
-		for(int tmp = 0; tmp < n; tmp++) {
+		
+		for(int tmp = 0; tmp < numberof_amountUp; tmp++) {
 			while(true) {
-				posX = rand.nextInt(20)*48;
-				posY = rand.nextInt(14)*48;
+				posX = rand.nextInt(20)*Constant.BLOCK_SIZE;
+				posY = rand.nextInt(14)*Constant.BLOCK_SIZE;
 				
 				if(ItemCoordinates.contains(new Pair<>(posX,posY)))
 					continue;
@@ -520,21 +457,22 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 			}
 		}
 	}
+
 	
 	private void GenerateEnemy(int type1,int type2, int type3, int type4, int type5) {
 		Random rand = new Random();
 		int posX, posY;
 		for(int tmp = 0; tmp < type1; tmp++) {
 			while(true) {
-				posX = rand.nextInt(20)*48;
-				posY = rand.nextInt(14)*48;
+				posX = rand.nextInt(20)*Constant.BLOCK_SIZE;
+				posY = rand.nextInt(14)*Constant.BLOCK_SIZE;
 				
-				if(posX == 0 || posY < 3*48) 
+				if(posX == 0 || posY < 3*Constant.BLOCK_SIZE) 
 					continue;
 				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)) || EnemyCoordinates.contains(new Pair<>(posX,posY)))
 					continue;
-				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
-				|| posX == 48 && posY == 4*48) 
+				if(posX == Constant.BLOCK_SIZE && posY == 3*Constant.BLOCK_SIZE || posX == Constant.BLOCK_SIZE*2 && posY == 3*Constant.BLOCK_SIZE 
+				|| posX == Constant.BLOCK_SIZE && posY == 4*Constant.BLOCK_SIZE) 
 					continue;
 				
 				enemy1[tmp].moveTo(posX, posY);
@@ -546,15 +484,15 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		
 		for(int tmp = 0; tmp < type2; tmp++) {
 			while(true) {
-				posX = rand.nextInt(20)*48;
-				posY = rand.nextInt(14)*48;
+				posX = rand.nextInt(20)*Constant.BLOCK_SIZE;
+				posY = rand.nextInt(14)*Constant.BLOCK_SIZE;
 				
-				if(posX == 0 || posY < 3*48) 
+				if(posX == 0 || posY < 3*Constant.BLOCK_SIZE) 
 					continue;
 				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)) || EnemyCoordinates.contains(new Pair<>(posX,posY)))
 					continue;
-				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
-				|| posX == 48 && posY == 4*48) 
+				if(posX == Constant.BLOCK_SIZE && posY == 3*Constant.BLOCK_SIZE || posX == Constant.BLOCK_SIZE*2 && posY == 3*Constant.BLOCK_SIZE 
+				|| posX == Constant.BLOCK_SIZE && posY == 4*Constant.BLOCK_SIZE) 
 					continue;
 				
 				enemy2[tmp].moveTo(posX, posY);
@@ -566,15 +504,15 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		
 		for(int tmp = 0; tmp < type3; tmp++) {
 			while(true) {
-				posX = rand.nextInt(20)*48;
-				posY = rand.nextInt(14)*48;
+				posX = rand.nextInt(20)*Constant.BLOCK_SIZE;
+				posY = rand.nextInt(14)*Constant.BLOCK_SIZE;
 				
-				if(posX == 0 || posY < 3*48) 
+				if(posX == 0 || posY < 3*Constant.BLOCK_SIZE) 
 					continue;
 				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)) || EnemyCoordinates.contains(new Pair<>(posX,posY)))
 					continue;
-				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
-				|| posX == 48 && posY == 4*48) 
+				if(posX == Constant.BLOCK_SIZE && posY == 3*Constant.BLOCK_SIZE || posX == Constant.BLOCK_SIZE*2 && posY == 3*Constant.BLOCK_SIZE 
+				|| posX == Constant.BLOCK_SIZE && posY == 4*Constant.BLOCK_SIZE) 
 					continue;
 				
 				enemy3[tmp].moveTo(posX, posY);
@@ -586,15 +524,15 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		
 		for(int tmp = 0; tmp < type4; tmp++) {
 			while(true) {
-				posX = rand.nextInt(20)*48;
-				posY = rand.nextInt(14)*48;
+				posX = rand.nextInt(20)*Constant.BLOCK_SIZE;
+				posY = rand.nextInt(14)*Constant.BLOCK_SIZE;
 				
-				if(posX == 0 || posY < 3*48) 
+				if(posX == 0 || posY < 3*Constant.BLOCK_SIZE) 
 					continue;
 				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)) || EnemyCoordinates.contains(new Pair<>(posX,posY)))
 					continue;
-				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
-				|| posX == 48 && posY == 4*48) 
+				if(posX == Constant.BLOCK_SIZE && posY == 3*Constant.BLOCK_SIZE || posX == Constant.BLOCK_SIZE*2 && posY == 3*Constant.BLOCK_SIZE 
+				|| posX == Constant.BLOCK_SIZE && posY == 4*Constant.BLOCK_SIZE) 
 					continue;
 				
 				enemy4[tmp].moveTo(posX, posY);
@@ -606,15 +544,15 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		
 		for(int tmp = 0; tmp < type5; tmp++) {
 			while(true) {
-				posX = rand.nextInt(20)*48;
-				posY = rand.nextInt(14)*48;
+				posX = rand.nextInt(20)*Constant.BLOCK_SIZE;
+				posY = rand.nextInt(14)*Constant.BLOCK_SIZE;
 				
-				if(posX == 0 || posY < 3*48) 
+				if(posX == 0 || posY < 3*Constant.BLOCK_SIZE) 
 					continue;
 				if(wallBrickCoordinates.contains(new Pair<>(posX,posY)) || wallCoordinates.contains(new Pair<>(posX,posY)) || EnemyCoordinates.contains(new Pair<>(posX,posY)))
 					continue;
-				if(posX == 48 && posY == 3*48 || posX == 48*2 && posY == 3*48 
-				|| posX == 48 && posY == 4*48) 
+				if(posX == Constant.BLOCK_SIZE && posY == 3*Constant.BLOCK_SIZE || posX == Constant.BLOCK_SIZE*2 && posY == 3*Constant.BLOCK_SIZE 
+				|| posX == Constant.BLOCK_SIZE && posY == 4*Constant.BLOCK_SIZE) 
 					continue;
 				
 				enemy5[tmp].moveTo(posX, posY);
@@ -625,16 +563,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		}
 	}
 	
-	public static Boolean checkWall(int x, int y) { 
-		if(wallCoordinates.contains(new Pair<>(x,y)) || wallBrickCoordinates.contains(new Pair<>(x,y))) {
-			return true;
-		}
-		return false;
-		
-	}
-	
-	public static void playEffect(String path)
-	{
+	public static void playEffect(String path){
 		effect = new Media(new File(path).toURI().toString());
 		mediaPlayerEffects = new MediaPlayer(effect);
 		mediaPlayerEffects.play();
@@ -713,11 +642,26 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		addObject();
 		GeneratePosItem(1, 5, 5, 5);
 		GenerateEnemy(Constant.STATE_ENEMY[stage][0],Constant.STATE_ENEMY[stage][1],Constant.STATE_ENEMY[stage][2],Constant.STATE_ENEMY[stage][3],Constant.STATE_ENEMY[stage][4]);
+		for(int i=0; i<DoorCoordinates.size(); i++) {
+			door[i].moveTo(DoorCoordinates.get(i).getKey(), DoorCoordinates.get(i).getValue());
+		}
+		
+		for(int i=0; i<RangeCoordinates.size(); i++) {
+			rangeUp[i].moveTo(RangeCoordinates.get(i).getKey(), RangeCoordinates.get(i).getValue());
+		}
+		
+		for(int i=0; i<SpeedCoordinates.size(); i++) {
+			speedUp[i].moveTo(SpeedCoordinates.get(i).getKey(), SpeedCoordinates.get(i).getValue());
+		}
+		
+		for(int i=0; i<AmountCoordinates.size(); i++) {
+			amountUp[i].moveTo(AmountCoordinates.get(i).getKey(), AmountCoordinates.get(i).getValue());
+		}
 	}
 	
 	@Override
 	public void playLoopMusic() {
-		sound = new Media(new File(BACKGROUND_SONG).toURI().toString());
+		sound = new Media(new File(Constant.BACKGROUND_SONG).toURI().toString());
 		mediaPlayer = new MediaPlayer(sound);
 		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
 		mediaPlayer.play();
@@ -748,28 +692,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		Font Monster = Font.font("verdana", FontWeight.BOLD, 40);
 		gc.setFont(Monster);
 		gc.setFill(Color.WHITE);
-		int cnt = 0;
-		for(int i=0;i<Constant.STATE_ENEMY[stage][0]+2*getDividedDead();i++) {
-			if(enemy1[i].getDead() == false)
-				cnt++;
-		}
-		for(int i=0;i<Constant.STATE_ENEMY[stage][1];i++) {
-			if(enemy2[i].getDead() == false)
-				cnt++;
-		}
-		for(int i=0;i<Constant.STATE_ENEMY[stage][2];i++) {
-			if(enemy3[i].getDead() == false)
-				cnt++;
-		}
-		for(int i=0;i<Constant.STATE_ENEMY[stage][3];i++) {
-			if(enemy4[i].getDead() == false)
-				cnt++;
-		}
-		for(int i=0;i<Constant.STATE_ENEMY[stage][4];i++) {
-			if(enemy5[i].getDead() == false)
-				cnt++;
-		}
-		gc.fillText(Integer.toString(cnt), 49*8+10 , 53);
+		gc.fillText(Integer.toString(checkMonsterAlive()), 49*8+10 , 53);
 		
 		Font Bomb = Font.font("verdana", FontWeight.BOLD, 40);
 		gc.setFont(Bomb);
@@ -802,7 +725,41 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		}
 	}
 	
+	private int checkMonsterAlive() {
+		int cnt = 0;
+		for(int i=0;i<Constant.STATE_ENEMY[stage][0]+2*getDividedDead();i++) {
+			if(enemy1[i].getDead() == false)
+				cnt++;
+		}
+		for(int i=0;i<Constant.STATE_ENEMY[stage][1];i++) {
+			if(enemy2[i].getDead() == false)
+				cnt++;
+		}
+		for(int i=0;i<Constant.STATE_ENEMY[stage][2];i++) {
+			if(enemy3[i].getDead() == false)
+				cnt++;
+		}
+		for(int i=0;i<Constant.STATE_ENEMY[stage][3];i++) {
+			if(enemy4[i].getDead() == false)
+				cnt++;
+		}
+		for(int i=0;i<Constant.STATE_ENEMY[stage][4];i++) {
+			if(enemy5[i].getDead() == false)
+				cnt++;
+		}
+		return cnt;
+	}
+	
 	//getter&&setter
+	
+	public boolean getMusicEnabled() {
+		return isMusicEnabled;
+	}
+	
+	public void setMusicEnables(boolean tmp) {
+		isMusicEnabled = tmp; 
+	}
+	
 	public int getDividedDead() {
 		return dividedDead;
 	}

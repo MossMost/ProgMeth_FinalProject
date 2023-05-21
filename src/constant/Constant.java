@@ -25,4 +25,9 @@ public class Constant {
 	public static final byte PLAYER_DIE_FRAME = 90;
 	public static final byte BOMB_FRAME = 15;
     public static final byte WALL_FRAME = 10;
+    
+	public static final String BACKGROUND_SONG = "assets/SoloGameSceneMusic.wav";
+	public static final String PLACE_BOMB_EFFECT = "assets/place_bomb.wav";
+	public static final String EXPLOSION_EFFECT = "assets/explosion.wav";	
+	public static final String DIE_EFFECT = "assets/PlayerDie.wav";
 }
