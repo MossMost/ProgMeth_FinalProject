@@ -18,8 +18,6 @@ public class CreditsScene extends GeneralScene implements MusicPlayable, Animate
 	public static final String BACKGROUND_SONG = "assets/CreditSceneMusic.wav";
 	private MonsterCry monster;
 	
-	protected MediaPlayer mediaPlayer;
-	protected Media sound;
 	public CreditsScene()
 	{
 		super();

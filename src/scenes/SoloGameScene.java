@@ -6,8 +6,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
 
-import application.Main;
 import constant.Constant;
+import application.Main;
 import enemy.Enemy1;
 import enemy.Enemy2;
 import enemy.Enemy3;
@@ -263,11 +263,12 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 						for(int j=0; j<delTime.size();j++) {
 							if(currentNanoTime - delTime.get(j) >= 3e9 && currentNanoTime - delTime.get(j) <= 3e9 + 1e7 && enemy3[i].checkBomb(mnX, mnY, Player.getFireRange()) && !enemy3[i].getDead()) {
 								int newMonster1 = Constant.STATE_ENEMY[stage][1]+2*getDividedDead();
-								System.out.println("eiei");
-								enemy1[newMonster1+1].moveTo(enemy4[i].getX(), enemy4[i].getY());
-								enemy1[newMonster1+1].setCurrentDirection(AnimatedSprite.LEFT);
-								enemy1[newMonster1+2].moveTo(enemy4[i].getX(), enemy4[i].getY());
-								enemy1[newMonster1+2].setCurrentDirection(AnimatedSprite.RIGHT);
+								int posX = enemy3[i].getX();
+								int posY = enemy3[i].getY();
+								enemy1[newMonster1].moveTo(posX, posY);
+								enemy1[newMonster1].setCurrentDirection(AnimatedSprite.LEFT);
+								enemy1[newMonster1+1].moveTo(posX, posY);
+								enemy1[newMonster1+1].setCurrentDirection(AnimatedSprite.RIGHT);
 								setDividedDead(getDividedDead()+1);
 								enemy3[i].die(enemy3[i].getX(), enemy3[i].getY(), gc, currentNanoTime);
 							}

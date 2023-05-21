@@ -1,6 +1,10 @@
 package application;
 	
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import scenes.CreditsScene;
 import scenes.GeneralScene;
@@ -20,8 +24,8 @@ public class Main extends Application {
 	public static final int VICTORY_SCENE = 4;
 	
 	public static final GeneralScene[] scenes = new GeneralScene[MAX_SCENES];
-	
 	private static Stage stage;
+	
 	
 	@Override
 	public void start(Stage stage) {
@@ -37,6 +41,7 @@ public class Main extends Application {
 		stage.setTitle("Trinity Boy");
 		setScene(WELCOME_SCENE);
 		stage.setResizable(false);
+
 		stage.show();
 	}
 	
