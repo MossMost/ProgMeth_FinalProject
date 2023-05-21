@@ -14,12 +14,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import music.MusicPlayable;
 
-public class CreditsScene extends GeneralScene implements MusicPlayable, Animateable{
+public class GameOverScene extends GeneralScene implements MusicPlayable, Animateable{
 	
 	public static final String BACKGROUND_SONG = "assets/CreditSceneMusic.wav";
 	private MonsterCry monster;
 	
-	public CreditsScene()
+	public GameOverScene()
 	{
 		super();
 		monster = new MonsterCry();

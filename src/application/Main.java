@@ -3,7 +3,7 @@ package application;
 import constant.Constant;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import scenes.CreditsScene;
+import scenes.GameOverScene;
 import scenes.GeneralScene;
 import scenes.NextStage;
 import scenes.SoloGameScene;
@@ -23,7 +23,7 @@ public class Main extends Application {
 		
 		scenes[0] = new WelcomeScene();
 		scenes[1] = new SoloGameScene();
-		scenes[2] = new CreditsScene();
+		scenes[2] = new GameOverScene();
 		scenes[3] = new NextStage();
 		scenes[4] = new VictoryScene();
 		
