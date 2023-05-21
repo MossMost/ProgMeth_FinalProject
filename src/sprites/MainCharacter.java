@@ -31,15 +31,15 @@ public class MainCharacter extends AnimatedSprite{
 			e.printStackTrace();
 		}
 		
-		spriteXCoordinates[RIGHT] = new int[] {0, 48, 96, 144};
+		spriteXCoordinates[RIGHT] = new int[] {0, Constant.BLOCK_SIZE, 96, 144};
 		spriteYCoordinates[RIGHT] = new int[] {0, 0, 0, 0};
-		spriteXCoordinates[LEFT] = new int[] {0, 48, 96, 144};
-		spriteYCoordinates[LEFT] = new int[] {48, 48, 48, 48};
-		spriteXCoordinates[UP] = new int[] {0, 48, 96, 144};
+		spriteXCoordinates[LEFT] = new int[] {0, Constant.BLOCK_SIZE, 96, 144};
+		spriteYCoordinates[LEFT] = new int[] {Constant.BLOCK_SIZE, Constant.BLOCK_SIZE, Constant.BLOCK_SIZE, Constant.BLOCK_SIZE};
+		spriteXCoordinates[UP] = new int[] {0, Constant.BLOCK_SIZE, 96, 144};
 		spriteYCoordinates[UP] = new int[] {96, 96, 96, 96};
-		spriteXCoordinates[DOWN] = new int[] {0, 48, 96, 144};
+		spriteXCoordinates[DOWN] = new int[] {0, Constant.BLOCK_SIZE, 96, 144};
 		spriteYCoordinates[DOWN] = new int[] {144, 144, 144, 144};
-		spriteXCoordinates[DIE] = new int[] {0, 48, 96, 144};
+		spriteXCoordinates[DIE] = new int[] {0, Constant.BLOCK_SIZE, 96, 144};
 		spriteYCoordinates[DIE] = new int[] {192, 192, 192, 192};
 		
 		updateSpriteCoordinates();
@@ -59,14 +59,14 @@ public class MainCharacter extends AnimatedSprite{
 			newX += Step;
 		else if(movement == RIGHT && newX + Step > 1008 - 44*2)
 			newX = 1008 - 44*2;
-		if (movement == UP && newY - Step >= 48*3)
+		if (movement == UP && newY - Step >= Constant.BLOCK_SIZE*3)
 			newY -= Step;
-		else if(movement == UP && newY - Step < 48*3)
-			newY = 48*3;
-		if (movement == DOWN && newY + Step <= 720 - 48*2)
+		else if(movement == UP && newY - Step < Constant.BLOCK_SIZE*3)
+			newY = Constant.BLOCK_SIZE*3;
+		if (movement == DOWN && newY + Step <= 720 - Constant.BLOCK_SIZE*2)
 			newY += Step;
-		else if(movement == DOWN && newY + Step > 720 - 48*2)
-			newY = 720 - 48*2;
+		else if(movement == DOWN && newY + Step > 720 - Constant.BLOCK_SIZE*2)
+			newY = 720 - Constant.BLOCK_SIZE*2;
 		
 		//check wall
 		int sz = SoloGameScene.wallCoordinates.size();
@@ -90,7 +90,7 @@ public class MainCharacter extends AnimatedSprite{
 				newY = oldY;
 			}
 		}
-		//checkbomb
+		
 		for(int i=0;i<SoloGameScene.BombCoordinates.size();i++) {
 			int wallX = SoloGameScene.BombCoordinates.get(i).getKey();
 			int wallY = SoloGameScene.BombCoordinates.get(i).getValue();
@@ -117,7 +117,7 @@ public class MainCharacter extends AnimatedSprite{
 		}
 		new AnimationTimer() {
 			public void handle(long currentNanoTime) {
-				if(currentNanoTime - time <= 1e9) {
+				if(currentNanoTime - time <= Constant.SEC) {
                     currentSpriteChange++;
                     if(currentSpriteChange >= Constant.PLAYER_DIE_FRAME) {
                         currentSpriteChange = 0;
@@ -125,7 +125,7 @@ public class MainCharacter extends AnimatedSprite{
                     }
                     updateSpriteCoordinates(gc);
                 }
-				if(currentNanoTime - time > 1e9 && currentNanoTime - time <= 1e9 + 2e8) {
+				if(currentNanoTime - time > Constant.SEC && currentNanoTime - time <= Constant.SEC + 0.2 * Constant.SEC) {
 					setDead(true);
 				}
 			}
@@ -137,38 +137,38 @@ public class MainCharacter extends AnimatedSprite{
 		if(checkCollision(this.getX(), this.getY(), x, y)) 
 			return true;
 		for(int i=1;i<=range;i++) {
-			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y-48*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y-48*i))) {
+			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y-Constant.BLOCK_SIZE*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y-Constant.BLOCK_SIZE*i))) {
 				break;
 			}
-			if(checkCollision(this.getX(),this.getY(),x,y-48*i)) {
+			if(checkCollision(this.getX(),this.getY(),x,y-Constant.BLOCK_SIZE*i)) {
 				
 				return true;
 			}
 		}
 		for(int i=1;i<=range;i++) {
-			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y+48*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y+48*i))) {
+			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y+Constant.BLOCK_SIZE*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y+Constant.BLOCK_SIZE*i))) {
 				break;
 			}
-			if(checkCollision(this.getX(),this.getY(),x,y+48*i)) {
+			if(checkCollision(this.getX(),this.getY(),x,y+Constant.BLOCK_SIZE*i)) {
 				
 				return true;
 			}
 		}
 		for(int i=1;i<=range;i++) {
-			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x-48*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x-48*i,y))) {
+			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x-Constant.BLOCK_SIZE*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x-Constant.BLOCK_SIZE*i,y))) {
 				//System.out.println("true");
 				break;
 			}
-			if(checkCollision(this.getX(),this.getY(),x-48*i,y)) {
+			if(checkCollision(this.getX(),this.getY(),x-Constant.BLOCK_SIZE*i,y)) {
 				
 				return true;
 			}
 		}
 		for(int i=1;i<=range;i++) {
-			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x+48*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x+48*i,y))) {
+			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x+Constant.BLOCK_SIZE*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x+Constant.BLOCK_SIZE*i,y))) {
 				break;
 			}
-			if(checkCollision(this.getX(),this.getY(),x+48*i,y)) {
+			if(checkCollision(this.getX(),this.getY(),x+Constant.BLOCK_SIZE*i,y)) {
 				return true;
 			}
 		}
@@ -176,23 +176,23 @@ public class MainCharacter extends AnimatedSprite{
 	}
 	
 	public boolean checkEnemy(int xPlayer, int yPlayer, int xObj,int yObj) {
-		if(xPlayer>=xObj-48+17 && xPlayer<=xObj+48-17 && yPlayer>=yObj-48+17 && yPlayer<=yObj+48-17)
+		if(xPlayer >= xObj - Constant.BLOCK_SIZE + 17 && xPlayer <= xObj + Constant.BLOCK_SIZE - 17 && yPlayer >= yObj - Constant.BLOCK_SIZE + 17 
+		&& yPlayer <= yObj + Constant.BLOCK_SIZE - 17)
 			return true;
 		return false;
 	}
 	
 	public boolean checkCollision(int xPlayer, int yPlayer, int xObj,int yObj) {
-		if(xPlayer>=xObj-48+15 && xPlayer<=xObj+48-15 && yPlayer>=yObj-48+7 && yPlayer<=yObj+48-15)
+		if(xPlayer >= xObj - Constant.BLOCK_SIZE + 15 && xPlayer <= xObj + Constant.BLOCK_SIZE - 15 && yPlayer >= yObj - Constant.BLOCK_SIZE + 7 
+		&& yPlayer <= yObj + Constant.BLOCK_SIZE - 15)
 			return true;
 		return false;
 	}
 	
 	protected void updateSpriteCoordinates(GraphicsContext gc) {
-
 		spriteX = spriteXCoordinates[DIE][currentSprite];
 		spriteY = spriteYCoordinates[DIE][currentSprite];
         draw(gc);
-        
     }
 	
 	//getter&&setter

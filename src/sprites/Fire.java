@@ -33,7 +33,7 @@ public class Fire extends AnimatedSprite{
         this.y = y;
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
-                if(currentNanoTime - time <= 5e8) {
+                if(currentNanoTime - time <= 0.5 * Constant.SEC) {
                     currentSpriteChange++;
                     if(currentSpriteChange >= Constant.BOMB_FRAME) {
                         currentSpriteChange = 0;
@@ -45,16 +45,11 @@ public class Fire extends AnimatedSprite{
             }
         }.start();
 
-
-
-
     }
     protected void updateSpriteCoordinates(GraphicsContext gc) {
-
         spriteX = spriteXCoordinates[currentSprite];
         spriteY = spriteYCoordinates[currentSprite];
-        draw(gc);
-        
+        draw(gc);  
     }
 	
 }
