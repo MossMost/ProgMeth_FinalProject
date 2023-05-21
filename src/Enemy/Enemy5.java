@@ -1,4 +1,4 @@
-package sprites;
+package Enemy;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -6,6 +6,7 @@ import java.util.Random;
 import Constant.Constant;
 
 import javafx.scene.image.Image;
+import sprites.AnimatedSprite;
 
 public class Enemy5 extends AnimatedSprite{
 	private static final String IMAGE_PATH = "assets/Enemy5.png";
@@ -23,10 +24,12 @@ public class Enemy5 extends AnimatedSprite{
 		spriteYCoordinates[LEFT] = new int[] {0, 0, 0};
 		spriteXCoordinates[RIGHT] = new int[] {0, 48, 96};
 		spriteYCoordinates[RIGHT] = new int[] {48, 48, 48};
-		spriteXCoordinates[UP] = new int[] {0, 48, 96};
-		spriteYCoordinates[UP] = new int[] {0, 0, 0};
 		spriteXCoordinates[DOWN] = new int[] {0, 48, 96};
-		spriteYCoordinates[DOWN] = new int[] {48, 48, 48};
+		spriteYCoordinates[DOWN] = new int[] {0, 0, 0};
+		spriteXCoordinates[UP] = new int[] {0, 48, 96}; 
+		spriteYCoordinates[UP] = new int[] {48, 48, 48};
+		spriteXCoordinates[DIE] = new int[] {0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96, 0, 48, 96};
+		spriteYCoordinates[DIE] = new int[] {96, 96, 96, 144, 144, 144, 192, 192, 192, 240, 240, 240, 288, 288, 288, 336, 336, 336};
 		
 		updateSpriteCoordinates();
 	}

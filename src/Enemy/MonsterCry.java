@@ -1,10 +1,11 @@
-package sprites;
+package Enemy;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import Constant.Constant;
 import javafx.scene.image.Image;
+import sprites.Sprite;
 
 public class MonsterCry extends Sprite{
     private static final String IMAGE_PATH = "assets/MonsterCry.png";
@@ -26,7 +27,7 @@ public class MonsterCry extends Sprite{
         }
     }
 
-public void animate() {
+    public void animate() {
         currentSpriteChange++;
             if(currentSpriteChange >= SPRITE_CHANGE) {
                 currentSpriteChange = 0;

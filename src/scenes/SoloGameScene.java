@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import Constant.Constant;
+import Enemy.Enemy1;
 import Item.AmountUp;
 import Item.Door;
 import Item.RangeUp;
@@ -23,7 +24,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Pair;
 import sprites.Bomb;
-import sprites.Enemy1;
 import sprites.MainCharacter;
 import sprites.Sprite;
 
@@ -64,6 +64,8 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	public static final String BACKGROUND_SONG = "assets/SoloGameSceneMusic.wav";
 	public static final String PLACE_BOMB_EFFECT = "assets/place_bomb.wav";
 	public static final String EXPLOSION_EFFECT = "assets/explosion.wav";	
+	public static final String DIE_EFFECT = "assets/PlayerDie.wav";
+	public static final String ITEM_EFFECT = "assets/Collectitem.wav";
 	
 	private static MediaPlayer mediaPlayerEffects;
 	private static Media effect;
@@ -95,6 +97,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		activeKeys.clear();
 		Player.moveTo(1*48, 3*48);
 		Player.setDead(false);
+		//enemy1[0].moveTo(48*5,48*5);
 		for(int i=0; i<EnemyCoordinates.size(); i++) {
 			enemy1[i].moveTo(EnemyCoordinates.get(i).getKey(), EnemyCoordinates.get(i).getValue());
 		}
@@ -131,12 +134,14 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 								ch = false;
 						}
 						if(door[i]!=null && ch && Player.checkCollision(Player.getX(), Player.getY(), DoorCoordinates.get(i).getKey(), DoorCoordinates.get(i).getValue())) {
+							this.stop();
 							door[i].ItemEffect(Player);
 						}
 					}
 					
 					for(int i=0; i<RangeCoordinates.size();i++) {
 						if(rangeUp[i]!=null&&Player.checkCollision(Player.getX(), Player.getY(), RangeCoordinates.get(i).getKey(), RangeCoordinates.get(i).getValue())) {
+							playEffect(ITEM_EFFECT);
 							rangeUp[i].ItemEffect(Player);
 							rangeUp[i] = null;
 						}
@@ -144,6 +149,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 					
 					for(int i=0; i<SpeedCoordinates.size();i++) {
 						if(speedUp[i]!=null&&Player.checkCollision(Player.getX(), Player.getY(), SpeedCoordinates.get(i).getKey(), SpeedCoordinates.get(i).getValue())) {
+							playEffect(ITEM_EFFECT);
 							speedUp[i].ItemEffect(Player);
 							speedUp[i] = null;
 						}
@@ -151,12 +157,15 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 					
 					for(int i=0; i<AmountCoordinates.size();i++) {
 						if(amountUp[i]!=null&&Player.checkCollision(Player.getX(), Player.getY(), AmountCoordinates.get(i).getKey(), AmountCoordinates.get(i).getValue())) {
+							playEffect(ITEM_EFFECT);
 							amountUp[i].ItemEffect(Player);
 							amountUp[i] = null;
 						}
 					}
 					
-					
+					for(int i=0;i<DoorCoordinates.size();i++) {
+						door[i].draw(gc);
+					}
 					
 					for(int i=0;i<RangeCoordinates.size();i++) {
 						if(rangeUp[i]!=null)
@@ -181,28 +190,31 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 							wall[i].draw(gc);
 						}
 					}
-					for(int i=0;i<DoorCoordinates.size();i++) {
-						door[i].draw(gc);
-					}
 					
 					if(!delTime.isEmpty() && currentNanoTime - delTime.get(0) >= 3e9+1e8) {
 						Player.setAmountBomb(Player.getAmountBomb()+1);
 						delTime.remove(0);
 					}
 					
-					if(currentNanoTime - lastDie >= 2e8 && currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 5e8 && Player.checkBomb(mnX,mnY, Player.getFireRange())) {
-						lastDie = currentNanoTime;
-						Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
+					for(int i=0;i<delTime.size();i++) {
+						if(currentNanoTime - lastDie >= 2e8 && currentNanoTime - delTime.get(i) > 3e9 && currentNanoTime - delTime.get(i) <= 3e9 + 3e8 && Player.checkBomb(mnX,mnY, Player.getFireRange())) {
+							lastDie = currentNanoTime;
+							Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
+						}
 					}
+					
 					
 					
 					for(int i=0; i<EnemyCoordinates.size(); i++) {
 						enemy1[i].draw(gc);
 						enemy1[i].move(enemy1[i].getCurrentDirection());
-						if(currentNanoTime - lastSpace >= 3e9 && currentNanoTime - lastSpace <= 3e9 + 1e7 && enemy1[i].checkBomb(mnX, mnY, Player.getFireRange()) && !enemy1[i].getDead()) {
-							enemy1[i].die(enemy1[i].getX(), enemy1[i].getY(), gc, currentNanoTime);
+						for(int j=0; j<delTime.size();j++) {
+							if(currentNanoTime - delTime.get(j) >= 3e9 && currentNanoTime - delTime.get(j) <= 3e9 + 1e7 && enemy1[i].checkBomb(mnX, mnY, Player.getFireRange()) && !enemy1[i].getDead()) {
+								enemy1[i].die(enemy1[i].getX(), enemy1[i].getY(), gc, currentNanoTime);
+							}
 						}
-						if(currentNanoTime - lastDie >= 2e8 && enemy1[i].getDead() == false && Player.checkCollision(Player.getX(), Player.getY(), enemy1[i].getX(), enemy1[i].getY())) {
+						
+						if(currentNanoTime - lastDie >= 2e8 && enemy1[i].getDead() == false && Player.checkEnemy(Player.getX(), Player.getY(), enemy1[i].getX(), enemy1[i].getY())) {
 							Player.die(Player.getX(), Player.getY(), gc, currentNanoTime);
 							lastDie = currentNanoTime;
 						}
@@ -217,7 +229,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 							Player.setLife(3);
 						}
 						else {
-							Main.setScene(Main.SOLO_GAME_SCENE);
+							Main.setScene(Main.SOLO_GAME_SCENE_1);
 						}
 					}
 					
@@ -506,7 +518,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		Font Speed = Font.font("verdana", FontWeight.BOLD, 40);
 		gc.setFont(Speed);
 		gc.setFill(Color.WHITE);
-		gc.fillText(Integer.toString(Player.getStep()), 49*17+10 , 53);
+		gc.fillText(Integer.toString( (int)((Player.getStep()-2)*2) + 1 ), 49*17+10 , 53);
 	}
 	
 	private void reset() {

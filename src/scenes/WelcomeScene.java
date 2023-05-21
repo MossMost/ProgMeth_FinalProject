@@ -57,7 +57,8 @@ public class WelcomeScene extends GeneralScene implements MusicPlayable{
 					if(activeKeys.contains(KeyCode.SPACE)){
 						stopmusic();
 						this.stop();
-						Main.setScene(Main.SOLO_GAME_SCENE);
+						NextStage.setStage(1);
+						Main.setScene(Main.NEXTSTAGE_SCENE);
 					}
 					else if(activeKeys.contains(KeyCode.ESCAPE)) {
 						this.stop();

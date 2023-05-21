@@ -55,7 +55,8 @@ public class Bomb extends AnimatedSprite{
                     }
                     updateSpriteCoordinates(gc);
                 }
-                if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 2e7) {
+                //too slow -> not work, too fast -> multiple block
+                if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 2e7 + 1e6) {
                 	if(!SoloGameScene.BombCoordinates.isEmpty() && isignite1) {
                 		int idx = SoloGameScene.BombCoordinates.indexOf(new Pair<>(x,y));
                 		SoloGameScene.BombCoordinates.remove(idx);

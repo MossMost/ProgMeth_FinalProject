@@ -1,4 +1,4 @@
-package sprites;
+package Enemy;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,6 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.util.Pair;
 import scenes.SoloGameScene;
+import sprites.AnimatedSprite;
 
 
 public class Enemy1 extends AnimatedSprite{
@@ -71,7 +72,7 @@ public class Enemy1 extends AnimatedSprite{
 			int wallX = SoloGameScene.wallCoordinates.get(i).getKey();
 			int wallY = SoloGameScene.wallCoordinates.get(i).getValue();
 			
-			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
 				movement = randomMovement(movement);
 				break;
 			}
@@ -82,7 +83,7 @@ public class Enemy1 extends AnimatedSprite{
 			int wallX = SoloGameScene.wallBrickCoordinates.get(i).getKey();
 			int wallY = SoloGameScene.wallBrickCoordinates.get(i).getValue();
 			
-			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
 				movement = randomMovement(movement);
 				break;
 			}
@@ -93,7 +94,7 @@ public class Enemy1 extends AnimatedSprite{
 			int wallX = SoloGameScene.BombCoordinates.get(i).getKey();
 			int wallY = SoloGameScene.BombCoordinates.get(i).getValue();
 			
-			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+32) {
+			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
 				movement = randomMovement(movement);
 				break;
 			}
@@ -219,6 +220,12 @@ public class Enemy1 extends AnimatedSprite{
 			}
 		}
 		return false;		
+	}
+	
+	public boolean checkEnemy(int xPlayer, int yPlayer, int xObj,int yObj) {
+		if(xPlayer>=xObj-48+17 && xPlayer<=xObj+48-17 && yPlayer>=yObj-48+17 && yPlayer<=yObj+48-17)
+			return true;
+		return false;
 	}
 	
 	public boolean checkCollision(int xPlayer, int yPlayer, int xBomb,int yBomb) {
