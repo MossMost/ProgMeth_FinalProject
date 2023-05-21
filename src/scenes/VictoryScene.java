@@ -25,6 +25,7 @@ public class VictoryScene extends GeneralScene implements Animateable{
 		super();
 		monster = new MonsterLove();
 	}
+	
 	@Override
 	public void draw() {
 		activeKeys.clear();

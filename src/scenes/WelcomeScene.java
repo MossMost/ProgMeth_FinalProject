@@ -18,7 +18,7 @@ import music.MusicPlayable;
 
 public class WelcomeScene extends GeneralScene implements MusicPlayable{
 	private static final String BACKGROUND_IMAGE = "assets/Welcome_Background.png";
-	public static final String BACKGROUND_SONG = "assets/WelcomeSceneMusic.wav";
+	private static final String BACKGROUND_SONG = "assets/WelcomeSceneMusic.wav";
 	private Image background;
 	
 	public WelcomeScene() {
@@ -39,10 +39,8 @@ public class WelcomeScene extends GeneralScene implements MusicPlayable{
 		
 		new AnimationTimer() {
 			 public void handle(long currentNanoTime){
-				 
 				 	showImage();
 					showMessage();
-					
 					if(activeKeys.contains(KeyCode.SPACE)){
 						stopMusic();
 						this.stop();

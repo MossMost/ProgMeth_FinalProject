@@ -18,7 +18,7 @@ import javafx.scene.text.FontWeight;
 import sprites.AnimatedSprite;
 
 public class NextStage extends GeneralScene implements Animateable{
-	public static final String NExTSTAGE_EFFECT = "assets/NextStage.wav";
+	public static final String NEXTSTAGE_EFFECT = "assets/NextStage.wav";
 	
 	public static int stage;
 	
@@ -44,7 +44,7 @@ public class NextStage extends GeneralScene implements Animateable{
 	@Override
 	public void draw() {
 		activeKeys.clear();
-		playEffect(NExTSTAGE_EFFECT);
+		playEffect(NEXTSTAGE_EFFECT);
 		
 		new AnimationTimer() {
 			boolean ch = true;
@@ -58,12 +58,10 @@ public class NextStage extends GeneralScene implements Animateable{
 			 	if(currentNanoTime - time >= 3e9) {
 			 		this.stop();
 			 		Main.setScene(Main.SOLO_GAME_SCENE);
-			 	}
-				 	
+			 	}	
 			 	showImage();
 			 	showMessage();
-			 	showAnimate();
-				 	
+			 	showAnimate();	
 					
 			}
 		}.start();

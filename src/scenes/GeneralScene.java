@@ -13,9 +13,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 abstract public class GeneralScene extends Scene{
-	public static final int GAME_WIDTH = 1008;
-	public static final int GAME_HEIGHT = 720;
-
 	
 	private StackPane root = new StackPane();
 	protected GraphicsContext gc;
@@ -26,7 +23,6 @@ abstract public class GeneralScene extends Scene{
 	protected Media sound;
 	
 	public GeneralScene() {
-		
 		super(new StackPane(), Constant.SCENE_WIDTH, Constant.SCENE_HEIGHT);
 		
 		root = new StackPane();
@@ -38,9 +34,11 @@ abstract public class GeneralScene extends Scene{
 		
 		activeKeys = new HashSet<>();
 		releasedKeys = new HashSet<>();
+		
 		this.setOnKeyPressed(e -> {
 			activeKeys.add(e.getCode());
 		});
+		
 		this.setOnKeyReleased(e->{
 			activeKeys.remove(e.getCode());
 			releasedKeys.add(e.getCode());

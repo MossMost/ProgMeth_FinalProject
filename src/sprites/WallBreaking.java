@@ -11,8 +11,8 @@ import javafx.scene.image.Image;
 public class WallBreaking extends AnimatedSprite{
 
 	private static final String IMAGE_PATH = "assets/Brick_break2.png";
-    protected int[] spriteXCoordinates = new int[] {0,48,96,144};
-    protected int[] spriteYCoordinates = new int[] {0,0,0,0};
+    protected int[] spriteXCoordinates = new int[] {0, 48, 96, 144};
+    protected int[] spriteYCoordinates = new int[] {0, 0, 0, 0};
     public static final byte WALL_CHANGE = 10;
     	
 

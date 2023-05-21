@@ -1,10 +1,6 @@
 package application;
-	
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import javafx.application.Application;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import scenes.CreditsScene;
 import scenes.GeneralScene;

@@ -4,22 +4,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 
-import constant.Constant;
-import javafx.animation.AnimationTimer;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.util.Pair;
-import scenes.SoloGameScene;
-import sprites.AnimatedSprite;
 
-public class Enemy5 extends AnimatedSprite{
+public class Enemy5 extends Monster{
 	private static final String IMAGE_PATH = "assets/Enemy5.png";
 	private static final int STEP = 1;
-	private boolean isDead = false;
-	public static final byte DIE_FRAME = 31;
 	
 	public Enemy5() {
-		super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
+		super();
 		try {
 			spriteImage = new Image(Files.newInputStream(Paths.get(IMAGE_PATH)));
 		} catch (Exception e) {
@@ -56,63 +48,17 @@ public class Enemy5 extends AnimatedSprite{
 		
 	}
 	
-	public int randomMovement(int movement) {
-		int random;
-		Random rand = new Random();
-		while(true) {
-			random = rand.nextInt(4);
-			if(checkwall(random)) {
-				break;
-			}
-		}
-		return random;
-	}
-	
-	public boolean checkwall(int movement) {
-		int newX = x, newY = y;
-		if (movement == LEFT)
-			newX = x - STEP;
-		else if (movement == RIGHT)
-			newX = x + STEP;
-		else if (movement == UP)
-			newY = y - STEP;
-		else if (movement == DOWN)
-			newY = y + STEP;
-		
-		int sz = SoloGameScene.wallCoordinates.size();
-		for(int i=0;i<sz;i++) {
-			int wallX = SoloGameScene.wallCoordinates.get(i).getKey();
-			int wallY = SoloGameScene.wallCoordinates.get(i).getValue();
-			
-			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
-				return false;
-			}
-		}
-		
-		sz = SoloGameScene.BombCoordinates.size();
-		for(int i=0;i<sz;i++) {
-			int wallX = SoloGameScene.BombCoordinates.get(i).getKey();
-			int wallY = SoloGameScene.BombCoordinates.get(i).getValue();
-			
-			if (newX > wallX-40 && newX <= wallX+35 && newY > wallY-47 && newY <= wallY+35) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-	
 	public void flutter(int movement, int newX, int newY) {
 		
 
 		if (movement == LEFT && newX - STEP < 40)
-			movement = randomMovement(movement);
+			movement = randomMovement(movement, STEP);
 		else if (movement == RIGHT && newX + STEP > 1008 - 44*2)
-			movement = randomMovement(movement);
+			movement = randomMovement(movement, STEP);
 		else if (movement == UP && newY - STEP < 48*3)
-			movement = randomMovement(movement);
+			movement = randomMovement(movement, STEP);
 		else if (movement == DOWN && newY + STEP > 720 - 48*2)
-			movement = randomMovement(movement);
+			movement = randomMovement(movement, STEP);
 		
 		if(newX%96  > 40 && newX%96 < 64 && newY%96 > 46 && newY%96 < 64) {
 			
@@ -155,91 +101,5 @@ public class Enemy5 extends AnimatedSprite{
 			animate(movement);
 		}
 	}
-	
-	public void die(int x,int y,GraphicsContext gc,long time) {
-		
-		new AnimationTimer() {
-			public void handle(long currentNanoTime) {
-				if(currentNanoTime - time <= 3e9 + 5e8) {
-                    currentSpriteChange++;
-                    if(currentSpriteChange >= DIE_FRAME) {
-                        currentSpriteChange = 0;
-                        currentSprite = (byte)((currentSprite + 1) % (spriteXCoordinates[DIE].length));
-                    }
-                    updateSpriteCoordinates(gc);
-                }
-			}
-		}.start();
-		setDead(true);
-	}
-	
-	public boolean checkBomb(int x,int y, int range) {
-		if(checkCollision(this.getX(), this.getY(), x, y)) 
-			return true;
-		for(int i=1;i<=range;i++) {
-			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y-48*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y-48*i))) {
-				break;
-			}
-			if(checkCollision(this.getX(),this.getY(),x,y-48*i)) {
-				return true;
-			}
-		}
-		for(int i=1;i<=range;i++) {
-			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y+48*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y+48*i))) {
-				break;
-			}
-			if(checkCollision(this.getX(),this.getY(),x,y+48*i)) {
-				return true;
-			}
-		}
-		for(int i=1;i<=range;i++) {
-			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x-48*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x-48*i,y))) {
-				break;
-			}
-			if(checkCollision(this.getX(),this.getY(),x-48*i,y)) {
-				return true;
-			}
-		}
-		for(int i=1;i<=range;i++) {
-			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x+48*i,y)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x+48*i,y))) {
-				break;
-			}
-			if(checkCollision(this.getX(),this.getY(),x+48*i,y)) {
-				return true;
-			}
-		}
-		return false;		
-	}
-	
-	public boolean checkEnemy(int xPlayer, int yPlayer, int xObj,int yObj) {
-		if(xPlayer>=xObj-48+17 && xPlayer<=xObj+48-17 && yPlayer>=yObj-48+17 && yPlayer<=yObj+48-17)
-			return true;
-		return false;
-	}
-	
-	public boolean checkCollision(int xPlayer, int yPlayer, int xBomb,int yBomb) {
-		if(yPlayer>=yBomb-48*2+10 && yPlayer<=yBomb+48*2-10 && xPlayer>=xBomb-48+20 && xPlayer<=xBomb+48)
-			return true;
-		if(xPlayer>=xBomb-48*2+10 && xPlayer<=xBomb+48*2 && yPlayer>=yBomb-48+20 && yPlayer<=yBomb+48)
-			return true;
-		return false;
-	}
-	
-	protected void updateSpriteCoordinates(GraphicsContext gc) {
-
-		spriteX = spriteXCoordinates[DIE][currentSprite];
-		spriteY = spriteYCoordinates[DIE][currentSprite];
-        draw(gc);
-        
-    }
-	
-	public boolean getDead() {
-		return isDead;
-	}
-	
-	public void setDead(boolean dead) {
-		isDead = dead;
-	}
-	
 	
 }

@@ -21,7 +21,6 @@ public class MainCharacter extends AnimatedSprite{
 	private boolean canwalk = true;
 	private boolean IsturntoDust = false;
 	public boolean ch = true;
-	public static final byte DIE_FRAME = 90;
 	protected boolean IsInBomb;
 
 	public MainCharacter() {
@@ -122,7 +121,7 @@ public class MainCharacter extends AnimatedSprite{
 			public void handle(long currentNanoTime) {
 				if(currentNanoTime - time <= 1e9) {
                     currentSpriteChange++;
-                    if(currentSpriteChange >= DIE_FRAME) {
+                    if(currentSpriteChange >= Constant.PLAYER_DIE_FRAME) {
                         currentSpriteChange = 0;
                         currentSprite = (byte)((currentSprite + 1) % (spriteXCoordinates[DIE].length));
                     }
@@ -141,7 +140,6 @@ public class MainCharacter extends AnimatedSprite{
 			return true;
 		for(int i=1;i<=range;i++) {
 			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y-48*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y-48*i))) {
-				//System.out.println("true");
 				break;
 			}
 			if(checkCollision(this.getX(),this.getY(),x,y-48*i)) {
@@ -151,7 +149,6 @@ public class MainCharacter extends AnimatedSprite{
 		}
 		for(int i=1;i<=range;i++) {
 			if(SoloGameScene.wallBrickCoordinates.contains(new Pair<>(x,y+48*i)) || SoloGameScene.wallCoordinates.contains(new Pair<>(x,y+48*i))) {
-				//System.out.println("true");
 				break;
 			}
 			if(checkCollision(this.getX(),this.getY(),x,y+48*i)) {
@@ -200,6 +197,7 @@ public class MainCharacter extends AnimatedSprite{
         
     }
 	
+	//getter&&setter
 	public int getFireRange() {
 		return fireRange;
 	}

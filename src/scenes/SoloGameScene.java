@@ -802,6 +802,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 		}
 	}
 	
+	//getter&&setter
 	public int getDividedDead() {
 		return dividedDead;
 	}

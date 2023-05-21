@@ -1,6 +1,7 @@
 package scenes;
 
 import java.io.File;
+import constant.Constant;
 
 import application.Main;
 import enemy.MonsterCry;
@@ -43,6 +44,7 @@ public class CreditsScene extends GeneralScene implements MusicPlayable, Animate
 			}
 		}.start();
 	}
+	
 	@Override
 	public void showMessage() {
 		Font myFont = Font.font("Arial", FontWeight.NORMAL, 80);
@@ -59,7 +61,7 @@ public class CreditsScene extends GeneralScene implements MusicPlayable, Animate
 	@Override
 	public void showImage() {
 	 	gc.setFill(Color.BLACK);
-	 	gc.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+	 	gc.fillRect(0, 0, Constant.GAME_WIDTH, Constant.GAME_HEIGHT);
 	 	
 	}
 

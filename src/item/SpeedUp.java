@@ -22,7 +22,7 @@ public class SpeedUp extends Item{
 
     @Override
     public void ItemEffect(MainCharacter Player) {
-        Player.setStep(Player.getStep()+0.5);
+        Player.setStep(Player.getStep() + 0.5);
     }
 
 

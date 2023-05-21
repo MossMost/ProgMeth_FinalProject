@@ -22,7 +22,7 @@ public class RangeUp extends Item{
 
     @Override
     public void ItemEffect(MainCharacter Player) {
-    	Player.setFireRange(Player.getFireRange()+1);
+    	Player.setFireRange(Player.getFireRange() + 1);
     }
 
 }

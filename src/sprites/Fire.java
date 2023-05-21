@@ -10,8 +10,8 @@ import javafx.scene.image.Image;
 
 public class Fire extends AnimatedSprite{
 
-    protected int[] spriteXCoordinates = new int[] {0,48,96};
-    protected int[] spriteYCoordinates = new int[] {0,0,0};
+    protected int[] spriteXCoordinates = new int[] {0, 48, 96};
+    protected int[] spriteYCoordinates = new int[] {0, 0, 0};
     	
 
     protected byte currentSprite;
@@ -35,7 +35,7 @@ public class Fire extends AnimatedSprite{
             public void handle(long currentNanoTime) {
                 if(currentNanoTime - time <= 5e8) {
                     currentSpriteChange++;
-                    if(currentSpriteChange >= Bomb.BOMB_CHANGE) {
+                    if(currentSpriteChange >= Constant.BOMB_FRAME) {
                         currentSpriteChange = 0;
                         currentSprite = (byte)((currentSprite + 1) % (spriteXCoordinates.length));
                     }

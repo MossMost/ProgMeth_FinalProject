@@ -21,6 +21,6 @@ public class AmountUp extends Item{
 
     @Override
     public void ItemEffect(MainCharacter Player) {
-    	Player.setAmountBomb(Player.getAmountBomb()+1);
+    	Player.setAmountBomb(Player.getAmountBomb() + 1);
     }
 }

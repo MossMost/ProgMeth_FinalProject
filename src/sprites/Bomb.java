@@ -12,25 +12,19 @@ import scenes.SoloGameScene;
 
 public class Bomb extends AnimatedSprite{
     private static final String IMAGE_PATH = "assets/Bomb.png";
-    public static final byte SPRITE_CHANGE = 25;
-    public static final byte BOMB_CHANGE = 15;
 
-    protected int[] spriteXCoordinates = new int[] {0,48,96};
-    protected int[] spriteYCoordinates = new int[] {0,0,0};
+    protected int[] spriteXCoordinates = new int[] {0, 48, 96};
+    protected int[] spriteYCoordinates = new int[] {0, 0, 0};
 
     protected byte currentSprite;
     protected byte currentSpriteChange;
     protected boolean IsInBomb;
-    private boolean isignite1;
-    private boolean isignite2;
     private boolean hasflame;
 
     public Bomb() {
         super(Constant.BLOCK_SIZE, Constant.BLOCK_SIZE);
         setIsInBomb(true);
         hasflame = false;
-        isignite1 =  true;
-        isignite2 = true;
         currentSprite = 0;
         currentSpriteChange = 0;
         try {
@@ -56,15 +50,6 @@ public class Bomb extends AnimatedSprite{
                 }
                 //too slow -> not work, too fast -> multiple block
                 if(currentNanoTime - time > 3e9 && currentNanoTime - time < 3e9 + 2e7 + 4e6) {
-                	/*if(!SoloGameScene.BombCoordinates.isEmpty() && isignite1) {
-                		int idx = SoloGameScene.BombCoordinates.indexOf(new Pair<>(x,y));
-                		SoloGameScene.BombCoordinates.remove(idx);
-                		isignite1 = false;
-                	}*/
-                	/*if(!SoloGameScene.BombArr.isEmpty() && isignite2) {
-                		SoloGameScene.BombArr.remove(0);
-                		isignite2 = false;
-                	}*/
                 	if(hasflame==false) {
                 		SoloGameScene.playEffect(SoloGameScene.EXPLOSION_EFFECT);
                 		hasflame = true;

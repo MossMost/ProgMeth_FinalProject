@@ -2,7 +2,7 @@ package sprites;
 
 
 public class AnimatedSprite extends Sprite{
-	public static final int ToTAL_MOVEMENTS = 5;
+	public static final int TOTAL_MOVEMENTS = 5;
 	public static final int RIGHT = 0;
 	public static final int LEFT =1;
 	public static final int UP = 2;
@@ -14,8 +14,8 @@ public class AnimatedSprite extends Sprite{
 	protected byte currentSprite;
 	protected byte currentSpriteChange;
 	
-	protected int[][] spriteXCoordinates = new int[ToTAL_MOVEMENTS][];
-	protected int[][] spriteYCoordinates = new int[ToTAL_MOVEMENTS][];
+	protected int[][] spriteXCoordinates = new int[TOTAL_MOVEMENTS][];
+	protected int[][] spriteYCoordinates = new int[TOTAL_MOVEMENTS][];
 	
 	public AnimatedSprite(int width, int height) {
 		super(width, height);

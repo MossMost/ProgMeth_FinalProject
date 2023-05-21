@@ -9,12 +9,6 @@ public abstract class Item extends Sprite{
         super(width, height);
 
     }
-
-    public boolean checkcollision(int PlayerX, int PlayerY) {
-        return true;
-
-    }
+    
     abstract public void ItemEffect(MainCharacter Player);
-
-
 }
