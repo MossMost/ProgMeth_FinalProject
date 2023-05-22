@@ -15,7 +15,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import sprites.AnimatedSprite;
 
 public class NextStage extends GeneralScene implements Animateable{
 	public static final String NEXTSTAGE_EFFECT = "assets/NextStage.wav";

@@ -48,7 +48,7 @@ public class Bomb extends AnimatedSprite{
                     updateSpriteCoordinates(gc);
                 }
                 //flame
-                if(currentNanoTime - time > 3 * Constant.SEC && currentNanoTime - time < 3 * Constant.SEC + 2e7 + 4e6) {
+                if(currentNanoTime - time > 3 * Constant.SEC && currentNanoTime - time < 3 * Constant.SEC + 3e7) {
                 	if(!getFlame()) {
                 		SoloGameScene.playEffect(Constant.EXPLOSION_EFFECT);
                 		setFlame(true);

@@ -183,6 +183,7 @@ public class MainCharacter extends AnimatedSprite{
     }
 	
 	//getter&&setter
+	
 	public int getFireRange() {
 		return fireRange;
 	}

@@ -4,6 +4,8 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import javax.print.DocFlavor.URL;
+
 import application.Main;
 import constant.Constant;
 import javafx.animation.AnimationTimer;
@@ -17,13 +19,15 @@ import javafx.scene.text.FontWeight;
 import music.MusicPlayable;
 
 public class WelcomeScene extends GeneralScene implements MusicPlayable{
+	
 	private static final String BACKGROUND_IMAGE = "assets/Welcome_Background.png";
 	private static final String BACKGROUND_SONG = "assets/WelcomeSceneMusic.wav";
 	private Image background;
 	
+	
+	
 	public WelcomeScene() {
 		super();
-		
 		try {
 			background = new Image(Files.newInputStream(Paths.get(BACKGROUND_IMAGE)));
 		} catch(Exception e) {
@@ -44,7 +48,7 @@ public class WelcomeScene extends GeneralScene implements MusicPlayable{
 					if(activeKeys.contains(KeyCode.SPACE)){
 						stopMusic();
 						this.stop();
-						SoloGameScene.setStage(3);
+						SoloGameScene.setStage(1);
 						Main.setScene(Constant.NEXTSTAGE_SCENE);
 					}
 					else if(activeKeys.contains(KeyCode.ESCAPE)) {

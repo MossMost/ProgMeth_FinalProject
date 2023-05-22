@@ -15,6 +15,7 @@ import enemy.Enemy4;
 import enemy.Enemy5;
 import item.AmountUp;
 import item.Door;
+import item.Item;
 import item.RangeUp;
 import item.SpeedUp;
 import javafx.animation.AnimationTimer;
@@ -65,10 +66,10 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	private Enemy3[] enemy3;
 	private Enemy4[] enemy4;
 	private Enemy5[] enemy5;
-	private Door[] door;
-	private RangeUp[] rangeUp;
-	private SpeedUp[] speedUp;
-	private AmountUp[] amountUp;
+	private Item[] door;
+	private Item[] rangeUp;
+	private Item[] speedUp;
+	private Item[] amountUp;
 	
 	public static int stage;
 	
@@ -132,7 +133,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 					}
 					
 					for(int i = 0; i < SpeedCoordinates.size(); i++) {
-						if(speedUp[i] != null&&Player.checkCollision(Player.getX(), Player.getY(), SpeedCoordinates.get(i).getKey(), SpeedCoordinates.get(i).getValue())) {
+						if(speedUp[i] != null && Player.checkCollision(Player.getX(), Player.getY(), SpeedCoordinates.get(i).getKey(), SpeedCoordinates.get(i).getValue())) {
 							playEffect(ITEM_EFFECT);
 							speedUp[i].ItemEffect(Player);
 							speedUp[i] = null;
@@ -140,7 +141,7 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 					}
 					
 					for(int i = 0; i < AmountCoordinates.size(); i++) {
-						if(amountUp[i] != null&&Player.checkCollision(Player.getX(), Player.getY(), AmountCoordinates.get(i).getKey(), AmountCoordinates.get(i).getValue())) {
+						if(amountUp[i] != null && Player.checkCollision(Player.getX(), Player.getY(), AmountCoordinates.get(i).getKey(), AmountCoordinates.get(i).getValue())) {
 							playEffect(ITEM_EFFECT);
 							amountUp[i].ItemEffect(Player);
 							amountUp[i] = null;
@@ -672,10 +673,6 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	public void stopMusic() {
 		mediaPlayer.stop();
 	}
-	
-	public static void setStage(int n) {
-		stage = n;
-	}
 
 	@Override
 	public void showMessage() {
@@ -752,6 +749,10 @@ public class SoloGameScene extends GeneralScene implements MusicPlayable{
 	}
 	
 	//getter&&setter
+	
+	public static void setStage(int n) {
+		stage = n;
+	}
 	
 	public boolean getMusicEnabled() {
 		return isMusicEnabled;
